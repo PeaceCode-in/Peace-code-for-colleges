@@ -57,8 +57,8 @@ function ReportsPage() {
   const [state, setState] = useState<BuilderState>({
     template: initialTpl,
     window: clampWindow(search.win),
-    segments: (search.segs.filter((s) => (ALL_SEGMENTS as string[]).includes(s)) as SegmentKey[]),
-    sections: (search.secs.filter((s) => (VALID_SECTIONS as string[]).includes(s)) as SectionId[]).length
+    segments: (search.segs.filter((s: string) => (ALL_SEGMENTS as string[]).includes(s)) as SegmentKey[]),
+    sections: (search.secs.filter((s: string) => (VALID_SECTIONS as string[]).includes(s)) as SectionId[]).length
       ? (search.secs as SectionId[])
       : (tplDef.sections.filter((s) => (VALID_SECTIONS as string[]).includes(s)) as SectionId[]),
     format: clampFormat(search.fmt),
