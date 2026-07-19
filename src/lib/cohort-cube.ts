@@ -54,7 +54,7 @@ function matches(cell: DemoCell, filters: Filters): boolean {
 let cache: DemoCell[] | null = null;
 function all(): DemoCell[] {
   if (!cache) cache = getDemographicsCube();
-  return cache;
+  return cache!;
 }
 
 export interface SliceAggregate {
@@ -138,7 +138,8 @@ export function marginalize(dim: DimKey, filters: Filters): Array<{ key: string;
   return values.map((v) => {
     const nested: Filters = { ...filters };
     const filterKey = (Object.keys(FILTER_TO_DIM) as (keyof Filters)[])
-      .find((k) => FILTER_TO_DIM[k] === dim)!;
+      .find((k) => FILTER_TO_DIM[k] === dim);
+    if (!filterKey) throw new Error(`No filter key for dim ${dim}`);
     (nested as Record<string, string>)[filterKey] = v;
     return { key: v, agg: sliceCube(nested) };
   });
@@ -196,8 +197,10 @@ function dimValues(dim: DimKey): string[] {
 }
 
 function filterKeyForDim(dim: DimKey): keyof Filters {
-  return (Object.keys(FILTER_TO_DIM) as (keyof Filters)[])
-    .find((k) => FILTER_TO_DIM[k] === dim)!;
+  const key = (Object.keys(FILTER_TO_DIM) as (keyof Filters)[])
+    .find((k) => FILTER_TO_DIM[k] === dim);
+  if (!key) throw new Error(`No filter key for dim ${dim}`);
+  return key;
 }
 
 export { K_MIN };
