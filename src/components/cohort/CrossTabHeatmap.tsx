@@ -39,9 +39,8 @@ export function CrossTabHeatmap({
           </div>
         ))}
         {rows.map((r) => (
-          <>
+          <div key={r} style={{ display: "contents" }}>
             <div
-              key={r}
               className="text-[11px] flex items-center"
               style={{ color: "var(--pc-ink-2)" }}
             >
@@ -76,7 +75,7 @@ export function CrossTabHeatmap({
                 </button>
               );
             })}
-          </>
+          </div>
         ))}
       </div>
       <p className="text-[10.5px] mt-3" style={{ color: "var(--pc-muted)" }}>
