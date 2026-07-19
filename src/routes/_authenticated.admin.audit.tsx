@@ -64,7 +64,7 @@ function AuditPage() {
   const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const set = (patch: Partial<z.infer<typeof auditSearch>>) => {
-    nav({ search: (prev) => ({ ...prev, ...patch, page: patch.page ?? 1 }) });
+    nav({ search: (prev: z.infer<typeof auditSearch>) => ({ ...prev, ...patch, page: patch.page ?? 1 }) });
   };
 
   const exportCsv = () => {
