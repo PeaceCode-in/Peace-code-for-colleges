@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Building2, GraduationCap, Users, GitCompareArrows,
   Activity, ClipboardList, Waves, Grid3x3,
   AlertTriangle, Share2, Gauge,
-  FileText, Download, LineChart,
+  FileText,
   ShieldCheck, ScrollText, Palette, LogOut,
 } from "lucide-react";
 import {
