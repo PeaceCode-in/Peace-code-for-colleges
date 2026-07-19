@@ -35,7 +35,7 @@ const GROUPS: Group[] = [
   ]},
 
   { label: "Early warning & care", items: [
-    { title: "Risk signals", url: "/care/risk", icon: AlertTriangle },
+    { title: "Early warning", url: "/care/risk", icon: AlertTriangle },
     { title: "Referral pipeline", url: "/care/referrals", icon: Share2 },
     { title: "Counsellor capacity", url: "/care/capacity", icon: Gauge },
   ]},

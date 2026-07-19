@@ -66,3 +66,33 @@ export const SCALE_LABEL: Record<ScaleId, string> = {
 };
 
 export const SCALE_MAX: Record<ScaleId, number> = { phq9: PHQ9_MAX, gad7: GAD7_MAX };
+
+// ─── Aggregate risk-tier rules (Early Warning & Care Routing) ─────
+// These are AGGREGATE tier definitions, not per-student risk scores. Every
+// tier is a deterministic rule over completed assessment data; nothing
+// here predicts individual outcomes.
+export const RISK_RULES = {
+  elevated: "PHQ-9 10–14 OR GAD-7 10–14 on latest completed assessment",
+  high:     "PHQ-9 ≥ 15 OR GAD-7 ≥ 15 on latest completed assessment",
+  item9:    "PHQ-9 item 9 score ≥ 1 on latest assessment",
+  overdue:  "No completed assessment in past 28 days for elevated/high tier",
+} as const;
+
+export type RiskTier = keyof typeof RISK_RULES;
+
+export const RISK_TIER_LABEL: Record<RiskTier, string> = {
+  elevated: "Elevated",
+  high:     "High",
+  item9:    "Item-9 flagged",
+  overdue:  "Overdue reassessment",
+};
+
+// Paired swatch tokens — always used WITH a text label + glyph, never
+// colour-only signalling.
+export const RISK_TIER_COLOR: Record<RiskTier, string> = {
+  elevated: "var(--pc-accent-2)",
+  high:     "var(--pc-warn)",
+  item9:    "color-mix(in oklab, var(--pc-warn) 62%, var(--pc-ink))",
+  overdue:  "var(--pc-muted)",
+};
+
