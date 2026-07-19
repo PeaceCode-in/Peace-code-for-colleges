@@ -43,7 +43,9 @@ export function Sparkline({
       const y = height - ((v - min) / range) * (height - 4) - 2;
       return [x, y] as [number, number];
     });
-    const tension = getComputedStyle(document.documentElement).getPropertyValue("--pc-chart-tension").trim();
+    const tension = typeof document !== "undefined"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--pc-chart-tension").trim()
+      : "";
     // sharp = 0, smooth ≈ 0.55 → route to a linear path when tension is 0.
     if (tension === "0") return "M " + pts.map((p) => `${p[0]},${p[1]}`).join(" L ");
     return catmullRom(pts);
