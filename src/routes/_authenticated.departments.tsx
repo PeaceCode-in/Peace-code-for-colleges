@@ -42,7 +42,7 @@ function DepartmentsPage() {
   const search = Route.useSearch();
   const nav = useNavigate({ from: Route.fullPath });
 
-  const selected = useMemo(
+  const selected = useMemo<string[]>(
     () => (search.dept ? search.dept.split(",").filter(Boolean).slice(0, MAX_COMPARE) : []),
     [search.dept],
   );
@@ -52,9 +52,8 @@ function DepartmentsPage() {
   const patch = useCallback(
     (next: Partial<DeptSearch>) => {
       nav({
-        search: (prev) => {
-          const merged: DeptSearch = { ...(prev as DeptSearch), ...next };
-          // Strip empty fields so URLs stay clean.
+        search: (prev: DeptSearch) => {
+          const merged: DeptSearch = { ...prev, ...next };
           (Object.keys(merged) as (keyof DeptSearch)[]).forEach((k) => {
             const v = merged[k];
             if (v === undefined || v === "" || v === null) delete merged[k];
@@ -77,7 +76,7 @@ function DepartmentsPage() {
   const toggleDept = useCallback(
     (id: string) => {
       const has = selected.includes(id);
-      setSelected(has ? selected.filter((x) => x !== id) : [...selected, id]);
+      setSelected(has ? selected.filter((x: string) => x !== id) : [...selected, id]);
     },
     [selected, setSelected],
   );
