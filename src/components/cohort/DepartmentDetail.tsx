@@ -2,7 +2,7 @@
 // tiles required by the spec into a 12-column bento. Every tile that
 // consumes a slice runs its N through applyKAnonymity and renders a
 // <SuppressedTile /> when the guardrail trips.
-import { useMemo } from "react";
+import { useMemo, Fragment } from "react";
 import {
   LineChart, Line, Area, AreaChart, XAxis, YAxis, Tooltip, ReferenceArea,
   Brush, CartesianGrid, ResponsiveContainer,
@@ -369,8 +369,8 @@ function CadenceHeatmap({ dept }: { dept: DepartmentInsight }) {
           <div key={h} className="text-center pb-1">{h % 3 === 0 ? h : ""}</div>
         ))}
         {dept.heatmap.map((row, day) => (
-          <>
-            <div key={`d-${day}`} className="pr-1 py-0.5 text-right tabular-nums">{days[day]}</div>
+          <Fragment key={`row-${day}`}>
+            <div className="pr-1 py-0.5 text-right tabular-nums">{days[day]}</div>
             {row.map((v, h) => {
               const t = v / max;
               return (
@@ -386,7 +386,7 @@ function CadenceHeatmap({ dept }: { dept: DepartmentInsight }) {
                 />
               );
             })}
-          </>
+          </Fragment>
         ))}
       </div>
     </div>
