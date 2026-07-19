@@ -11,6 +11,7 @@ import { useCollegeContext } from "@/lib/college-context";
 import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 import { KeyboardHelpDialog } from "@/components/keyboard/KeyboardHelpDialog";
 import { SeedModePill } from "@/components/college/SeedModePill";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
@@ -201,6 +202,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
   const college = useCollegeContext();
   const [dark, toggleDark] = useDark();
   const [helpOpen, setHelpOpen] = useState(false);
+  const shellPathname = useRouterState({ select: (s) => s.location.pathname });
   useGlobalShortcuts({ onHelp: () => setHelpOpen(true) });
 
   useEffect(() => {
@@ -285,7 +287,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
             </header>
             <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />
-              {children}
+              <PageTransition pathname={shellPathname}>{children}</PageTransition>
             </main>
           </SidebarInset>
         </div>
