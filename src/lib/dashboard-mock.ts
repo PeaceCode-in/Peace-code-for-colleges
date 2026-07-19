@@ -372,3 +372,320 @@ export function getDemographicsCube(): DemoCell[] {
 }
 
 function round1(v: number) { return Math.round(v * 10) / 10; }
+
+// ─────────────────────────────────────────────────────────────
+// Early Warning & Care Routing — aggregate mock data
+// ─────────────────────────────────────────────────────────────
+// System-level counts only. Never a per-student row, never a per-student
+// risk score. All numbers are deterministic given a fixed seed so the
+// preview is stable across renders. This whole block is aggregate, not
+// case data — see clinical-scales.RISK_RULES for the tier definitions.
+export type EwWindowKey = "7d" | "30d" | "90d" | "term";
+export type EwSegment = "inst" | "school" | "year";
+
+export const EW_WINDOWS: { key: EwWindowKey; label: string; weeks: number; days: number }[] = [
+  { key: "7d",   label: "Last 7 days",  weeks: 1,  days: 7 },
+  { key: "30d",  label: "Last 30 days", weeks: 4,  days: 30 },
+  { key: "90d",  label: "Last 90 days", weeks: 13, days: 90 },
+  { key: "term", label: "This term",    weeks: 16, days: 112 },
+];
+
+// Institution active-cohort baseline for percentage math.
+const EW_ACTIVE_BASE = 8320;
+
+export type RiskTierWeekly = {
+  week: string; // "W-12".."W-1"
+  elevated: number;
+  high: number;
+  item9: number;
+  overdue: number;
+};
+
+export type RoutingFunnelStep = {
+  key: "detected" | "nudged" | "resource" | "offered" | "accepted" | "completed";
+  label: string;
+  note: string;
+  n: number;
+};
+
+export type TimeToContactBucket = {
+  key: string;
+  label: string; // "0–1h" etc
+  n: number;
+};
+
+export type ChannelWeekly = {
+  week: string;
+  inApp: number;
+  email: number;
+  peer: number;
+  counselor: number;
+};
+
+export type BottleneckCell = {
+  tier: "elevated" | "high" | "item9" | "overdue";
+  step: RoutingFunnelStep["key"];
+  dropPct: number; // 0..100 — share of prior step that DID NOT progress
+  n: number;       // sample size at prior step for this tier
+};
+
+export type SchoolResponseRow = {
+  schoolId: string;
+  schoolName: string;
+  n: number;
+  medianHours: number;
+};
+
+export type EarlyWarningAlert = {
+  id: string;
+  severity: "info" | "attention" | "watch";
+  headline: string;
+  sub: string;
+  sparkline: number[];
+};
+
+export interface EarlyWarningSnapshot {
+  asOf: string;
+  window: EwWindowKey;
+  activeCohort: number;
+  // Institution + per-school + per-year risk-tier population 12-week series.
+  riskTierSeries: {
+    inst: RiskTierWeekly[];
+    school: Record<string, RiskTierWeekly[]>;
+    year: Record<string, RiskTierWeekly[]>;
+  };
+  // Care-routing funnel counts for the selected window.
+  routingFunnel: RoutingFunnelStep[];
+  // Time-to-first-contact histogram + benchmarks.
+  timeToContact: {
+    buckets: TimeToContactBucket[];
+    medianHours: number;
+    p90Hours: number;
+    peerMedianHours: number;
+  };
+  // Weekly routing channel breakdown for the selected window.
+  channelBreakdown: ChannelWeekly[];
+  // Bottleneck matrix — tier × step drop-off %.
+  bottleneckMatrix: BottleneckCell[];
+  // Per-school response times (only n≥10).
+  schoolResponseTimes: SchoolResponseRow[];
+  // Reassessment adherence for elevated/high tier.
+  reassessmentAdherence: {
+    within28d: number;
+    total: number;
+    priorPct: number;
+  };
+  // System health chips.
+  sla24h: { withinPct: number; n: number };
+  coverageGap: { hourFrom: number; hourTo: number; responseRate: number };
+  // Alerts feed.
+  alerts: EarlyWarningAlert[];
+}
+
+const EW_SCHOOLS: { id: string; name: string; weight: number; medianHoursBase: number }[] = [
+  { id: "eng", name: "Engineering",                 weight: 0.34, medianHoursBase: 18.6 },
+  { id: "hss", name: "Humanities & Social Sciences", weight: 0.22, medianHoursBase: 12.4 },
+  { id: "mgt", name: "Management",                  weight: 0.18, medianHoursBase: 22.1 },
+  { id: "nsc", name: "Natural Sciences",            weight: 0.16, medianHoursBase: 15.3 },
+  { id: "des", name: "Design",                      weight: 0.10, medianHoursBase: 10.8 },
+];
+
+const EW_YEARS: { id: string; weight: number; tilt: number }[] = [
+  { id: "Y1", weight: 0.24, tilt:  1.10 },
+  { id: "Y2", weight: 0.23, tilt:  1.04 },
+  { id: "Y3", weight: 0.20, tilt:  0.96 },
+  { id: "Y4", weight: 0.19, tilt:  1.12 },
+  { id: "PG", weight: 0.14, tilt:  0.92 },
+];
+
+// Deterministic PRNG dedicated to the early-warning surface so its numbers
+// never drift when other tiles are edited.
+const ewRand = mulberry32(0x45574e21); // "EWN!"
+function ewR(base: number, spread: number) { return base + (ewRand() - 0.5) * spread; }
+function ewInt(v: number) { return Math.max(0, Math.round(v)); }
+
+function tierBaseFor(activeN: number, tier: "elevated" | "high" | "item9" | "overdue", tilt = 1): number {
+  // Rough institutional shares of the active cohort per tier.
+  const share =
+    tier === "elevated" ? 0.088 :
+    tier === "high"     ? 0.032 :
+    tier === "item9"    ? 0.014 :
+    /* overdue */         0.061;
+  return activeN * share * tilt;
+}
+
+function makeRiskWeekly(activeN: number, tilt = 1): RiskTierWeekly[] {
+  return Array.from({ length: 12 }, (_, i) => {
+    const drift = 1 + (i - 6) * 0.012; // gentle rise
+    return {
+      week: `W-${12 - i}`,
+      elevated: ewInt(ewR(tierBaseFor(activeN, "elevated", tilt) * drift, tierBaseFor(activeN, "elevated", tilt) * 0.12)),
+      high:     ewInt(ewR(tierBaseFor(activeN, "high",     tilt) * drift, tierBaseFor(activeN, "high",     tilt) * 0.16)),
+      item9:    ewInt(ewR(tierBaseFor(activeN, "item9",    tilt) * drift, tierBaseFor(activeN, "item9",    tilt) * 0.28)),
+      overdue:  ewInt(ewR(tierBaseFor(activeN, "overdue",  tilt) * drift, tierBaseFor(activeN, "overdue",  tilt) * 0.10)),
+    };
+  });
+}
+
+function makeChannels(weeks: number): ChannelWeekly[] {
+  return Array.from({ length: weeks }, (_, i) => {
+    const base = EW_ACTIVE_BASE * 0.06; // ~roughly interventions/week
+    return {
+      week: `W-${weeks - i}`,
+      inApp:     ewInt(ewR(base * 0.52, base * 0.10)),
+      email:     ewInt(ewR(base * 0.22, base * 0.08)),
+      peer:      ewInt(ewR(base * 0.14, base * 0.06)),
+      counselor: ewInt(ewR(base * 0.12, base * 0.05)),
+    };
+  });
+}
+
+function windowDays(w: EwWindowKey): number {
+  return EW_WINDOWS.find((x) => x.key === w)!.days;
+}
+function windowWeeks(w: EwWindowKey): number {
+  return EW_WINDOWS.find((x) => x.key === w)!.weeks;
+}
+
+function makeFunnel(w: EwWindowKey): RoutingFunnelStep[] {
+  const days = windowDays(w);
+  const detected = ewInt(ewR(days * 12.6, days * 1.8));           // ~aggregate detections per day
+  const nudged   = ewInt(detected * ewR(0.86, 0.05));
+  const resource = ewInt(nudged   * ewR(0.62, 0.06));
+  const offered  = ewInt(resource * ewR(0.58, 0.07));
+  const accepted = ewInt(offered  * ewR(0.66, 0.06));
+  const completed= ewInt(accepted * ewR(0.71, 0.05));
+  return [
+    { key: "detected",  label: "Detected",            note: "Aggregate rule match",          n: detected },
+    { key: "nudged",    label: "In-app nudge sent",   note: "Auto-generated by the app",     n: nudged },
+    { key: "resource",  label: "Resource opened",     note: "Self-serve module engaged",     n: resource },
+    { key: "offered",   label: "Counselor slot offered", note: "Slot proposed in-app",      n: offered },
+    { key: "accepted",  label: "Slot accepted",       note: "Student confirmed",             n: accepted },
+    { key: "completed", label: "Session completed",   note: "Attended first session",        n: completed },
+  ];
+}
+
+function makeTimeToContact() {
+  // Bucket counts favour 4–24h.
+  const buckets: TimeToContactBucket[] = [
+    { key: "0-1",   label: "0–1h",  n: ewInt(ewR( 34, 6)) },
+    { key: "1-4",   label: "1–4h",  n: ewInt(ewR( 92, 10)) },
+    { key: "4-12",  label: "4–12h", n: ewInt(ewR(148, 12)) },
+    { key: "12-24", label: "12–24h",n: ewInt(ewR(112, 10)) },
+    { key: "24-48", label: "24–48h",n: ewInt(ewR( 68, 8)) },
+    { key: "48+",   label: "48h+",  n: ewInt(ewR( 41, 6)) },
+  ];
+  return {
+    buckets,
+    medianHours: 8.6,
+    p90Hours: 34.4,
+    peerMedianHours: 12.2,
+  };
+}
+
+function makeBottlenecks(): BottleneckCell[] {
+  const tiers: ("elevated" | "high" | "item9" | "overdue")[] = ["elevated", "high", "item9", "overdue"];
+  const steps: RoutingFunnelStep["key"][] = ["detected", "nudged", "resource", "offered", "accepted", "completed"];
+  const out: BottleneckCell[] = [];
+  for (const tier of tiers) {
+    let prev = ewInt(ewR(tierBaseFor(EW_ACTIVE_BASE, tier) * 4, tierBaseFor(EW_ACTIVE_BASE, tier)));
+    for (const step of steps) {
+      const dropBase =
+        step === "detected" ? 0 :
+        step === "nudged"   ? 8 :
+        step === "resource" ? 34 :
+        step === "offered"  ? 40 :
+        step === "accepted" ? 30 :
+        22;
+      // Slight tier tilt — item9 has better routing, overdue has worst reassessment.
+      const tilt = tier === "item9" ? -6 : tier === "overdue" ? 6 : tier === "high" ? -2 : 0;
+      const dropPct = Math.max(0, Math.min(80, dropBase + tilt + ewR(0, 6)));
+      // Force a demo-visible suppressed cell.
+      const n = (tier === "item9" && step === "completed") ? 6 : prev;
+      out.push({ tier, step, dropPct: Math.round(dropPct * 10) / 10, n });
+      prev = ewInt(prev * (1 - dropPct / 100));
+    }
+  }
+  return out;
+}
+
+function makeSchoolResponseTimes(): SchoolResponseRow[] {
+  return EW_SCHOOLS.map((s) => {
+    const n = ewInt(EW_ACTIVE_BASE * s.weight * 0.045);
+    const jitter = ewR(0, 3);
+    return {
+      schoolId: s.id,
+      schoolName: s.name,
+      n,
+      medianHours: Math.round((s.medianHoursBase + jitter) * 10) / 10,
+    };
+  }).filter((r) => r.n >= 10);
+}
+
+function makeAlerts(): EarlyWarningAlert[] {
+  const spark = (base: number, spread: number) =>
+    Array.from({ length: 12 }, (_, i) => Math.round(ewR(base + i * 0.1, spread) * 10) / 10);
+  return [
+    { id: "a1", severity: "attention", headline: "Item-9 flag rate rose to 3.1% in Y2 (N=142)", sub: "Up 0.7pt WoW · aggregate only, no individuals surfaced", sparkline: spark(2.4, 0.4) },
+    { id: "a2", severity: "watch",     headline: "Counselor-slot acceptance dropped 14% in Engineering", sub: "Prior 4w median 61% → 47% (N=318 offers)", sparkline: spark(60, 6) },
+    { id: "a3", severity: "info",      headline: "In-app nudges converted 6pt higher than email in Y1", sub: "26% vs 20% resource-open rate, N=1,240 nudges", sparkline: spark(24, 2) },
+    { id: "a4", severity: "attention", headline: "Overdue-reassessment tier grew to 507 students", sub: "Up 42 WoW · Humanities & Design lead the increase", sparkline: spark(460, 20) },
+    { id: "a5", severity: "watch",     headline: "Median time-to-first-contact climbed to 8.6h", sub: "Peer benchmark: 12.2h · still under SLA, trend upward", sparkline: spark(7, 1) },
+    { id: "a6", severity: "info",      headline: "Reassessment completion holding at 71% within 28d", sub: "Elevated/High tier · aggregate only", sparkline: spark(70, 2) },
+  ];
+}
+
+let ewSnapshotCache: Record<EwWindowKey, EarlyWarningSnapshot> = {} as Record<EwWindowKey, EarlyWarningSnapshot>;
+
+export function getEarlyWarningSnapshot(window: EwWindowKey): EarlyWarningSnapshot {
+  if (ewSnapshotCache[window]) return ewSnapshotCache[window];
+
+  const instSeries = makeRiskWeekly(EW_ACTIVE_BASE);
+  const schoolSeries: Record<string, RiskTierWeekly[]> = {};
+  for (const s of EW_SCHOOLS) {
+    schoolSeries[s.id] = makeRiskWeekly(EW_ACTIVE_BASE * s.weight);
+  }
+  const yearSeries: Record<string, RiskTierWeekly[]> = {};
+  for (const y of EW_YEARS) {
+    yearSeries[y.id] = makeRiskWeekly(EW_ACTIVE_BASE * y.weight, y.tilt);
+  }
+
+  const funnel = makeFunnel(window);
+  const channelBreakdown = makeChannels(windowWeeks(window));
+  const bottlenecks = makeBottlenecks();
+  const responseTimes = makeSchoolResponseTimes();
+
+  const within28d = ewInt(EW_ACTIVE_BASE * 0.072);
+  const total = ewInt(within28d / 0.71);
+
+  const snap: EarlyWarningSnapshot = {
+    asOf: new Date().toISOString(),
+    window,
+    activeCohort: EW_ACTIVE_BASE,
+    riskTierSeries: {
+      inst: instSeries,
+      school: schoolSeries,
+      year: yearSeries,
+    },
+    routingFunnel: funnel,
+    timeToContact: makeTimeToContact(),
+    channelBreakdown,
+    bottleneckMatrix: bottlenecks,
+    schoolResponseTimes: responseTimes,
+    reassessmentAdherence: {
+      within28d,
+      total,
+      priorPct: 68.4,
+    },
+    sla24h:      { withinPct: 82.4, n: ewInt(EW_ACTIVE_BASE * 0.032) },
+    coverageGap: { hourFrom: 2, hourTo: 6, responseRate: 0.31 },
+    alerts: makeAlerts(),
+  };
+
+  ewSnapshotCache = { ...ewSnapshotCache, [window]: snap };
+  return snap;
+}
+
+export const EW_SCHOOL_META = EW_SCHOOLS;
+export const EW_YEAR_META = EW_YEARS;
+
