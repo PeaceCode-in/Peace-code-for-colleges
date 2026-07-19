@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, Moon, Sun, User } from "lucide-react";
+import { Search, Moon, Sun, User, Keyboard } from "lucide-react";
 import {
   SidebarProvider, SidebarTrigger, SidebarInset,
 } from "@/components/ui/sidebar";
@@ -8,6 +8,8 @@ import { AppSidebar } from "@/components/college/AppSidebar";
 import { GlassFX } from "@/components/GlassFX";
 import { loadSettings, saveSettings, applyAppearance, applyAccessibility } from "@/lib/settings-store";
 import { useCollegeContext } from "@/lib/college-context";
+import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
+import { KeyboardHelpDialog } from "@/components/keyboard/KeyboardHelpDialog";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
@@ -197,6 +199,8 @@ function UserMenu() {
 export function CollegeAppShell({ children }: { children: ReactNode }) {
   const college = useCollegeContext();
   const [dark, toggleDark] = useDark();
+  const [helpOpen, setHelpOpen] = useState(false);
+  useGlobalShortcuts({ onHelp: () => setHelpOpen(true) });
 
   useEffect(() => {
     const s = loadSettings();
@@ -221,9 +225,16 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
 
   return (
     <div style={{ background: "var(--pc-bg)", color: "var(--pc-ink)" }}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-1.5 focus:rounded-md focus:text-[13px]"
+        style={{ background: "var(--pc-primary)", color: "#fff" }}
+      >
+        Skip to main content
+      </a>
       <GlassFX />
       <SidebarProvider>
-        <div className="min-h-screen flex w-full">
+        <div className="min-h-dvh flex w-full">
           <AppSidebar />
           <SidebarInset style={{ background: "var(--pc-bg)" }}>
             <header
@@ -244,23 +255,40 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               <div className="flex-1 flex justify-center">
                 <CommandK />
               </div>
+              <span
+                aria-label="k-anonymity threshold: 10"
+                className="hidden sm:inline-flex text-[11px] font-mono px-1.5 py-0.5 rounded"
+                style={{ background: "var(--pc-surface2)", color: "var(--pc-muted)", border: "1px solid var(--pc-border)" }}
+              >
+                k=10
+              </span>
+              <button
+                type="button"
+                onClick={() => setHelpOpen(true)}
+                aria-label="Keyboard shortcuts"
+                className="p-2 rounded-full focus-visible:outline-none focus-visible:ring-2"
+                style={{ color: "var(--pc-ink-2)", background: "var(--pc-surface2)", border: "1px solid var(--pc-border)" }}
+              >
+                <Keyboard className="h-4 w-4" />
+              </button>
               <button
                 onClick={toggleDark}
                 aria-label="Toggle theme"
-                className="p-2 rounded-full"
+                className="p-2 rounded-full focus-visible:outline-none focus-visible:ring-2"
                 style={{ color: "var(--pc-ink-2)", background: "var(--pc-surface2)", border: "1px solid var(--pc-border)" }}
               >
                 {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
               <UserMenu />
             </header>
-            <main className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
+            <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />
               {children}
             </main>
           </SidebarInset>
         </div>
       </SidebarProvider>
+      <KeyboardHelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </div>
   );
 }
