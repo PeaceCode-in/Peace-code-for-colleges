@@ -1,5 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, ComingNext } from "@/components/college/primitives";
+import { PageHeader } from "@/components/college/primitives";
+import { FilterBar } from "@/components/college/dashboard/FilterBar";
+import {
+  InstitutionalWellbeingIndex,
+  ActiveEngagementTile,
+  SafetyPulseTile,
+  MoodTrendChart,
+  TopConcernsCloud,
+  DepartmentHeatmap,
+  SessionsDeliveredTile,
+  AverageWaitTile,
+  ProgramImpactStrip,
+} from "@/components/college/dashboard/tiles";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Executive overview — PeaceCode for Colleges" }] }),
@@ -12,13 +24,20 @@ function DashboardPage() {
       <PageHeader
         eyebrow="Overview"
         title="Executive overview"
-        subtitle="A single-glance read of your institution's wellbeing state — attendance of care, mood momentum, and where your counsellors' attention is most needed today."
+        subtitle="A single-glance read of your institution's wellbeing state — mood momentum, safety pulse, and where counsellor attention is landing this week. Every tile enforces k-anonymity ≥ 10."
       />
-      <ComingNext
-        promptNumber={2}
-        title="Your institution at a glance"
-        whatItWillShow="Live KPI tiles, mood-trend sparkline, top three risk cohorts (all k-anonymised), and the day's referral inflow. Every tile respects the aggregate-only guardrail."
-      />
+      <FilterBar />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <InstitutionalWellbeingIndex />
+        <ActiveEngagementTile />
+        <SafetyPulseTile />
+        <MoodTrendChart />
+        <TopConcernsCloud />
+        <DepartmentHeatmap />
+        <SessionsDeliveredTile />
+        <AverageWaitTile />
+        <ProgramImpactStrip />
+      </div>
     </>
   );
 }
