@@ -74,6 +74,7 @@ export interface Settings {
     fontSize: number;     // px, 14–20
     density: Density;
     reduceMotion: boolean;
+    motionIntensity: "reduced" | "standard" | "expressive";
     glassEffects: boolean;
     roundedCorners: number; // 6–24
     cardStyle: CardStyle;
@@ -206,6 +207,7 @@ const defaults: Settings = {
     fontSize: 16,
     density: "comfortable",
     reduceMotion: false,
+    motionIntensity: "standard",
     glassEffects: true,
     roundedCorners: 16,
     cardStyle: "elevated",
@@ -367,7 +369,9 @@ export function applyAppearance(s: Settings) {
   root.setAttribute("data-density", a.density);
 
   // Motion / effects
-  root.setAttribute("data-motion", (a.reduceMotion || s.accessibility.reduceAnim) ? "reduced" : "on");
+  const reduced = a.reduceMotion || s.accessibility.reduceAnim;
+  root.setAttribute("data-motion", reduced ? "reduced" : "on");
+  root.setAttribute("data-motion-intensity", reduced ? "reduced" : a.motionIntensity);
   root.setAttribute("data-glass", a.glassEffects ? "on" : "off");
   root.setAttribute("data-card-style", a.cardStyle);
   root.setAttribute("data-chart-style", a.chartStyle);
