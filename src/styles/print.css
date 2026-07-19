@@ -1,0 +1,66 @@
+/* Print stylesheet for /reports export previews.
+   Loaded as media="print" from src/routes/__root.tsx, plus applied
+   to the /reports/print route for on-screen preview parity. */
+
+@page { size: A4; margin: 18mm; }
+
+@media print {
+  html, body { background: white !important; color: black !important; }
+  /* Hide app chrome. */
+  [data-app-chrome], [data-noexport] { display: none !important; }
+}
+
+.print-root {
+  background: white;
+  color: black;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 11pt;
+  line-height: 1.4;
+}
+.print-root h1, .print-root h2, .print-root h3 {
+  font-family: "Fraunces", Georgia, serif;
+  color: black;
+  margin: 0 0 6pt 0;
+}
+.print-root h1 { font-size: 22pt; }
+.print-root h2 { font-size: 14pt; margin-top: 0; }
+.print-root h3 { font-size: 11pt; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.print-root .section {
+  border: 1px solid #222;
+  padding: 14pt;
+  margin: 0 0 12pt 0;
+  break-inside: avoid;
+  background: white;
+}
+.print-root .section-cover {
+  border: none;
+  padding: 0;
+  break-after: page;
+}
+.print-root table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10pt;
+  margin-top: 6pt;
+}
+.print-root th, .print-root td {
+  border: 1px solid #444;
+  padding: 4pt 6pt;
+  text-align: left;
+  vertical-align: top;
+}
+.print-root th { background: #eee; font-weight: 600; }
+.print-root .muted { color: #444; font-size: 9pt; }
+.print-root .chart-summary { font-size: 9.5pt; color: #222; margin-top: 4pt; font-style: italic; }
+.print-root .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8pt;
+  margin-top: 6pt;
+}
+.print-root .kpi { border: 1px solid #444; padding: 8pt; }
+.print-root .kpi .label { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.08em; color: #333; }
+.print-root .kpi .value { font-size: 18pt; font-family: "Fraunces", Georgia, serif; margin-top: 2pt; }
+.print-root .cover-meta { color: #333; font-size: 10pt; margin-top: 10pt; }
+.print-root .cover-meta div { margin: 2pt 0; }

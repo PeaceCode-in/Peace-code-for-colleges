@@ -21,9 +21,6 @@ import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_au
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
 import { Route as AuthenticatedSignalsHeatmapRouteImport } from './routes/_authenticated.signals.heatmap'
 import { Route as AuthenticatedSignalsEngagementRouteImport } from './routes/_authenticated.signals.engagement'
-import { Route as AuthenticatedReportsTermRouteImport } from './routes/_authenticated.reports.term'
-import { Route as AuthenticatedReportsExportsRouteImport } from './routes/_authenticated.reports.exports'
-import { Route as AuthenticatedReportsBenchmarksRouteImport } from './routes/_authenticated.reports.benchmarks'
 import { Route as AuthenticatedCohortsYearRouteImport } from './routes/_authenticated.cohorts.year'
 import { Route as AuthenticatedCohortsDemographicsRouteImport } from './routes/_authenticated.cohorts.demographics'
 import { Route as AuthenticatedCohortsCompareRouteImport } from './routes/_authenticated.cohorts.compare'
@@ -98,24 +95,6 @@ const AuthenticatedSignalsEngagementRoute =
     path: '/signals/engagement',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedReportsTermRoute =
-  AuthenticatedReportsTermRouteImport.update({
-    id: '/reports/term',
-    path: '/reports/term',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReportsExportsRoute =
-  AuthenticatedReportsExportsRouteImport.update({
-    id: '/reports/exports',
-    path: '/reports/exports',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReportsBenchmarksRoute =
-  AuthenticatedReportsBenchmarksRouteImport.update({
-    id: '/reports/benchmarks',
-    path: '/reports/benchmarks',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedCohortsYearRoute =
   AuthenticatedCohortsYearRouteImport.update({
     id: '/cohorts/year',
@@ -178,9 +157,6 @@ export interface FileRoutesByFullPath {
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/reports/term': typeof AuthenticatedReportsTermRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
@@ -202,9 +178,6 @@ export interface FileRoutesByTo {
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/reports/term': typeof AuthenticatedReportsTermRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
@@ -228,9 +201,6 @@ export interface FileRoutesById {
   '/_authenticated/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/_authenticated/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/_authenticated/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/_authenticated/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/_authenticated/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/_authenticated/reports/term': typeof AuthenticatedReportsTermRoute
   '/_authenticated/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/_authenticated/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/_authenticated/signals/mood': typeof AuthenticatedSignalsMoodRoute
@@ -254,9 +224,6 @@ export interface FileRouteTypes {
     | '/cohorts/compare'
     | '/cohorts/demographics'
     | '/cohorts/year'
-    | '/reports/benchmarks'
-    | '/reports/exports'
-    | '/reports/term'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
@@ -278,9 +245,6 @@ export interface FileRouteTypes {
     | '/cohorts/compare'
     | '/cohorts/demographics'
     | '/cohorts/year'
-    | '/reports/benchmarks'
-    | '/reports/exports'
-    | '/reports/term'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
@@ -303,9 +267,6 @@ export interface FileRouteTypes {
     | '/_authenticated/cohorts/compare'
     | '/_authenticated/cohorts/demographics'
     | '/_authenticated/cohorts/year'
-    | '/_authenticated/reports/benchmarks'
-    | '/_authenticated/reports/exports'
-    | '/_authenticated/reports/term'
     | '/_authenticated/signals/engagement'
     | '/_authenticated/signals/heatmap'
     | '/_authenticated/signals/mood'
@@ -406,27 +367,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSignalsEngagementRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/reports/term': {
-      id: '/_authenticated/reports/term'
-      path: '/reports/term'
-      fullPath: '/reports/term'
-      preLoaderRoute: typeof AuthenticatedReportsTermRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reports/exports': {
-      id: '/_authenticated/reports/exports'
-      path: '/reports/exports'
-      fullPath: '/reports/exports'
-      preLoaderRoute: typeof AuthenticatedReportsExportsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reports/benchmarks': {
-      id: '/_authenticated/reports/benchmarks'
-      path: '/reports/benchmarks'
-      fullPath: '/reports/benchmarks'
-      preLoaderRoute: typeof AuthenticatedReportsBenchmarksRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/cohorts/year': {
       id: '/_authenticated/cohorts/year'
       path: '/cohorts/year'
@@ -497,9 +437,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCohortsCompareRoute: typeof AuthenticatedCohortsCompareRoute
   AuthenticatedCohortsDemographicsRoute: typeof AuthenticatedCohortsDemographicsRoute
   AuthenticatedCohortsYearRoute: typeof AuthenticatedCohortsYearRoute
-  AuthenticatedReportsBenchmarksRoute: typeof AuthenticatedReportsBenchmarksRoute
-  AuthenticatedReportsExportsRoute: typeof AuthenticatedReportsExportsRoute
-  AuthenticatedReportsTermRoute: typeof AuthenticatedReportsTermRoute
   AuthenticatedSignalsEngagementRoute: typeof AuthenticatedSignalsEngagementRoute
   AuthenticatedSignalsHeatmapRoute: typeof AuthenticatedSignalsHeatmapRoute
   AuthenticatedSignalsMoodRoute: typeof AuthenticatedSignalsMoodRoute
@@ -518,9 +455,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCohortsCompareRoute: AuthenticatedCohortsCompareRoute,
   AuthenticatedCohortsDemographicsRoute: AuthenticatedCohortsDemographicsRoute,
   AuthenticatedCohortsYearRoute: AuthenticatedCohortsYearRoute,
-  AuthenticatedReportsBenchmarksRoute: AuthenticatedReportsBenchmarksRoute,
-  AuthenticatedReportsExportsRoute: AuthenticatedReportsExportsRoute,
-  AuthenticatedReportsTermRoute: AuthenticatedReportsTermRoute,
   AuthenticatedSignalsEngagementRoute: AuthenticatedSignalsEngagementRoute,
   AuthenticatedSignalsHeatmapRoute: AuthenticatedSignalsHeatmapRoute,
   AuthenticatedSignalsMoodRoute: AuthenticatedSignalsMoodRoute,
