@@ -1,7 +1,7 @@
 // PeaceCode — global settings store.
 // Every value persists to localStorage. Appearance/accessibility changes
 // are applied globally via CSS variables + data attributes.
-import { currentDisplayName } from "./auth-store";
+
 
 
 export type ThemeMode = "light" | "dark" | "auto" | "system";
@@ -301,9 +301,7 @@ export function loadSettings(): Settings {
   if (typeof window === "undefined") return defaults;
   try {
     const raw = window.localStorage.getItem(KEY);
-    const base = raw ? merge(defaults, JSON.parse(raw)) : defaults;
-    const who = currentDisplayName();
-    return { ...base, profile: { ...base.profile, fullName: who.full, preferredName: who.first } };
+    return raw ? merge(defaults, JSON.parse(raw)) : defaults;
   } catch { return defaults; }
 }
 
@@ -414,21 +412,7 @@ export function useSettings(): [Settings, (patch: (s: Settings) => Settings, act
 }
 
 // ─── Search index for settings ───────────────────────────────
+// Only Appearance ships in the first cut of PeaceCode for Colleges.
 export const SETTINGS_INDEX: { label: string; to: string; hint: string; keywords: string[] }[] = [
-  { label: "Profile", to: "/settings/profile", hint: "name, college, bio, birthday", keywords: ["profile","name","bio","student","college","photo","birthday","timezone","pronouns","interests","emergency"] },
-  { label: "Notifications", to: "/settings/notifications", hint: "reminders, quiet hours, dnd", keywords: ["notifications","reminders","push","email","quiet","dnd","frequency","weekly","monthly"] },
-  { label: "Privacy & Security", to: "/settings/privacy", hint: "password, 2FA, biometrics", keywords: ["privacy","security","password","2fa","biometric","face","fingerprint","lock","pin","delete","export"] },
   { label: "Appearance", to: "/settings/appearance", hint: "theme, accent, font", keywords: ["appearance","theme","dark","light","accent","color","font","density","motion","glass","corners","radius"] },
-  { label: "Accessibility", to: "/settings/accessibility", hint: "contrast, large text, dyslexia", keywords: ["accessibility","contrast","screen reader","large text","captions","dyslexia","color blind","reading width","keyboard","voice"] },
-  { label: "PeaceBot", to: "/settings/peacebot", hint: "AI personality, voice, memory", keywords: ["peacebot","ai","personality","voice","memory","reminder","reflection","sleep","crisis"] },
-  { label: "Journal", to: "/settings/journal", hint: "autosave, prompts, streak", keywords: ["journal","autosave","mood","prompt","template","private","password","ai analysis","daily"] },
-  { label: "Breathing", to: "/settings/breathing", hint: "session length, sounds", keywords: ["breathing","breathe","exercise","duration","sound","vibration","reminder","focus"] },
-  { label: "Community", to: "/settings/community", hint: "profile, requests, mutes", keywords: ["community","anonymous","public","achievements","messages","friend","block","mute","interests"] },
-  { label: "Resources", to: "/settings/resources", hint: "topics, content type", keywords: ["resources","topics","stress","sleep","anxiety","content","language","recommendations"] },
-  { label: "Data & Storage", to: "/settings/data", hint: "cache, backup, sync", keywords: ["data","storage","cache","backup","sync","offline","downloads","media"] },
-  { label: "Connected Accounts", to: "/settings/connected", hint: "google, apple, wearables", keywords: ["connected","google","apple","microsoft","sso","calendar","fit","health","fitbit","garmin"] },
-  { label: "Emergency & Safety", to: "/settings/emergency", hint: "SOS, contact, helplines", keywords: ["emergency","safety","sos","helpline","contact","location","panic","check-in"] },
-  { label: "Support", to: "/settings/support", hint: "help centre, feedback", keywords: ["support","help","faq","bug","feedback","rate","privacy policy","terms"] },
-  { label: "About PeaceCode", to: "/settings/about", hint: "version, team, roadmap", keywords: ["about","version","build","team","open source","acknowledgements","whats new","roadmap","beta"] },
-  { label: "Log out", to: "/settings/logout", hint: "sign out of PeaceCode", keywords: ["logout","log out","sign out"] },
 ];
