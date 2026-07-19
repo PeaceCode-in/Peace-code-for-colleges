@@ -285,7 +285,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
             </header>
             <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />
-              {children}
+              <PageTransition pathname={pathname}>{children}</PageTransition>
             </main>
           </SidebarInset>
         </div>
