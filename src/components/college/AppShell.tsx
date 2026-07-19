@@ -11,6 +11,7 @@ import { useCollegeContext } from "@/lib/college-context";
 import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 import { KeyboardHelpDialog } from "@/components/keyboard/KeyboardHelpDialog";
 import { SeedModePill } from "@/components/college/SeedModePill";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
