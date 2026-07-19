@@ -15,7 +15,7 @@ function useMotionEnabled() {
   useEffect(() => {
     const s = loadSettings();
     const reduce =
-      s.accessibility?.reduceMotion ||
+      s.accessibility?.reduceAnim ||
       (typeof window !== "undefined" &&
         window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
     setEnabled(!reduce);
