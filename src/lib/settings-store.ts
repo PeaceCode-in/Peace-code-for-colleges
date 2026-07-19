@@ -201,8 +201,8 @@ const defaults: Settings = {
   },
   appearance: {
     theme: "light",
-    accent: "rose",
-    bgTheme: "sakura",
+    accent: "moss",
+    bgTheme: "sage",
     fontSize: 16,
     density: "comfortable",
     reduceMotion: false,
