@@ -96,16 +96,11 @@ function DemographicsPage() {
   return (
     <div data-noexport onCopy={(e) => e.preventDefault()}>
       <PageHeader
-        eyebrow={
-          <span className="inline-flex items-center gap-1">
-            <Link to="/departments" className="hover:underline">Cohort insights</Link>
-            <ChevronRight className="h-3 w-3 inline" aria-hidden />
-            Year &amp; Demographics
-          </span> as unknown as string
-        }
-        title="Year &amp; Demographics"
+        eyebrow="Cohort insights → Year & Demographics"
+        title="Year & Demographics"
         subtitle="Aggregate-only slices across academic year, gender, residency, first-generation status, and aid tier. Every intersection enforces k ≥ 10."
       />
+
 
       <DemographicFilters
         value={filters}
