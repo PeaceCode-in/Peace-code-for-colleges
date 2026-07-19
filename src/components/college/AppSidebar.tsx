@@ -67,9 +67,8 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" style={{ background: "var(--pc-surface)", borderColor: "var(--pc-border)" }}>
       <SidebarContent style={{ background: "var(--pc-surface)" }}>
         {GROUPS.map((g) => {
-          const groupActive = g.items.some((i) => isActive(i.url));
           return (
-            <SidebarGroup key={g.label} defaultOpen={groupActive}>
+            <SidebarGroup key={g.label}>
               {!collapsed && (
                 <SidebarGroupLabel
                   className="text-[10px] uppercase"
