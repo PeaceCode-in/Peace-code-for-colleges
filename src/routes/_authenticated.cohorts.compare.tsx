@@ -141,8 +141,8 @@ function ComparePage() {
   const matrix = useMemo(() => cohortMatrix(), []);
 
   // Default seed selection when empty
-  const rawKeys = s.keys.length ? s.keys : ["dept:eng", "dept:med", "year:Y2"];
-  const keys = Array.from(new Set(rawKeys)).slice(0, MAX);
+  const rawKeys: string[] = s.keys.length ? s.keys : ["dept:eng", "dept:med", "year:Y2"];
+  const keys: string[] = Array.from(new Set(rawKeys)).slice(0, MAX);
 
   const cohorts: Cohort[] = keys.map((k) => ({
     key: k,
