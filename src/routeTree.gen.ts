@@ -13,27 +13,36 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
 import { Route as SettingsAppearanceRouteImport } from './routes/settings.appearance'
+import { Route as SettingsAccountRouteImport } from './routes/settings.account'
 import { Route as ReportsPrintRouteImport } from './routes/reports.print'
+import { Route as AuthenticatedQaDataRouteImport } from './routes/_authenticated.qa-data'
 import { Route as AuthenticatedQaRouteImport } from './routes/_authenticated/qa'
+import { Route as AuthenticatedHelpRouteImport } from './routes/_authenticated.help'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as AuthenticatedReportsIndexRouteImport } from './routes/_authenticated.reports.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated.admin.index'
 import { Route as AuthenticatedSignalsWellbeingRouteImport } from './routes/_authenticated.signals.wellbeing'
+import { Route as AuthenticatedSignalsSessionsRouteImport } from './routes/_authenticated.signals.sessions'
 import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_authenticated.signals.screenings'
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
 import { Route as AuthenticatedSignalsHeatmapRouteImport } from './routes/_authenticated.signals.heatmap'
 import { Route as AuthenticatedSignalsEngagementRouteImport } from './routes/_authenticated.signals.engagement'
+import { Route as AuthenticatedReportsHistoryRouteImport } from './routes/_authenticated.reports.history'
 import { Route as AuthenticatedCohortsYearRouteImport } from './routes/_authenticated.cohorts.year'
+import { Route as AuthenticatedCohortsProgramsRouteImport } from './routes/_authenticated.cohorts.programs'
 import { Route as AuthenticatedCohortsDemographicsRouteImport } from './routes/_authenticated.cohorts.demographics'
 import { Route as AuthenticatedCohortsCompareRouteImport } from './routes/_authenticated.cohorts.compare'
+import { Route as AuthenticatedCareRoutingRouteImport } from './routes/_authenticated.care.routing'
 import { Route as AuthenticatedCareRiskRouteImport } from './routes/_authenticated.care.risk'
 import { Route as AuthenticatedCareReferralsRouteImport } from './routes/_authenticated.care.referrals'
 import { Route as AuthenticatedCareCapacityRouteImport } from './routes/_authenticated.care.capacity'
 import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated.admin.policies'
 import { Route as AuthenticatedAdminMembersRouteImport } from './routes/_authenticated.admin.members'
+import { Route as AuthenticatedAdminInstitutionRouteImport } from './routes/_authenticated.admin.institution'
 import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated.admin.audit'
 
 const SettingsRoute = SettingsRouteImport.update({
@@ -55,9 +64,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsNotificationsRoute = SettingsNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => SettingsRoute,
+} as any)
 const SettingsAppearanceRoute = SettingsAppearanceRouteImport.update({
   id: '/appearance',
   path: '/appearance',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsAccountRoute = SettingsAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => SettingsRoute,
 } as any)
 const ReportsPrintRoute = ReportsPrintRouteImport.update({
@@ -65,9 +84,19 @@ const ReportsPrintRoute = ReportsPrintRouteImport.update({
   path: '/reports/print',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedQaDataRoute = AuthenticatedQaDataRouteImport.update({
+  id: '/qa-data',
+  path: '/qa-data',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedQaRoute = AuthenticatedQaRouteImport.update({
   id: '/qa',
   path: '/qa',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedHelpRoute = AuthenticatedHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedDepartmentsRoute =
@@ -103,6 +132,12 @@ const AuthenticatedSignalsWellbeingRoute =
     path: '/signals/wellbeing',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSignalsSessionsRoute =
+  AuthenticatedSignalsSessionsRouteImport.update({
+    id: '/signals/sessions',
+    path: '/signals/sessions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSignalsScreeningsRoute =
   AuthenticatedSignalsScreeningsRouteImport.update({
     id: '/signals/screenings',
@@ -127,10 +162,22 @@ const AuthenticatedSignalsEngagementRoute =
     path: '/signals/engagement',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedReportsHistoryRoute =
+  AuthenticatedReportsHistoryRouteImport.update({
+    id: '/reports/history',
+    path: '/reports/history',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedCohortsYearRoute =
   AuthenticatedCohortsYearRouteImport.update({
     id: '/cohorts/year',
     path: '/cohorts/year',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCohortsProgramsRoute =
+  AuthenticatedCohortsProgramsRouteImport.update({
+    id: '/cohorts/programs',
+    path: '/cohorts/programs',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedCohortsDemographicsRoute =
@@ -143,6 +190,12 @@ const AuthenticatedCohortsCompareRoute =
   AuthenticatedCohortsCompareRouteImport.update({
     id: '/cohorts/compare',
     path: '/cohorts/compare',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCareRoutingRoute =
+  AuthenticatedCareRoutingRouteImport.update({
+    id: '/care/routing',
+    path: '/care/routing',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedCareRiskRoute = AuthenticatedCareRiskRouteImport.update({
@@ -174,6 +227,12 @@ const AuthenticatedAdminMembersRoute =
     path: '/members',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminInstitutionRoute =
+  AuthenticatedAdminInstitutionRouteImport.update({
+    id: '/institution',
+    path: '/institution',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -187,22 +246,31 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
+  '/help': typeof AuthenticatedHelpRoute
   '/qa': typeof AuthenticatedQaRoute
+  '/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
+  '/settings/account': typeof SettingsAccountRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/institution': typeof AuthenticatedAdminInstitutionRoute
   '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
+  '/care/routing': typeof AuthenticatedCareRoutingRoute
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
+  '/cohorts/programs': typeof AuthenticatedCohortsProgramsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
+  '/reports/history': typeof AuthenticatedReportsHistoryRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/signals/sessions': typeof AuthenticatedSignalsSessionsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/reports/': typeof AuthenticatedReportsIndexRoute
@@ -213,22 +281,31 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
+  '/help': typeof AuthenticatedHelpRoute
   '/qa': typeof AuthenticatedQaRoute
+  '/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
+  '/settings/account': typeof SettingsAccountRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/institution': typeof AuthenticatedAdminInstitutionRoute
   '/admin/members': typeof AuthenticatedAdminMembersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
+  '/care/routing': typeof AuthenticatedCareRoutingRoute
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
+  '/cohorts/programs': typeof AuthenticatedCohortsProgramsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
+  '/reports/history': typeof AuthenticatedReportsHistoryRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/signals/sessions': typeof AuthenticatedSignalsSessionsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/reports': typeof AuthenticatedReportsIndexRoute
@@ -242,22 +319,31 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
+  '/_authenticated/help': typeof AuthenticatedHelpRoute
   '/_authenticated/qa': typeof AuthenticatedQaRoute
+  '/_authenticated/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
+  '/settings/account': typeof SettingsAccountRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
   '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/_authenticated/admin/institution': typeof AuthenticatedAdminInstitutionRoute
   '/_authenticated/admin/members': typeof AuthenticatedAdminMembersRoute
   '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/_authenticated/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/_authenticated/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/_authenticated/care/risk': typeof AuthenticatedCareRiskRoute
+  '/_authenticated/care/routing': typeof AuthenticatedCareRoutingRoute
   '/_authenticated/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/_authenticated/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
+  '/_authenticated/cohorts/programs': typeof AuthenticatedCohortsProgramsRoute
   '/_authenticated/cohorts/year': typeof AuthenticatedCohortsYearRoute
+  '/_authenticated/reports/history': typeof AuthenticatedReportsHistoryRoute
   '/_authenticated/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/_authenticated/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/_authenticated/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/_authenticated/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/_authenticated/signals/sessions': typeof AuthenticatedSignalsSessionsRoute
   '/_authenticated/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/reports/': typeof AuthenticatedReportsIndexRoute
@@ -271,22 +357,31 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/departments'
+    | '/help'
     | '/qa'
+    | '/qa-data'
     | '/reports/print'
+    | '/settings/account'
     | '/settings/appearance'
+    | '/settings/notifications'
     | '/admin/audit'
+    | '/admin/institution'
     | '/admin/members'
     | '/admin/policies'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
+    | '/care/routing'
     | '/cohorts/compare'
     | '/cohorts/demographics'
+    | '/cohorts/programs'
     | '/cohorts/year'
+    | '/reports/history'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
+    | '/signals/sessions'
     | '/signals/wellbeing'
     | '/admin/'
     | '/reports/'
@@ -297,22 +392,31 @@ export interface FileRouteTypes {
     | '/settings'
     | '/dashboard'
     | '/departments'
+    | '/help'
     | '/qa'
+    | '/qa-data'
     | '/reports/print'
+    | '/settings/account'
     | '/settings/appearance'
+    | '/settings/notifications'
     | '/admin/audit'
+    | '/admin/institution'
     | '/admin/members'
     | '/admin/policies'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
+    | '/care/routing'
     | '/cohorts/compare'
     | '/cohorts/demographics'
+    | '/cohorts/programs'
     | '/cohorts/year'
+    | '/reports/history'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
+    | '/signals/sessions'
     | '/signals/wellbeing'
     | '/admin'
     | '/reports'
@@ -325,22 +429,31 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/departments'
+    | '/_authenticated/help'
     | '/_authenticated/qa'
+    | '/_authenticated/qa-data'
     | '/reports/print'
+    | '/settings/account'
     | '/settings/appearance'
+    | '/settings/notifications'
     | '/_authenticated/admin/audit'
+    | '/_authenticated/admin/institution'
     | '/_authenticated/admin/members'
     | '/_authenticated/admin/policies'
     | '/_authenticated/care/capacity'
     | '/_authenticated/care/referrals'
     | '/_authenticated/care/risk'
+    | '/_authenticated/care/routing'
     | '/_authenticated/cohorts/compare'
     | '/_authenticated/cohorts/demographics'
+    | '/_authenticated/cohorts/programs'
     | '/_authenticated/cohorts/year'
+    | '/_authenticated/reports/history'
     | '/_authenticated/signals/engagement'
     | '/_authenticated/signals/heatmap'
     | '/_authenticated/signals/mood'
     | '/_authenticated/signals/screenings'
+    | '/_authenticated/signals/sessions'
     | '/_authenticated/signals/wellbeing'
     | '/_authenticated/admin/'
     | '/_authenticated/reports/'
@@ -384,11 +497,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/notifications': {
+      id: '/settings/notifications'
+      path: '/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof SettingsNotificationsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
     '/settings/appearance': {
       id: '/settings/appearance'
       path: '/appearance'
       fullPath: '/settings/appearance'
       preLoaderRoute: typeof SettingsAppearanceRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/account': {
+      id: '/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof SettingsAccountRouteImport
       parentRoute: typeof SettingsRoute
     }
     '/reports/print': {
@@ -398,11 +525,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsPrintRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/qa-data': {
+      id: '/_authenticated/qa-data'
+      path: '/qa-data'
+      fullPath: '/qa-data'
+      preLoaderRoute: typeof AuthenticatedQaDataRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/qa': {
       id: '/_authenticated/qa'
       path: '/qa'
       fullPath: '/qa'
       preLoaderRoute: typeof AuthenticatedQaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/help': {
+      id: '/_authenticated/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof AuthenticatedHelpRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/departments': {
@@ -447,6 +588,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSignalsWellbeingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/signals/sessions': {
+      id: '/_authenticated/signals/sessions'
+      path: '/signals/sessions'
+      fullPath: '/signals/sessions'
+      preLoaderRoute: typeof AuthenticatedSignalsSessionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/signals/screenings': {
       id: '/_authenticated/signals/screenings'
       path: '/signals/screenings'
@@ -475,11 +623,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSignalsEngagementRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/reports/history': {
+      id: '/_authenticated/reports/history'
+      path: '/reports/history'
+      fullPath: '/reports/history'
+      preLoaderRoute: typeof AuthenticatedReportsHistoryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/cohorts/year': {
       id: '/_authenticated/cohorts/year'
       path: '/cohorts/year'
       fullPath: '/cohorts/year'
       preLoaderRoute: typeof AuthenticatedCohortsYearRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/cohorts/programs': {
+      id: '/_authenticated/cohorts/programs'
+      path: '/cohorts/programs'
+      fullPath: '/cohorts/programs'
+      preLoaderRoute: typeof AuthenticatedCohortsProgramsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/cohorts/demographics': {
@@ -494,6 +656,13 @@ declare module '@tanstack/react-router' {
       path: '/cohorts/compare'
       fullPath: '/cohorts/compare'
       preLoaderRoute: typeof AuthenticatedCohortsCompareRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/care/routing': {
+      id: '/_authenticated/care/routing'
+      path: '/care/routing'
+      fullPath: '/care/routing'
+      preLoaderRoute: typeof AuthenticatedCareRoutingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/care/risk': {
@@ -531,6 +700,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMembersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/institution': {
+      id: '/_authenticated/admin/institution'
+      path: '/institution'
+      fullPath: '/admin/institution'
+      preLoaderRoute: typeof AuthenticatedAdminInstitutionRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/audit': {
       id: '/_authenticated/admin/audit'
       path: '/audit'
@@ -543,6 +719,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
+  AuthenticatedAdminInstitutionRoute: typeof AuthenticatedAdminInstitutionRoute
   AuthenticatedAdminMembersRoute: typeof AuthenticatedAdminMembersRoute
   AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -550,6 +727,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
+  AuthenticatedAdminInstitutionRoute: AuthenticatedAdminInstitutionRoute,
   AuthenticatedAdminMembersRoute: AuthenticatedAdminMembersRoute,
   AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -562,17 +740,23 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
+  AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
   AuthenticatedQaRoute: typeof AuthenticatedQaRoute
+  AuthenticatedQaDataRoute: typeof AuthenticatedQaDataRoute
   AuthenticatedCareCapacityRoute: typeof AuthenticatedCareCapacityRoute
   AuthenticatedCareReferralsRoute: typeof AuthenticatedCareReferralsRoute
   AuthenticatedCareRiskRoute: typeof AuthenticatedCareRiskRoute
+  AuthenticatedCareRoutingRoute: typeof AuthenticatedCareRoutingRoute
   AuthenticatedCohortsCompareRoute: typeof AuthenticatedCohortsCompareRoute
   AuthenticatedCohortsDemographicsRoute: typeof AuthenticatedCohortsDemographicsRoute
+  AuthenticatedCohortsProgramsRoute: typeof AuthenticatedCohortsProgramsRoute
   AuthenticatedCohortsYearRoute: typeof AuthenticatedCohortsYearRoute
+  AuthenticatedReportsHistoryRoute: typeof AuthenticatedReportsHistoryRoute
   AuthenticatedSignalsEngagementRoute: typeof AuthenticatedSignalsEngagementRoute
   AuthenticatedSignalsHeatmapRoute: typeof AuthenticatedSignalsHeatmapRoute
   AuthenticatedSignalsMoodRoute: typeof AuthenticatedSignalsMoodRoute
   AuthenticatedSignalsScreeningsRoute: typeof AuthenticatedSignalsScreeningsRoute
+  AuthenticatedSignalsSessionsRoute: typeof AuthenticatedSignalsSessionsRoute
   AuthenticatedSignalsWellbeingRoute: typeof AuthenticatedSignalsWellbeingRoute
   AuthenticatedReportsIndexRoute: typeof AuthenticatedReportsIndexRoute
 }
@@ -581,17 +765,23 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
+  AuthenticatedHelpRoute: AuthenticatedHelpRoute,
   AuthenticatedQaRoute: AuthenticatedQaRoute,
+  AuthenticatedQaDataRoute: AuthenticatedQaDataRoute,
   AuthenticatedCareCapacityRoute: AuthenticatedCareCapacityRoute,
   AuthenticatedCareReferralsRoute: AuthenticatedCareReferralsRoute,
   AuthenticatedCareRiskRoute: AuthenticatedCareRiskRoute,
+  AuthenticatedCareRoutingRoute: AuthenticatedCareRoutingRoute,
   AuthenticatedCohortsCompareRoute: AuthenticatedCohortsCompareRoute,
   AuthenticatedCohortsDemographicsRoute: AuthenticatedCohortsDemographicsRoute,
+  AuthenticatedCohortsProgramsRoute: AuthenticatedCohortsProgramsRoute,
   AuthenticatedCohortsYearRoute: AuthenticatedCohortsYearRoute,
+  AuthenticatedReportsHistoryRoute: AuthenticatedReportsHistoryRoute,
   AuthenticatedSignalsEngagementRoute: AuthenticatedSignalsEngagementRoute,
   AuthenticatedSignalsHeatmapRoute: AuthenticatedSignalsHeatmapRoute,
   AuthenticatedSignalsMoodRoute: AuthenticatedSignalsMoodRoute,
   AuthenticatedSignalsScreeningsRoute: AuthenticatedSignalsScreeningsRoute,
+  AuthenticatedSignalsSessionsRoute: AuthenticatedSignalsSessionsRoute,
   AuthenticatedSignalsWellbeingRoute: AuthenticatedSignalsWellbeingRoute,
   AuthenticatedReportsIndexRoute: AuthenticatedReportsIndexRoute,
 }
@@ -601,11 +791,15 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface SettingsRouteChildren {
+  SettingsAccountRoute: typeof SettingsAccountRoute
   SettingsAppearanceRoute: typeof SettingsAppearanceRoute
+  SettingsNotificationsRoute: typeof SettingsNotificationsRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsAccountRoute: SettingsAccountRoute,
   SettingsAppearanceRoute: SettingsAppearanceRoute,
+  SettingsNotificationsRoute: SettingsNotificationsRoute,
 }
 
 const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
