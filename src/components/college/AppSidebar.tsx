@@ -43,8 +43,7 @@ const GROUPS: Group[] = [
     { title: "Reports", url: "/reports", icon: FileText },
   ]},
   { label: "Administration", items: [
-    { title: "Access & roles", url: "/admin/access", icon: ShieldCheck },
-    { title: "Audit log", url: "/admin/audit", icon: ScrollText },
+    { title: "Admin", url: "/admin", icon: ShieldCheck },
     { title: "Appearance", url: "/settings/appearance", icon: Palette },
   ]},
 ];
