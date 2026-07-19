@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { useMemo } from "react";
-import { AlertTriangle, ArrowRight, Bell, Check, FileText, Inbox, Settings2, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, FileText, Inbox, Settings2, Users } from "lucide-react";
 import { GlassCard, PageHeader } from "@/components/college/primitives";
 import { EmptyState } from "@/components/primitives/EmptyState";
 import { markAllRead, markRead, timeAgo, useNotifications, type NotifKind } from "@/lib/notifications-store";
@@ -91,10 +91,10 @@ function NotificationsPage() {
         {filtered.length === 0 ? (
           <div className="p-8">
             <EmptyState
-              icon={Bell}
-              title="Nothing to show"
-              body={filter === "unread"
-                ? "All caught up — no unread alerts under this filter."
+              kind={filter === "unread" ? "no-data" : "filtered"}
+              title={filter === "unread" ? "All caught up" : "Nothing to show"}
+              subtitle={filter === "unread"
+                ? "No unread alerts under this filter."
                 : "No notifications match this filter yet."}
             />
           </div>
