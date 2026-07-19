@@ -1,30 +1,39 @@
-import { createFileRoute, redirect, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { ROUTE_MANIFEST } from "@/lib/route-manifest";
 import { useCurrentRole } from "@/lib/admin-mock";
 import { GlassCard } from "@/components/college/primitives";
 import { EmptyState } from "@/components/primitives/EmptyState";
 import { LoadingBlock } from "@/components/primitives/LoadingBlock";
 import { KeyboardHelpDialog } from "@/components/keyboard/KeyboardHelpDialog";
+import { isSuppressed } from "@/lib/cohort-selectors";
 import { CheckCircle2, XCircle, AlertTriangle, Play, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/qa")({
   head: () => ({
     meta: [
       { title: "QA self-check — PeaceCode for Colleges" },
-      { name: "description", content: "Internal QA dashboard: route coverage, contrast, k-anonymity probe, keyboard walk." },
+      { name: "description", content: "Internal QA: route coverage, contrast, k-anonymity probe, keyboard walk." },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  beforeLoad: () => {
-    // Admin-only. Redirect viewers/others to the dashboard.
-    if (typeof window === "undefined") return;
-    // Note: mock role lives in localStorage; treat missing as admin (dev default).
-  },
   component: QAPage,
 });
 
-/* ---------- utilities ---------- */
+/* ---------- helpers ---------- */
+
+function Panel({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+  return (
+    <GlassCard className="p-4 space-y-3">
+      <header>
+        <h2 className="font-serif text-[15px]" style={{ color: "var(--pc-ink)" }}>{title}</h2>
+        {subtitle && <p className="text-[11.5px] mt-0.5" style={{ color: "var(--pc-muted)" }}>{subtitle}</p>}
+      </header>
+      {children}
+    </GlassCard>
+  );
+}
 
 function tick(ok: boolean) {
   return ok ? (
@@ -44,14 +53,13 @@ function relLuminance(hex: string): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 function contrast(a: string, b: string): number {
-  const la = relLuminance(a);
-  const lb = relLuminance(b);
+  const la = relLuminance(a), lb = relLuminance(b);
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 function readVar(name: string): string {
   if (typeof window === "undefined") return "#000000";
   const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  return v.startsWith("#") ? v : "#000000"; // skip oklch/rgba — reported as n/a
+  return v.startsWith("#") ? v : "#000000";
 }
 
 /* ---------- Route coverage ---------- */
@@ -73,7 +81,7 @@ function RouteCoverage() {
   }, []);
 
   return (
-    <GlassCard title="Route coverage" subtitle={`${ROUTE_MANIFEST.length} routes tracked`}>
+    <Panel title="Route coverage" subtitle={`${ROUTE_MANIFEST.length} routes tracked`}>
       <div className="overflow-x-auto -mx-2">
         <table className="w-full text-[12.5px]">
           <thead>
@@ -86,38 +94,32 @@ function RouteCoverage() {
           </thead>
           <tbody>
             {ROUTE_MANIFEST.map((r) => {
-              const scannedKey = Object.keys(scanned).find((k) => k.endsWith(r.file.replace(/^src/, "")));
-              const hasHead = scannedKey ? scanned[scannedKey] : false;
+              const key = Object.keys(scanned).find((k) => k.endsWith(r.file.replace(/^src/, "")));
+              const hasHead = key ? scanned[key] : false;
               return (
                 <tr key={r.path} style={{ borderTop: "1px solid var(--pc-border)" }}>
                   <td className="px-2 py-1.5 font-mono text-[11.5px]" style={{ color: "var(--pc-ink)" }}>
-                    <Link to={r.path as never} className="underline-offset-2 hover:underline">
-                      {r.path}
-                    </Link>
+                    <Link to={r.path as never} className="underline-offset-2 hover:underline">{r.path}</Link>
                   </td>
                   <td className="px-2 py-1.5" style={{ color: "var(--pc-ink-2)" }}>{r.title}</td>
                   <td className="px-2 py-1.5 text-center">{tick(hasHead)}</td>
-                  <td className="px-2 py-1.5 text-center" style={{ color: "var(--pc-muted)" }}>
-                    {r.requiresAuth ? "yes" : "no"}
-                  </td>
+                  <td className="px-2 py-1.5 text-center" style={{ color: "var(--pc-muted)" }}>{r.requiresAuth ? "yes" : "no"}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-    </GlassCard>
+    </Panel>
   );
 }
 
-/* ---------- Contrast checker ---------- */
+/* ---------- Contrast ---------- */
 
 function ContrastChecker() {
   const [rows, setRows] = useState<Array<{ name: string; fg: string; bg: string; ratio: number; pass: boolean }>>([]);
-
   useEffect(() => {
-    const bg = readVar("--pc-bg");
-    const card = readVar("--pc-surface");
+    const bg = readVar("--pc-bg"), card = readVar("--pc-surface");
     const pairs: Array<[string, string, string]> = [
       ["Ink on bg", readVar("--pc-ink"), bg],
       ["Ink-2 on bg", readVar("--pc-ink-2"), bg],
@@ -129,45 +131,35 @@ function ContrastChecker() {
       ["Danger on bg", readVar("--pc-danger"), bg],
       ["Good on bg", readVar("--pc-good"), bg],
     ];
-    setRows(
-      pairs.map(([name, fg, bg]) => {
-        const ratio = contrast(fg, bg);
-        return { name, fg, bg, ratio, pass: ratio >= 4.5 };
-      })
-    );
+    setRows(pairs.map(([name, fg, bg]) => {
+      const ratio = contrast(fg, bg);
+      return { name, fg, bg, ratio, pass: ratio >= 4.5 };
+    }));
   }, []);
 
   return (
-    <GlassCard title="Contrast (WCAG AA)" subtitle="Body text — 4.5:1 minimum">
-      <ul className="text-[12.5px] space-y-1.5">
-        {rows.length === 0 ? (
-          <li><LoadingBlock variant="row" /></li>
-        ) : rows.map((r) => (
-          <li key={r.name} className="flex items-center justify-between gap-3">
-            <span className="flex items-center gap-2">
-              <span
-                className="inline-block w-4 h-4 rounded"
-                style={{ background: r.bg, border: "1px solid var(--pc-border)" }}
-                aria-hidden
-              />
-              <span
-                className="inline-block w-4 h-4 rounded"
-                style={{ background: r.fg, border: "1px solid var(--pc-border)" }}
-                aria-hidden
-              />
-              <span style={{ color: "var(--pc-ink-2)" }}>{r.name}</span>
-            </span>
-            <span className="flex items-center gap-2 font-mono" style={{ color: "var(--pc-muted)" }}>
-              {r.ratio.toFixed(2)}:1 {tick(r.pass)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </GlassCard>
+    <Panel title="Contrast (WCAG AA)" subtitle="Body text — 4.5:1 minimum">
+      {rows.length === 0 ? <LoadingBlock variant="row" /> : (
+        <ul className="text-[12.5px] space-y-1.5">
+          {rows.map((r) => (
+            <li key={r.name} className="flex items-center justify-between gap-3">
+              <span className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded" style={{ background: r.bg, border: "1px solid var(--pc-border)" }} aria-hidden />
+                <span className="inline-block w-4 h-4 rounded" style={{ background: r.fg, border: "1px solid var(--pc-border)" }} aria-hidden />
+                <span style={{ color: "var(--pc-ink-2)" }}>{r.name}</span>
+              </span>
+              <span className="flex items-center gap-2 font-mono" style={{ color: "var(--pc-muted)" }}>
+                {r.ratio.toFixed(2)}:1 {tick(r.pass)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Panel>
   );
 }
 
-/* ---------- K-anonymity probe ---------- */
+/* ---------- k-anonymity probe ---------- */
 
 type ProbeRow = { name: string; passed: boolean; detail: string };
 
@@ -182,27 +174,22 @@ function KAnonProbe() {
       const cube = await import("@/lib/cohort-cube");
       const filters = { ...cube.DEFAULT_FILTERS, year: ["Y4"], gender: ["Non-binary"], residency: ["Off-campus"], gen1: ["Yes"], aid: ["Full"] } as never;
       const agg = cube.sliceCube(filters);
-      const ok = agg.suppressed === true || agg.n >= 10;
-      out.push({ name: "sliceCube tiny filter", passed: ok, detail: `n=${agg.n ?? "—"} suppressed=${agg.suppressed ?? false}` });
-    } catch (e) {
-      out.push({ name: "sliceCube tiny filter", passed: false, detail: String((e as Error).message) });
-    }
+      const n = agg.n ?? 0;
+      out.push({ name: "sliceCube tiny filter", passed: n === 0 || n >= 10, detail: `n=${n}` });
+    } catch (e) { out.push({ name: "sliceCube tiny filter", passed: false, detail: (e as Error).message }); }
     try {
       const sig = await import("@/lib/signals-selectors");
       const r = sig.getRidgeline("phq9" as never, "4w" as never);
-      const ok = r.kind === "suppressed" || (r.kind === "ok" && r.data.n >= 10);
-      out.push({ name: "getRidgeline default", passed: ok, detail: `kind=${r.kind}` });
-    } catch (e) {
-      out.push({ name: "getRidgeline default", passed: false, detail: String((e as Error).message) });
-    }
+      const suppressed = isSuppressed(r);
+      const passed = suppressed || (r as { n: number }).n >= 10;
+      out.push({ name: "getRidgeline default", passed, detail: suppressed ? "suppressed" : `n=${(r as { n: number }).n}` });
+    } catch (e) { out.push({ name: "getRidgeline default", passed: false, detail: (e as Error).message }); }
     try {
       const ew = await import("@/lib/early-warning-selectors");
       const pop = ew.getTierPopulation("4w" as never);
-      const ok = pop.every((t) => t.suppressed === true || (t.n ?? 0) >= 10);
-      out.push({ name: "getTierPopulation buckets ≥10", passed: ok, detail: `${pop.length} tiers checked` });
-    } catch (e) {
-      out.push({ name: "getTierPopulation buckets ≥10", passed: false, detail: String((e as Error).message) });
-    }
+      const passed = pop.every((t) => t.suppressed === true || t.count >= 10);
+      out.push({ name: "getTierPopulation buckets ≥10", passed, detail: `${pop.length} tiers checked` });
+    } catch (e) { out.push({ name: "getTierPopulation buckets ≥10", passed: false, detail: (e as Error).message }); }
     setRows(out);
     setRunning(false);
   };
@@ -210,10 +197,8 @@ function KAnonProbe() {
   useEffect(() => { run(); }, []);
 
   return (
-    <GlassCard title="k-anonymity probe" subtitle="k = 10 must hold on every slice">
-      {rows === null ? (
-        <LoadingBlock variant="table" />
-      ) : (
+    <Panel title="k-anonymity probe" subtitle="k = 10 must hold on every slice">
+      {rows === null ? <LoadingBlock variant="table" /> : (
         <ul className="text-[12.5px] space-y-1.5">
           {rows.map((r) => (
             <li key={r.name} className="flex items-center justify-between">
@@ -225,18 +210,14 @@ function KAnonProbe() {
           ))}
         </ul>
       )}
-      <div className="pt-3">
-        <button
-          type="button"
-          disabled={running}
-          onClick={run}
+      <div>
+        <button type="button" disabled={running} onClick={run}
           className="text-[12px] px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}>
           <Play aria-hidden className="w-3.5 h-3.5" /> Re-run
         </button>
       </div>
-    </GlassCard>
+    </Panel>
   );
 }
 
@@ -245,22 +226,20 @@ function KAnonProbe() {
 function KeyboardWalk() {
   const [stats, setStats] = useState<{ count: number; noFocusVisible: number } | null>(null);
   const run = () => {
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
-      )
-    );
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+    ));
     let noFV = 0;
     for (const el of nodes) {
       const cs = window.getComputedStyle(el, ":focus-visible");
       const outline = cs.outlineStyle !== "none" && cs.outlineWidth !== "0px";
-      const ring = cs.boxShadow && cs.boxShadow !== "none";
+      const ring = !!cs.boxShadow && cs.boxShadow !== "none";
       if (!outline && !ring) noFV++;
     }
     setStats({ count: nodes.length, noFocusVisible: noFV });
   };
   return (
-    <GlassCard title="Keyboard walk" subtitle="Focusable elements on this page">
+    <Panel title="Keyboard walk" subtitle="Focusable elements on this page">
       {stats === null ? (
         <EmptyState kind="no-data" title="Not run yet" subtitle="Run to count focusable elements and check :focus-visible." />
       ) : (
@@ -277,21 +256,18 @@ function KeyboardWalk() {
           </li>
         </ul>
       )}
-      <div className="pt-3">
-        <button
-          type="button"
-          onClick={run}
+      <div>
+        <button type="button" onClick={run}
           className="text-[12px] px-2.5 py-1 rounded-full focus-visible:outline-none focus-visible:ring-2"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}>
           Run walk
         </button>
       </div>
-    </GlassCard>
+    </Panel>
   );
 }
 
-/* ---------- Axe live audit ---------- */
+/* ---------- Axe ---------- */
 
 function AxePanel() {
   const [state, setState] = useState<
@@ -308,63 +284,48 @@ function AxePanel() {
       const result = await axe.run(document);
       setState({
         kind: "done",
-        violations: result.violations.map((v) => ({
-          id: v.id, impact: v.impact ?? null, help: v.help, nodes: v.nodes.length,
-        })),
+        violations: result.violations.map((v) => ({ id: v.id, impact: v.impact ?? null, help: v.help, nodes: v.nodes.length })),
       });
-    } catch (e) {
-      setState({ kind: "error", message: (e as Error).message });
-    }
+    } catch (e) { setState({ kind: "error", message: (e as Error).message }); }
   };
 
   return (
-    <GlassCard title="Axe audit (this page)" subtitle="axe-core loaded on demand">
-      {state.kind === "idle" && (
-        <EmptyState kind="no-data" title="Not run yet" subtitle="Click to audit this page with axe-core." />
-      )}
+    <Panel title="Axe audit (this page)" subtitle="axe-core loaded on demand">
+      {state.kind === "idle" && <EmptyState kind="no-data" title="Not run yet" subtitle="Click to audit this page." />}
       {state.kind === "running" && <LoadingBlock variant="table" />}
-      {state.kind === "error" && (
-        <div className="text-[12.5px]" style={{ color: "var(--pc-danger)" }}>{state.message}</div>
-      )}
-      {state.kind === "done" && (
-        state.violations.length === 0 ? (
-          <div className="flex items-center gap-2 text-[13px]" style={{ color: "var(--pc-good)" }}>
-            <CheckCircle2 className="w-4 h-4" /> No violations on this page.
-          </div>
-        ) : (
-          <ul className="text-[12.5px] space-y-1.5">
-            {state.violations.map((v) => (
-              <li key={v.id} className="flex items-start justify-between gap-3">
-                <div>
-                  <div style={{ color: "var(--pc-ink)" }}>{v.help}</div>
-                  <div className="font-mono text-[11px]" style={{ color: "var(--pc-muted)" }}>{v.id} · {v.nodes} node(s)</div>
-                </div>
-                <span
-                  className="px-1.5 py-0.5 rounded text-[10.5px] uppercase tracking-wide"
-                  style={{
-                    background: "var(--pc-surface2)",
-                    color: v.impact === "critical" || v.impact === "serious" ? "var(--pc-danger)" : "var(--pc-muted)",
-                    border: "1px solid var(--pc-border)",
-                  }}
-                >
-                  {v.impact ?? "minor"}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )
-      )}
-      <div className="pt-3">
-        <button
-          type="button"
-          onClick={run}
+      {state.kind === "error" && <div className="text-[12.5px]" style={{ color: "var(--pc-danger)" }}>{state.message}</div>}
+      {state.kind === "done" && (state.violations.length === 0 ? (
+        <div className="flex items-center gap-2 text-[13px]" style={{ color: "var(--pc-good)" }}>
+          <CheckCircle2 className="w-4 h-4" /> No violations on this page.
+        </div>
+      ) : (
+        <ul className="text-[12.5px] space-y-1.5">
+          {state.violations.map((v) => (
+            <li key={v.id} className="flex items-start justify-between gap-3">
+              <div>
+                <div style={{ color: "var(--pc-ink)" }}>{v.help}</div>
+                <div className="font-mono text-[11px]" style={{ color: "var(--pc-muted)" }}>{v.id} · {v.nodes} node(s)</div>
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[10.5px] uppercase tracking-wide"
+                style={{
+                  background: "var(--pc-surface2)",
+                  color: v.impact === "critical" || v.impact === "serious" ? "var(--pc-danger)" : "var(--pc-muted)",
+                  border: "1px solid var(--pc-border)",
+                }}>
+                {v.impact ?? "minor"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ))}
+      <div>
+        <button type="button" onClick={run}
           className="text-[12px] px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}>
           <Play aria-hidden className="w-3.5 h-3.5" /> Run axe
         </button>
       </div>
-    </GlassCard>
+    </Panel>
   );
 }
 
@@ -373,28 +334,21 @@ function AxePanel() {
 function QuickActions() {
   const [helpOpen, setHelpOpen] = useState(false);
   return (
-    <GlassCard title="Quick actions" subtitle="Common QA jump-offs">
+    <Panel title="Quick actions" subtitle="Common QA jump-offs">
       <div className="flex flex-wrap gap-2">
-        <a
-          href="/reports/print?demo=1"
-          target="_blank"
-          rel="noreferrer"
+        <a href="/reports/print?demo=1" target="_blank" rel="noreferrer"
           className="text-[12px] px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}>
           <ExternalLink aria-hidden className="w-3.5 h-3.5" /> Print preview
         </a>
-        <button
-          type="button"
-          onClick={() => setHelpOpen(true)}
+        <button type="button" onClick={() => setHelpOpen(true)}
           className="text-[12px] px-2.5 py-1 rounded-full focus-visible:outline-none focus-visible:ring-2"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink)", border: "1px solid var(--pc-border)" }}>
           Keyboard shortcuts
         </button>
       </div>
       <KeyboardHelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
-    </GlassCard>
+    </Panel>
   );
 }
 
@@ -414,11 +368,9 @@ function QAPage() {
       </header>
 
       {banner && (
-        <div
-          role="status"
+        <div role="status"
           className="flex items-center gap-2 text-[12.5px] px-3 py-2 rounded-xl"
-          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink-2)", border: "1px solid var(--pc-border)" }}
-        >
+          style={{ background: "var(--pc-surface2)", color: "var(--pc-ink-2)", border: "1px solid var(--pc-border)" }}>
           <AlertTriangle aria-hidden className="w-4 h-4" style={{ color: "var(--pc-warn)" }} />
           Current role is <strong className="mx-1">{role}</strong> — some panels below assume admin.
         </div>
@@ -435,6 +387,3 @@ function QAPage() {
     </div>
   );
 }
-
-// keep import to satisfy TS unused check if lint tightens
-void redirect; void useRef;
