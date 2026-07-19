@@ -156,6 +156,8 @@
   --pc-accent-2: #B78A3A;
   --pc-warn:     #B65A2E;
   --pc-good:     #4E7A57;
+  --pc-danger:   #B65A2E;
+  --pc-accent-3: #6B7570;
   --pc-soft:     #CDE3D2;
   --pc-lavender: #B78A3A;
   --pc-shell:    rgba(255,255,255,0.78);
@@ -179,6 +181,8 @@
   --pc-accent-2: #D4A65A;
   --pc-warn:     #E07A4A;
   --pc-good:     #7FB58C;
+  --pc-danger:   #E07A4A;
+  --pc-accent-3: #B8C0BC;
   --pc-soft:     #2E4238;
   --pc-lavender: #D4A65A;
   --pc-shell:    rgba(28,32,36,0.72);
