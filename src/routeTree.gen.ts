@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsAppearanceRouteImport } from './routes/settings.appearance'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedSignalsWellbeingRouteImport } from './routes/_authenticated.signals.wellbeing'
 import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_authenticated.signals.screenings'
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
 import { Route as AuthenticatedSignalsHeatmapRouteImport } from './routes/_authenticated.signals.heatmap'
@@ -67,6 +68,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSignalsWellbeingRoute =
+  AuthenticatedSignalsWellbeingRouteImport.update({
+    id: '/signals/wellbeing',
+    path: '/signals/wellbeing',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSignalsScreeningsRoute =
   AuthenticatedSignalsScreeningsRouteImport.update({
     id: '/signals/screenings',
@@ -178,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -201,6 +209,7 @@ export interface FileRoutesByTo {
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -226,6 +235,7 @@ export interface FileRoutesById {
   '/_authenticated/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/_authenticated/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/_authenticated/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
+  '/_authenticated/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -251,6 +261,7 @@ export interface FileRouteTypes {
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
+    | '/signals/wellbeing'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
+    | '/signals/wellbeing'
   id:
     | '__root__'
     | '/'
@@ -298,6 +310,7 @@ export interface FileRouteTypes {
     | '/_authenticated/signals/heatmap'
     | '/_authenticated/signals/mood'
     | '/_authenticated/signals/screenings'
+    | '/_authenticated/signals/wellbeing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/signals/wellbeing': {
+      id: '/_authenticated/signals/wellbeing'
+      path: '/signals/wellbeing'
+      fullPath: '/signals/wellbeing'
+      preLoaderRoute: typeof AuthenticatedSignalsWellbeingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/signals/screenings': {
@@ -484,6 +504,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSignalsHeatmapRoute: typeof AuthenticatedSignalsHeatmapRoute
   AuthenticatedSignalsMoodRoute: typeof AuthenticatedSignalsMoodRoute
   AuthenticatedSignalsScreeningsRoute: typeof AuthenticatedSignalsScreeningsRoute
+  AuthenticatedSignalsWellbeingRoute: typeof AuthenticatedSignalsWellbeingRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -504,6 +525,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSignalsHeatmapRoute: AuthenticatedSignalsHeatmapRoute,
   AuthenticatedSignalsMoodRoute: AuthenticatedSignalsMoodRoute,
   AuthenticatedSignalsScreeningsRoute: AuthenticatedSignalsScreeningsRoute,
+  AuthenticatedSignalsWellbeingRoute: AuthenticatedSignalsWellbeingRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
