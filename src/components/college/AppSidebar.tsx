@@ -1,10 +1,13 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Building2, GraduationCap, Users, GitCompareArrows,
-  Activity, ClipboardList, Waves, Grid3x3,
-  AlertTriangle, Share2, Gauge,
-  FileText,
-  ShieldCheck, Palette, LogOut,
+  LayoutDashboard, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
+  Activity, ClipboardList, Waves, Grid3x3, CalendarClock,
+  AlertTriangle, Share2, Gauge, Route as RouteIcon,
+  FileText, History,
+  ShieldCheck, UserCog, Landmark, ScrollText,
+  Palette, User as UserIcon, BellRing,
+  HelpCircle, TerminalSquare, Braces,
+  LogOut,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -16,38 +19,55 @@ import { endSession } from "@/lib/auth-store";
 type Item = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
 type Group = { label: string; items: Item[] };
 
-const GROUPS: Group[] = [
+export const SIDEBAR_GROUPS: Group[] = [
   { label: "Overview", items: [
     { title: "Executive overview", url: "/dashboard", icon: LayoutDashboard },
   ]},
   { label: "Cohort insights", items: [
-    { title: "Departments", url: "/departments", icon: Building2 },
-    { title: "Year & program", url: "/cohorts/year", icon: GraduationCap },
-    { title: "Demographics", url: "/cohorts/demographics", icon: Users },
-    { title: "Compare cohorts", url: "/cohorts/compare", icon: GitCompareArrows },
+    { title: "Departments",     url: "/departments",          icon: Building2 },
+    { title: "Year & program",  url: "/cohorts/year",         icon: GraduationCap },
+    { title: "Programs",        url: "/cohorts/programs",     icon: BookOpen },
+    { title: "Demographics",    url: "/cohorts/demographics", icon: Users },
+    { title: "Compare cohorts", url: "/cohorts/compare",      icon: GitCompareArrows },
   ]},
   { label: "Wellbeing signals", items: [
-    { title: "Overview", url: "/signals/wellbeing", icon: Activity },
-    { title: "Mood trends", url: "/signals/mood", icon: Activity },
-    { title: "Screening outcomes", url: "/signals/screenings", icon: ClipboardList },
-    { title: "Engagement rhythm", url: "/signals/engagement", icon: Waves },
-    { title: "Wellness heatmap", url: "/signals/heatmap", icon: Grid3x3 },
+    { title: "Overview",           url: "/signals/wellbeing",   icon: Activity },
+    { title: "Mood trends",        url: "/signals/mood",        icon: Activity },
+    { title: "Screening outcomes", url: "/signals/screenings",  icon: ClipboardList },
+    { title: "Engagement rhythm",  url: "/signals/engagement",  icon: Waves },
+    { title: "Sessions",           url: "/signals/sessions",    icon: CalendarClock },
+    { title: "Wellness heatmap",   url: "/signals/heatmap",     icon: Grid3x3 },
   ]},
-
   { label: "Early warning & care", items: [
-    { title: "Early warning", url: "/care/risk", icon: AlertTriangle },
-    { title: "Referral pipeline", url: "/care/referrals", icon: Share2 },
-    { title: "Counsellor capacity", url: "/care/capacity", icon: Gauge },
+    { title: "Early warning",       url: "/care/risk",       icon: AlertTriangle },
+    { title: "Care routing",        url: "/care/routing",    icon: RouteIcon },
+    { title: "Referral pipeline",   url: "/care/referrals",  icon: Share2 },
+    { title: "Counsellor capacity", url: "/care/capacity",   icon: Gauge },
   ]},
   { label: "Institutional reporting", items: [
-    { title: "Reports", url: "/reports", icon: FileText },
+    { title: "Reports",        url: "/reports",         icon: FileText },
+    { title: "Report history", url: "/reports/history", icon: History },
   ]},
   { label: "Administration", items: [
-    { title: "Admin", url: "/admin", icon: ShieldCheck },
-    { title: "QA self-check", url: "/qa", icon: ShieldCheck },
-    { title: "Appearance", url: "/settings/appearance", icon: Palette },
+    { title: "Overview",    url: "/admin",             icon: ShieldCheck },
+    { title: "Members",     url: "/admin/members",     icon: UserCog },
+    { title: "Institution", url: "/admin/institution", icon: Landmark },
+    { title: "Audit log",   url: "/admin/audit",       icon: ScrollText },
+  ]},
+  { label: "Settings", items: [
+    { title: "Appearance",    url: "/settings/appearance",    icon: Palette },
+    { title: "Account",       url: "/settings/account",       icon: UserIcon },
+    { title: "Notifications", url: "/settings/notifications", icon: BellRing },
+  ]},
+  { label: "Support", items: [
+    { title: "Help & policy",    url: "/help",     icon: HelpCircle },
+    { title: "QA self-check",    url: "/qa",       icon: TerminalSquare },
+    { title: "QA data dump",     url: "/qa-data",  icon: Braces },
   ]},
 ];
+
+const GROUPS = SIDEBAR_GROUPS;
+
 
 export function AppSidebar() {
   const { state } = useSidebar();
