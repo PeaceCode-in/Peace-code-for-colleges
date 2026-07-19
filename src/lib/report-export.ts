@@ -280,7 +280,7 @@ function buildSection(def: SectionDef, ctx: BuildCtx): ReportSection {
         { item: "Benchmark included",  value: ctx.config.benchmark ? "Yes" : "No" },
         { item: "PHQ-9 cutoffs",       value: "0–4 min · 5–9 mild · 10–14 mod · 15–19 mod-severe · 20+ severe" },
         { item: "GAD-7 cutoffs",       value: "0–4 min · 5–9 mild · 10–14 mod · 15+ severe" },
-        ...RISK_RULES.map((r) => ({ item: `Rule · ${r.label}`, value: r.description })),
+        ...Object.entries(RISK_RULES).map(([key, desc]) => ({ item: `Rule · ${RISK_TIER_LABEL[key as RiskTier]}`, value: String(desc) })),
         { item: "Institution ID",      value: ctx.config.institutionId },
         { item: "Generated at",        value: new Date().toISOString() },
       ];
