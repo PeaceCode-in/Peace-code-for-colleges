@@ -289,6 +289,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               <ProfileMenu />
               {/* Legacy UserMenu removed — ProfileMenu supersedes it. */}
               {false && <UserMenu />}
+            </header>
             <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />
               <PageTransition pathname={shellPathname}>{children}</PageTransition>
