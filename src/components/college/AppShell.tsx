@@ -201,6 +201,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
   const college = useCollegeContext();
   const [dark, toggleDark] = useDark();
   const [helpOpen, setHelpOpen] = useState(false);
+  const shellPathname = useRouterState({ select: (s) => s.location.pathname });
   useGlobalShortcuts({ onHelp: () => setHelpOpen(true) });
 
   useEffect(() => {
@@ -285,7 +286,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
             </header>
             <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />
-              <PageTransition pathname={pathname}>{children}</PageTransition>
+              <PageTransition pathname={shellPathname}>{children}</PageTransition>
             </main>
           </SidebarInset>
         </div>
