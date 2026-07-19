@@ -253,7 +253,7 @@ function EngagementPage() {
                 <TrendArea data={retention} height={160} color="var(--pc-accent-2, var(--pc-primary))" ariaLabel="Retention curve" yDomain={[0, 100]} />
               </div>
               <div className="mt-2 flex items-center gap-3 text-[11px]" style={{ color: "var(--pc-muted)" }}>
-                <RadialProgress value={retention[retention.length - 1]?.y ?? 0} max={100} size={48} strokeWidth={5} label={`${retention[retention.length - 1]?.y ?? 0}%`} ariaLabel="Day-30 retention" />
+                <RadialProgress value={retention[retention.length - 1]?.y ?? 0} size={48} stroke={5} label={`${retention[retention.length - 1]?.y ?? 0}%`} />
                 <span>Day-30 retention</span>
               </div>
             </FlowCard>
