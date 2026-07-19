@@ -56,7 +56,7 @@ function hash(s: string): number {
 }
 function positiveTrend(key: string, points: number): { x: string; y: number }[] {
   const rand = mulberry32(SEED_ROOT ^ hash(`${key}:pos`));
-  const out: { x: string; value: number }[] = [];
+  const out: { x: string; y: number }[] = [];
   const today = new Date();
   let base = 22 + rand() * 6;
   for (let i = points - 1; i >= 0; i--) {
@@ -65,7 +65,7 @@ function positiveTrend(key: string, points: number): { x: string; y: number }[] 
     const drift = Math.sin(i / 4) * 3 + (rand() - 0.5) * 2.4;
     const v = Math.max(10, Math.min(38, base + drift));
     base += (rand() - 0.5) * 0.4;
-    out.push({ x: d.toISOString().slice(5, 10), value: Math.round(v * 10) / 10 });
+    out.push({ x: d.toISOString().slice(5, 10), y: Math.round(v * 10) / 10 });
   }
   return out;
 }
@@ -155,8 +155,8 @@ function ScreeningsPage() {
   // Trend
   const trendPoints = windowKey === "month" ? 8 : windowKey === "term" ? 16 : 26;
   const trend = useMemo(() => positiveTrend(`${dept}:${scale}:${windowKey}`, trendPoints), [dept, scale, windowKey, trendPoints]);
-  const trendCurrent = trend[trend.length - 1]?.value ?? positiveRate;
-  const trendPrior   = trend[trend.length - 5]?.value ?? trendCurrent;
+  const trendCurrent = trend[trend.length - 1]?.y ?? positiveRate;
+  const trendPrior   = trend[trend.length - 5]?.y ?? trendCurrent;
   const trendDelta   = Math.round((trendCurrent - trendPrior) * 10) / 10;
 
   // Volume
