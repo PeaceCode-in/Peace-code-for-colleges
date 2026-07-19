@@ -1,6 +1,7 @@
 // Weekly engagement heatmap. 7 rows × 12 columns (2-hour buckets starting
 // at 6am). Cell opacity scales with session count; tooltip shows the
 // human-readable day and bucket.
+import { Fragment } from "react";
 import { BentoTile } from "./BentoTile";
 import type { ExecutiveSnapshot, HeatCell } from "@/lib/dashboard-mock";
 

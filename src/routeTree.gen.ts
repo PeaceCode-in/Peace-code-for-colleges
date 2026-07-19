@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsAppearanceRouteImport } from './routes/settings.appearance'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_authenticated.signals.screenings'
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
 import { Route as AuthenticatedSignalsHeatmapRouteImport } from './routes/_authenticated.signals.heatmap'
@@ -61,6 +62,11 @@ const AuthenticatedDepartmentsRoute =
     path: '/departments',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedSignalsScreeningsRoute =
   AuthenticatedSignalsScreeningsRouteImport.update({
     id: '/signals/screenings',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/settings'
+    | '/dashboard'
     | '/departments'
     | '/settings/appearance'
     | '/admin/access'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/settings'
+    | '/dashboard'
     | '/departments'
     | '/settings/appearance'
     | '/admin/access'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/settings'
+    | '/_authenticated/dashboard'
     | '/_authenticated/departments'
     | '/settings/appearance'
     | '/_authenticated/admin/access'
@@ -337,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/departments'
       fullPath: '/departments'
       preLoaderRoute: typeof AuthenticatedDepartmentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/signals/screenings': {
@@ -448,6 +467,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
   AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
   AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
@@ -467,6 +487,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
   AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
   AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
