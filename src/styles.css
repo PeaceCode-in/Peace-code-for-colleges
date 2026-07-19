@@ -141,40 +141,52 @@
   --input: oklch(1 0 0 / 0.12);
 }
 
-/* ---- PeaceCode themeable palette (used via inline styles across the app) ---- */
+/* ---- PeaceCode for Colleges — Campus (moss/ink) palette ---- */
 :root {
-  --pc-bg:       #F7FAFF;
+  --pc-bg:       #F4F1EA;
   --pc-surface:  #FFFFFF;
-  --pc-surface2: #EAF3FF;
-  --pc-border:   #DCE3EF;
-  --pc-ink:      #1D2A44;
-  --pc-muted:    #7587A6;
-  --pc-primary:  #4B6CB7;
-  --pc-soft:     #AFC9F5;
-  --pc-lavender: #D5C9F7;
+  --pc-surface2: #ECE7DC;
+  --pc-surface-2:#ECE7DC;
+  --pc-border:   #D9D2C4;
+  --pc-ink:      #1B2A24;
+  --pc-ink-2:    #3E4A44;
+  --pc-muted:    #6B7570;
+  --pc-primary:  #3F6B4E;
+  --pc-accent:   #3F6B4E;
+  --pc-accent-2: #B78A3A;
+  --pc-warn:     #B65A2E;
+  --pc-good:     #4E7A57;
+  --pc-soft:     #CDE3D2;
+  --pc-lavender: #B78A3A;
   --pc-shell:    rgba(255,255,255,0.78);
-  --pc-header:   rgba(247,250,255,0.92);
-  --pc-scrim:    rgba(29,42,68,0.35);
-  --pc-aurora-a: #D5C9F7;
-  --pc-aurora-b: #AFC9F5;
-  --pc-aurora-c: #EAF3FF;
+  --pc-header:   rgba(244,241,234,0.92);
+  --pc-scrim:    rgba(27,42,36,0.35);
+  --pc-aurora-a: #CDE3D2;
+  --pc-aurora-b: #E8DFC7;
+  --pc-aurora-c: #F4F1EA;
 }
 .dark, [data-theme="dark"] {
-  --pc-bg:       #0B1020;
-  --pc-surface:  #141B33;
-  --pc-surface2: #1E2745;
-  --pc-border:   #2A3557;
-  --pc-ink:      #E8ECF7;
-  --pc-muted:    #8E9BC0;
-  --pc-primary:  #93B0F0;
-  --pc-soft:     #4C6CB0;
-  --pc-lavender: #6B5FA8;
-  --pc-shell:    rgba(20,27,51,0.72);
-  --pc-header:   rgba(11,16,32,0.88);
+  --pc-bg:       #14171A;
+  --pc-surface:  #1C2024;
+  --pc-surface2: #23282D;
+  --pc-surface-2:#23282D;
+  --pc-border:   #2D3438;
+  --pc-ink:      #E8ECEA;
+  --pc-ink-2:    #B8C0BC;
+  --pc-muted:    #7A857F;
+  --pc-primary:  #6FA57F;
+  --pc-accent:   #6FA57F;
+  --pc-accent-2: #D4A65A;
+  --pc-warn:     #E07A4A;
+  --pc-good:     #7FB58C;
+  --pc-soft:     #2E4238;
+  --pc-lavender: #D4A65A;
+  --pc-shell:    rgba(28,32,36,0.72);
+  --pc-header:   rgba(20,23,26,0.88);
   --pc-scrim:    rgba(0,0,0,0.55);
-  --pc-aurora-a: #3B2E6B;
-  --pc-aurora-b: #1E3A6E;
-  --pc-aurora-c: #12203E;
+  --pc-aurora-a: #2E4238;
+  --pc-aurora-b: #3A3627;
+  --pc-aurora-c: #14171A;
 }
 html { color-scheme: light; }
 html.dark, html[data-theme="dark"] { color-scheme: dark; }

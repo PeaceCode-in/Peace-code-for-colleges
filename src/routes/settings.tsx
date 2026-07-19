@@ -1,7 +1,11 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { AppShell } from "@/components/AppShell";
+import { CollegeAppShell } from "@/components/college/AppShell";
 
 export const Route = createFileRoute("/settings")({
-  head: () => ({ meta: [{ title: "Settings — PeaceCode" }, { name: "description", content: "Manage your PeaceCode profile, appearance, privacy, and preferences." }] }),
-  component: () => <AppShell><Outlet /></AppShell>,
+  head: () => ({ meta: [{ title: "Settings — PeaceCode for Colleges" }] }),
+  component: () => (
+    <CollegeAppShell>
+      <Outlet />
+    </CollegeAppShell>
+  ),
 });

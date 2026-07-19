@@ -11,15 +11,14 @@ export type ChartStyle = "smooth" | "sharp" | "dotted";
 export type Personality = "gentle" | "friendly" | "motivational" | "professional" | "reflective";
 export type ResponseLength = "short" | "balanced" | "detailed";
 
-export type AccentKey = "lavender" | "blue" | "sky" | "moss" | "peach" | "rose" | "amber";
+export type AccentKey = "moss" | "brass" | "terracotta" | "slate" | "plum" | "teal";
 export const ACCENTS: Record<AccentKey, { name: string; primary: string; soft: string; ring: string }> = {
-  lavender: { name: "Lavender", primary: "#7C6BC7", soft: "#D5C9F7", ring: "#B4A5F0" },
-  blue:     { name: "Calm Blue", primary: "#4B6CB7", soft: "#AFC9F5", ring: "#7FA8E6" },
-  sky:      { name: "Sky", primary: "#3E88C7", soft: "#B7DDF3", ring: "#77B7DF" },
-  moss:     { name: "Moss", primary: "#5F8A6A", soft: "#CDE7D2", ring: "#93B79A" },
-  peach:    { name: "Peach", primary: "#C77A5A", soft: "#F5D3BE", ring: "#E4A283" },
-  rose:     { name: "Rose", primary: "#B0567A", soft: "#F1C7D6", ring: "#D68CA6" },
-  amber:    { name: "Amber", primary: "#B08444", soft: "#EDD9B4", ring: "#D4B27B" },
+  moss:       { name: "Moss",       primary: "#3F6B4E", soft: "#CDE3D2", ring: "#93B79A" },
+  brass:      { name: "Brass",      primary: "#B78A3A", soft: "#E8DFC7", ring: "#D4B27B" },
+  terracotta: { name: "Terracotta", primary: "#B65A2E", soft: "#F1CDB8", ring: "#D6987A" },
+  slate:      { name: "Slate",      primary: "#4A5A63", soft: "#D5DBDF", ring: "#94A0A7" },
+  plum:       { name: "Plum",       primary: "#6B3F52", soft: "#DCC7D0", ring: "#A98596" },
+  teal:       { name: "Teal",       primary: "#2F6B6B", soft: "#C4DDDD", ring: "#7FB0B0" },
 };
 
 // ─── Premium background themes ─────────────────────────────────
@@ -202,8 +201,8 @@ const defaults: Settings = {
   },
   appearance: {
     theme: "light",
-    accent: "rose",
-    bgTheme: "sakura",
+    accent: "moss",
+    bgTheme: "sage",
     fontSize: 16,
     density: "comfortable",
     reduceMotion: false,
@@ -355,7 +354,7 @@ export function applyAppearance(s: Settings) {
   try { localStorage.setItem("peacecode.theme.v1", mode); } catch {}
 
   // Accent
-  const acc = ACCENTS[a.accent] ?? ACCENTS.blue;
+  const acc = ACCENTS[a.accent] ?? ACCENTS.moss;
   root.style.setProperty("--pc-primary", acc.primary);
   root.style.setProperty("--pc-soft", acc.soft);
   root.style.setProperty("--pc-aurora-b", acc.soft);

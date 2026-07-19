@@ -1,7 +1,8 @@
-// Minimal placeholder auth store for PeaceCode for Colleges.
-// Real auth (institution-provisioned admin accounts) will be wired via
-// Lovable Cloud in a later step. For now this only tracks a local session
-// stub so /auth can navigate forward without a backend.
+// Institutional sign-in stub. Validates that the email belongs to a
+// whitelisted partner college (src/lib/college-registry.ts). Real auth
+// lands via Lovable Cloud later.
+import { collegeFor, domainFor } from "./college-registry";
+import { clearCollege } from "./college-context";
 
 const SESSION_KEY = "pcc.auth.session.v1";
 
@@ -12,9 +13,7 @@ export function loadSession(): AdminSession | null {
   try {
     const raw = window.localStorage.getItem(SESSION_KEY);
     return raw ? (JSON.parse(raw) as AdminSession) : null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 export function startSession(email: string) {
@@ -26,11 +25,18 @@ export function startSession(email: string) {
 export function endSession() {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(SESSION_KEY);
+  clearCollege();
 }
 
 export function isInstitutionEmail(raw: string): { ok: boolean; reason?: string } {
   const email = raw.trim().toLowerCase();
-  const m = email.match(/^[a-z0-9._%+-]+@([a-z0-9.-]+\.[a-z]{2,})$/);
-  if (!m) return { ok: false, reason: "Enter a valid email address." };
+  const d = domainFor(email);
+  if (!d) return { ok: false, reason: "Enter a valid institutional email address." };
+  if (!collegeFor(email)) {
+    return {
+      ok: false,
+      reason: "This email isn't linked to a partner institution. Contact partnerships@peacecode.in.",
+    };
+  }
   return { ok: true };
 }
