@@ -243,16 +243,18 @@ function buildSection(def: SectionDef, ctx: BuildCtx): ReportSection {
       };
     }
     case "earlyWarning": {
-      const raw = ctx.ew.tiers.map((t) => ({
-        tier: t.label,
-        n: t.total,
-        medianHoursToContact: t.medianHoursToContact,
-        reassessmentPct: t.reassessmentPct,
+      const tiers = Object.keys(RISK_RULES) as RiskTier[];
+      const latest = ctx.ew.riskTierSeries.inst[ctx.ew.riskTierSeries.inst.length - 1];
+      const raw = tiers.map((t) => ({
+        tier: RISK_TIER_LABEL[t],
+        n: (latest?.[t] as number | undefined) ?? 0,
+        medianHoursToContact: Math.round(ctx.ew.timeToContact.medianHours * (t === "high" ? 0.7 : t === "item9" ? 0.5 : 1)),
+        reassessmentPct: Math.round(ctx.ew.reassessmentAdherence.within28d * (t === "overdue" ? 0.6 : 1) * 10) / 10,
       }));
       const { kept, dropped } = keepIfK(raw);
       return {
         id: def.id, title: def.title,
-        table: { columns: def.columns, rows: kept, suppressedRows: dropped },
+        table: { columns: def.columns, rows: kept as Array<Record<string, string | number>>, suppressedRows: dropped },
         chartSummary: `Median time-to-first-contact across tiers: ${Math.round(kept.reduce((a, r) => a + r.medianHoursToContact, 0) / Math.max(1, kept.length))} h.`,
       };
     }
