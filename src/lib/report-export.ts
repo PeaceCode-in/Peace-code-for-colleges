@@ -12,8 +12,10 @@ import {
 } from "./report-schema";
 import { narrativeFor } from "./report-narratives";
 import { getExecutiveSnapshot, getEarlyWarningSnapshot, type EwWindowKey } from "./dashboard-mock";
-import { K_MIN } from "./anonymity";
-import { RISK_RULES } from "./clinical-scales";
+import { RISK_RULES, RISK_TIER_LABEL, type RiskTier } from "./clinical-scales";
+
+// Reports enforce k ≥ 10 (stricter than the app-wide floor of 5).
+export const K_MIN = 10;
 
 export type WindowKey = "4w" | "12w" | "26w" | "52w" | "term" | "ay";
 export const WINDOWS: { key: WindowKey; label: string; weeks: number }[] = [
