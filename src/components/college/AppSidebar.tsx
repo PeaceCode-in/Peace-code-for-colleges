@@ -40,9 +40,7 @@ const GROUPS: Group[] = [
     { title: "Counsellor capacity", url: "/care/capacity", icon: Gauge },
   ]},
   { label: "Institutional reporting", items: [
-    { title: "Term reports", url: "/reports/term", icon: FileText },
-    { title: "Data exports", url: "/reports/exports", icon: Download },
-    { title: "Peer benchmarks", url: "/reports/benchmarks", icon: LineChart },
+    { title: "Reports", url: "/reports", icon: FileText },
   ]},
   { label: "Administration", items: [
     { title: "Access & roles", url: "/admin/access", icon: ShieldCheck },
