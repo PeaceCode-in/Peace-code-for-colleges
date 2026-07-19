@@ -4,7 +4,7 @@ import {
   Activity, ClipboardList, Waves, Grid3x3,
   AlertTriangle, Share2, Gauge,
   FileText,
-  ShieldCheck, ScrollText, Palette, LogOut,
+  ShieldCheck, Palette, LogOut,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
