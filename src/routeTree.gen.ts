@@ -17,7 +17,9 @@ import { Route as SettingsAppearanceRouteImport } from './routes/settings.appear
 import { Route as ReportsPrintRouteImport } from './routes/reports.print'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as AuthenticatedReportsIndexRouteImport } from './routes/_authenticated.reports.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated.admin.index'
 import { Route as AuthenticatedSignalsWellbeingRouteImport } from './routes/_authenticated.signals.wellbeing'
 import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_authenticated.signals.screenings'
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
@@ -29,8 +31,9 @@ import { Route as AuthenticatedCohortsCompareRouteImport } from './routes/_authe
 import { Route as AuthenticatedCareRiskRouteImport } from './routes/_authenticated.care.risk'
 import { Route as AuthenticatedCareReferralsRouteImport } from './routes/_authenticated.care.referrals'
 import { Route as AuthenticatedCareCapacityRouteImport } from './routes/_authenticated.care.capacity'
+import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated.admin.policies'
+import { Route as AuthenticatedAdminMembersRouteImport } from './routes/_authenticated.admin.members'
 import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated.admin.audit'
-import { Route as AuthenticatedAdminAccessRouteImport } from './routes/_authenticated.admin.access'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -72,12 +75,22 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedReportsIndexRoute =
   AuthenticatedReportsIndexRouteImport.update({
     id: '/reports/',
     path: '/reports/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedSignalsWellbeingRoute =
   AuthenticatedSignalsWellbeingRouteImport.update({
     id: '/signals/wellbeing',
@@ -143,28 +156,36 @@ const AuthenticatedCareCapacityRoute =
     path: '/care/capacity',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
-  id: '/admin/audit',
-  path: '/admin/audit',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAdminAccessRoute =
-  AuthenticatedAdminAccessRouteImport.update({
-    id: '/admin/access',
-    path: '/admin/access',
-    getParentRoute: () => AuthenticatedRoute,
+const AuthenticatedAdminPoliciesRoute =
+  AuthenticatedAdminPoliciesRouteImport.update({
+    id: '/policies',
+    path: '/policies',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminMembersRoute =
+  AuthenticatedAdminMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
@@ -176,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/reports/': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -186,8 +208,9 @@ export interface FileRoutesByTo {
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
@@ -199,6 +222,7 @@ export interface FileRoutesByTo {
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/reports': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRoutesById {
@@ -207,12 +231,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
   '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/_authenticated/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/_authenticated/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/_authenticated/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/_authenticated/care/risk': typeof AuthenticatedCareRiskRoute
@@ -224,6 +250,7 @@ export interface FileRoutesById {
   '/_authenticated/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/_authenticated/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/_authenticated/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/reports/': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRouteTypes {
@@ -232,12 +259,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/settings'
+    | '/admin'
     | '/dashboard'
     | '/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/admin/access'
     | '/admin/audit'
+    | '/admin/members'
+    | '/admin/policies'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
@@ -249,6 +278,7 @@ export interface FileRouteTypes {
     | '/signals/mood'
     | '/signals/screenings'
     | '/signals/wellbeing'
+    | '/admin/'
     | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -259,8 +289,9 @@ export interface FileRouteTypes {
     | '/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/admin/access'
     | '/admin/audit'
+    | '/admin/members'
+    | '/admin/policies'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
@@ -272,6 +303,7 @@ export interface FileRouteTypes {
     | '/signals/mood'
     | '/signals/screenings'
     | '/signals/wellbeing'
+    | '/admin'
     | '/reports'
   id:
     | '__root__'
@@ -279,12 +311,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/settings'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/_authenticated/admin/access'
     | '/_authenticated/admin/audit'
+    | '/_authenticated/admin/members'
+    | '/_authenticated/admin/policies'
     | '/_authenticated/care/capacity'
     | '/_authenticated/care/referrals'
     | '/_authenticated/care/risk'
@@ -296,6 +330,7 @@ export interface FileRouteTypes {
     | '/_authenticated/signals/mood'
     | '/_authenticated/signals/screenings'
     | '/_authenticated/signals/wellbeing'
+    | '/_authenticated/admin/'
     | '/_authenticated/reports/'
   fileRoutesById: FileRoutesById
 }
@@ -365,12 +400,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/reports/': {
       id: '/_authenticated/reports/'
       path: '/reports'
       fullPath: '/reports/'
       preLoaderRoute: typeof AuthenticatedReportsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/signals/wellbeing': {
       id: '/_authenticated/signals/wellbeing'
@@ -449,28 +498,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCareCapacityRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/policies': {
+      id: '/_authenticated/admin/policies'
+      path: '/policies'
+      fullPath: '/admin/policies'
+      preLoaderRoute: typeof AuthenticatedAdminPoliciesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/members': {
+      id: '/_authenticated/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AuthenticatedAdminMembersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/audit': {
       id: '/_authenticated/admin/audit'
-      path: '/admin/audit'
+      path: '/audit'
       fullPath: '/admin/audit'
       preLoaderRoute: typeof AuthenticatedAdminAuditRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/access': {
-      id: '/_authenticated/admin/access'
-      path: '/admin/access'
-      fullPath: '/admin/access'
-      preLoaderRoute: typeof AuthenticatedAdminAccessRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      parentRoute: typeof AuthenticatedAdminRoute
     }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
+  AuthenticatedAdminMembersRoute: typeof AuthenticatedAdminMembersRoute
+  AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
+  AuthenticatedAdminMembersRoute: AuthenticatedAdminMembersRoute,
+  AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
-  AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
-  AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
   AuthenticatedCareCapacityRoute: typeof AuthenticatedCareCapacityRoute
   AuthenticatedCareReferralsRoute: typeof AuthenticatedCareReferralsRoute
   AuthenticatedCareRiskRoute: typeof AuthenticatedCareRiskRoute
@@ -486,10 +558,9 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
-  AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
-  AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
   AuthenticatedCareCapacityRoute: AuthenticatedCareCapacityRoute,
   AuthenticatedCareReferralsRoute: AuthenticatedCareReferralsRoute,
   AuthenticatedCareRiskRoute: AuthenticatedCareRiskRoute,

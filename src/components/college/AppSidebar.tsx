@@ -4,7 +4,7 @@ import {
   Activity, ClipboardList, Waves, Grid3x3,
   AlertTriangle, Share2, Gauge,
   FileText,
-  ShieldCheck, ScrollText, Palette, LogOut,
+  ShieldCheck, Palette, LogOut,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -43,8 +43,7 @@ const GROUPS: Group[] = [
     { title: "Reports", url: "/reports", icon: FileText },
   ]},
   { label: "Administration", items: [
-    { title: "Access & roles", url: "/admin/access", icon: ShieldCheck },
-    { title: "Audit log", url: "/admin/audit", icon: ScrollText },
+    { title: "Admin", url: "/admin", icon: ShieldCheck },
     { title: "Appearance", url: "/settings/appearance", icon: Palette },
   ]},
 ];
