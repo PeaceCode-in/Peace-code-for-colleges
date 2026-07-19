@@ -2,14 +2,13 @@
 // k-anonymity (k>=10) at every intersection. URL is the source of truth
 // via validateSearch + zodValidator (fallback, never .catch()).
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ErrorBar, LineChart, Line, Legend, ReferenceLine,
+  ErrorBar, LineChart, Line, Legend,
 } from "recharts";
-import { ChevronRight } from "lucide-react";
 import { PageHeader, GlassCard, AnonymityBadge } from "@/components/college/primitives";
 import { SuppressedTile } from "@/components/primitives/SuppressedTile";
 import { SuppressedView } from "@/components/primitives/SuppressedView";
