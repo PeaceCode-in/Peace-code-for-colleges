@@ -102,8 +102,8 @@ function YearProgramPage() {
   const nav = useNavigate({ from: "/cohorts/year" });
   const [hoverDept, setHoverDept] = useState<string | null>(null);
 
-  const selectedYears = s.years.length ? s.years : (SEED_YEARS as readonly string[]);
-  const selectedPrograms = s.programs.length ? s.programs : SEED_DEPARTMENTS.map((d) => d.id);
+  const selectedYears: string[] = s.years.length ? s.years : [...SEED_YEARS];
+  const selectedPrograms: string[] = s.programs.length ? s.programs : SEED_DEPARTMENTS.map((d) => d.id);
   const intake = (INTAKES as readonly string[]).includes(s.intake) ? s.intake : "aug-2025";
 
   const matrix = useMemo(() => cohortMatrix(), []);
