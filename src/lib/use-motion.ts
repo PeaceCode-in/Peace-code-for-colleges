@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
-import { subscribeSettings, getSettings } from "@/lib/settings-store";
+import { loadSettings } from "@/lib/settings-store";
 
 export type MotionIntensity = "reduced" | "standard" | "expressive";
 
 function readIntensity(): MotionIntensity {
-  const s = getSettings();
+  if (typeof window === "undefined") return "standard";
+  const s = loadSettings();
   if (s.appearance.reduceMotion || s.accessibility.reduceAnim) return "reduced";
-  return (s.appearance.motionIntensity ?? "standard") as MotionIntensity;
+  return ((s.appearance as unknown as { motionIntensity?: MotionIntensity }).motionIntensity ?? "standard");
 }
 
-/** Reactive motion-intensity hook. Everything animation-related reads this. */
+/** Reactive motion-intensity hook. */
 export function useMotionIntensity(): MotionIntensity {
-  const [m, setM] = useState<MotionIntensity>(() =>
-    typeof window === "undefined" ? "standard" : readIntensity(),
-  );
+  const [m, setM] = useState<MotionIntensity>(() => readIntensity());
   useEffect(() => {
     setM(readIntensity());
-    return subscribeSettings(() => setM(readIntensity()));
+    const onChange = () => setM(readIntensity());
+    window.addEventListener("peacecode-settings", onChange as EventListener);
+    window.addEventListener("storage", onChange);
+    return () => {
+      window.removeEventListener("peacecode-settings", onChange as EventListener);
+      window.removeEventListener("storage", onChange);
+    };
   }, []);
   return m;
 }
@@ -25,7 +30,6 @@ export function useReducedMotion(): boolean {
   return useMotionIntensity() === "reduced";
 }
 
-/** Scale factor: reduced=0, standard=1, expressive=1.4. */
 export function motionScale(m: MotionIntensity): number {
   return m === "reduced" ? 0 : m === "expressive" ? 1.4 : 1;
 }
