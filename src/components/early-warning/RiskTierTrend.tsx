@@ -37,7 +37,7 @@ export function RiskTierTrend({
   }, [bundle, visible.join("|")]);
 
   if (isSuppressed(bundle)) {
-    return <SuppressedTile title="Risk-tier population" reason="k<10" />;
+    return <SuppressedTile label="Risk-tier population" reason="k<10" />;
   }
 
   return (

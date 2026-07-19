@@ -25,7 +25,7 @@ export function ChannelBreakdown({ window }: { window: EwWindowKey }) {
     return deriveAccentScale(hex);
   }, []);
   if (isSuppressed(bundle)) {
-    return <SuppressedTile title="Routing channel mix" reason="k<10" />;
+    return <SuppressedTile label="Routing channel mix" reason="k<10" />;
   }
   // Normalise to 100% per week.
   const data = bundle.map((row) => {

@@ -10,7 +10,7 @@ export function SchoolResponseTimes({ window }: { window: EwWindowKey }) {
   const rows = getSchoolResponseTimes(window);
   const ttc = getTimeToContact(window);
   if (isSuppressed(rows) || isSuppressed(ttc)) {
-    return <SuppressedTile title="School response times" reason="k<10" />;
+    return <SuppressedTile label="School response times" reason="k<10" />;
   }
   const peer = ttc.peerMedianHours;
   const inst = ttc.medianHours;

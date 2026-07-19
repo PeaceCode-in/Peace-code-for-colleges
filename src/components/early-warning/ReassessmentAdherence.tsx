@@ -5,7 +5,7 @@ import { SuppressedTile } from "@/components/primitives/SuppressedTile";
 
 export function ReassessmentAdherence({ window }: { window: EwWindowKey }) {
   const a = getAdherence(window);
-  if (isSuppressed(a)) return <SuppressedTile title="Reassessment adherence" reason="k<10" />;
+  if (isSuppressed(a)) return <SuppressedTile label="Reassessment adherence" reason="k<10" />;
   const pct = a.pct;
   const size = 128;
   const stroke = 14;

@@ -77,7 +77,7 @@ function RowFragment({
         if (cell.n < K_MIN) {
           return (
             <div key={step} className="min-h-[36px]">
-              <HatchedCell label="k<10" />
+              <HatchedCell title="k<10" />
             </div>
           );
         }

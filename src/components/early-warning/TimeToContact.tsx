@@ -11,7 +11,7 @@ import { SlaChip } from "@/components/primitives/SlaChip";
 export function TimeToContact({ window }: { window: EwWindowKey }) {
   const bundle = getTimeToContact(window);
   if (isSuppressed(bundle)) {
-    return <SuppressedTile title="Time to first contact" reason="k<10" />;
+    return <SuppressedTile label="Time to first contact" reason="k<10" />;
   }
   const total = bundle.buckets.reduce((s, b) => s + b.n, 0);
   return (
