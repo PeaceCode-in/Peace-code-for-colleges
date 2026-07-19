@@ -81,6 +81,20 @@ function SignInPage() {
         </span>
       </PrimaryButton>
 
+      <button
+        type="button"
+        onClick={() => {
+          const guestEmail = "guest@iitb.ac.in";
+          setCollegeFromEmail(guestEmail);
+          startSession(guestEmail);
+          nav({ to: "/dashboard" });
+        }}
+        className="mx-auto mt-1 block text-[11.5px] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 rounded"
+        style={{ color: "#7d5a44" }}
+      >
+        Continue as guest (demo, IIT Bombay)
+      </button>
+
       <p
         className="text-center text-[11.5px] leading-relaxed mt-1"
         style={{ color: "#7d5a44" }}
