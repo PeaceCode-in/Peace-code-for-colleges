@@ -44,6 +44,7 @@ const GROUPS: Group[] = [
   ]},
   { label: "Administration", items: [
     { title: "Admin", url: "/admin", icon: ShieldCheck },
+    { title: "QA self-check", url: "/qa", icon: ShieldCheck },
     { title: "Appearance", url: "/settings/appearance", icon: Palette },
   ]},
 ];
