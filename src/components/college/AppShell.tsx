@@ -12,6 +12,8 @@ import { useGlobalShortcuts } from "@/hooks/use-global-shortcuts";
 import { KeyboardHelpDialog } from "@/components/keyboard/KeyboardHelpDialog";
 import { SeedModePill } from "@/components/college/SeedModePill";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { NotificationsBell } from "@/components/college/NotificationsBell";
+import { ProfileMenu } from "@/components/college/ProfileMenu";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
@@ -283,7 +285,10 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               >
                 {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
-              <UserMenu />
+              <NotificationsBell />
+              <ProfileMenu />
+              {/* Legacy UserMenu removed — ProfileMenu supersedes it. */}
+              {false && <UserMenu />}
             </header>
             <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
               <Breadcrumbs />

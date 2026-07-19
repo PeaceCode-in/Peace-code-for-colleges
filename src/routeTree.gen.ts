@@ -19,6 +19,7 @@ import { Route as SettingsAccountRouteImport } from './routes/settings.account'
 import { Route as ReportsPrintRouteImport } from './routes/reports.print'
 import { Route as AuthenticatedQaDataRouteImport } from './routes/_authenticated.qa-data'
 import { Route as AuthenticatedQaRouteImport } from './routes/_authenticated/qa'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedHelpRouteImport } from './routes/_authenticated.help'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -94,6 +95,12 @@ const AuthenticatedQaRoute = AuthenticatedQaRouteImport.update({
   path: '/qa',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedHelpRoute = AuthenticatedHelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -247,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/help': typeof AuthenticatedHelpRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/qa': typeof AuthenticatedQaRoute
   '/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
@@ -282,6 +290,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/help': typeof AuthenticatedHelpRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/qa': typeof AuthenticatedQaRoute
   '/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
@@ -320,6 +329,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/_authenticated/help': typeof AuthenticatedHelpRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/qa': typeof AuthenticatedQaRoute
   '/_authenticated/qa-data': typeof AuthenticatedQaDataRoute
   '/reports/print': typeof ReportsPrintRoute
@@ -358,6 +368,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/departments'
     | '/help'
+    | '/notifications'
     | '/qa'
     | '/qa-data'
     | '/reports/print'
@@ -393,6 +404,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/departments'
     | '/help'
+    | '/notifications'
     | '/qa'
     | '/qa-data'
     | '/reports/print'
@@ -430,6 +442,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/departments'
     | '/_authenticated/help'
+    | '/_authenticated/notifications'
     | '/_authenticated/qa'
     | '/_authenticated/qa-data'
     | '/reports/print'
@@ -537,6 +550,13 @@ declare module '@tanstack/react-router' {
       path: '/qa'
       fullPath: '/qa'
       preLoaderRoute: typeof AuthenticatedQaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/help': {
@@ -741,6 +761,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
   AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedQaRoute: typeof AuthenticatedQaRoute
   AuthenticatedQaDataRoute: typeof AuthenticatedQaDataRoute
   AuthenticatedCareCapacityRoute: typeof AuthenticatedCareCapacityRoute
@@ -766,6 +787,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
   AuthenticatedHelpRoute: AuthenticatedHelpRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedQaRoute: AuthenticatedQaRoute,
   AuthenticatedQaDataRoute: AuthenticatedQaDataRoute,
   AuthenticatedCareCapacityRoute: AuthenticatedCareCapacityRoute,

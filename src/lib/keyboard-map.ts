@@ -18,6 +18,8 @@ export const SHORTCUTS: Shortcut[] = [
   { keys: "g e", label: "Go to Early warning & care", group: "Navigation", route: "/care/risk" },
   { keys: "g r", label: "Go to Reports", group: "Navigation", route: "/reports" },
   { keys: "g a", label: "Go to Administration", group: "Navigation", route: "/admin" },
+  { keys: "g n", label: "Go to Notifications", group: "Navigation", route: "/notifications" },
+  { keys: "g p", label: "Open profile menu", group: "Navigation" },
 
   { keys: "↑ / ↓", label: "Navigate table rows", group: "Tables" },
   { keys: "Enter", label: "Open selected row", group: "Tables" },

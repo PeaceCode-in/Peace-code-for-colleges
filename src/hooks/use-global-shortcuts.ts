@@ -48,6 +48,12 @@ export function useGlobalShortcuts({ onHelp }: { onHelp?: () => void } = {}) {
         if (bufferTimer) window.clearTimeout(bufferTimer);
         bufferTimer = window.setTimeout(clearBuffer, 900);
 
+        if (buffer === "gp") {
+          e.preventDefault();
+          clearBuffer();
+          window.dispatchEvent(new CustomEvent("pcc:open-profile"));
+          return;
+        }
         const target = NAV_SEQUENCES[buffer];
         if (target) {
           e.preventDefault();
