@@ -397,7 +397,20 @@ export function useSettings(): [Settings, (patch: (s: Settings) => Settings, act
     applyAccessibility(initial);
     const onSync = (e: Event) => setS((e as CustomEvent<Settings>).detail);
     window.addEventListener("peacecode-settings", onSync);
-    return () => window.removeEventListener("peacecode-settings", onSync);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== KEY || !e.newValue) return;
+      try {
+        const next = merge(defaults, JSON.parse(e.newValue));
+        setS(next);
+        applyAppearance(next);
+        applyAccessibility(next);
+      } catch {}
+    };
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("peacecode-settings", onSync);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
   const update = (patch: (s: Settings) => Settings, activityLabel?: string) => {
     setS((prev) => {

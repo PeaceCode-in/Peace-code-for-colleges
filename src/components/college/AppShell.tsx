@@ -202,6 +202,21 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
     const s = loadSettings();
     applyAppearance(s);
     applyAccessibility(s);
+    const onSame = (e: Event) => {
+      const next = (e as CustomEvent).detail;
+      if (next) { applyAppearance(next); applyAccessibility(next); }
+    };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== "peacecode.settings.v1") return;
+      const s2 = loadSettings();
+      applyAppearance(s2); applyAccessibility(s2);
+    };
+    window.addEventListener("peacecode-settings", onSame);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("peacecode-settings", onSame);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   return (
