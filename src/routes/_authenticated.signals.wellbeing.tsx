@@ -318,7 +318,16 @@ function HeadlineStrip({
   scale: ScaleId;
   range: RangeKey;
 }) {
-  const items = [
+  type Item = {
+    label: string;
+    value: number | null;
+    delta: number | null;
+    unit: string;
+    hint: string;
+    suppressed: boolean;
+    badTrend: "up" | "down";
+  };
+  const items: Item[] = [
     {
       label: `Mean ${scale === "phq9" ? "PHQ-9" : "GAD-7"}`,
       value: scale === "phq9" ? stats.meanPhq9.value : stats.meanGad7.value,
@@ -326,7 +335,7 @@ function HeadlineStrip({
       unit: "",
       hint: "Lower is better",
       suppressed: (scale === "phq9" ? stats.meanPhq9 : stats.meanGad7).suppressed,
-      badTrend: "up" as const,
+      badTrend: "up",
     },
     {
       label: `Mean ${scale === "phq9" ? "GAD-7" : "PHQ-9"}`,
@@ -335,7 +344,7 @@ function HeadlineStrip({
       unit: "",
       hint: "Lower is better",
       suppressed: (scale === "phq9" ? stats.meanGad7 : stats.meanPhq9).suppressed,
-      badTrend: "up" as const,
+      badTrend: "up",
     },
     {
       label: "% in Moderate+ band",
@@ -344,7 +353,7 @@ function HeadlineStrip({
       unit: "%",
       hint: "PHQ-9 ≥ 10",
       suppressed: stats.moderatePlusPct.suppressed,
-      badTrend: "up" as const,
+      badTrend: "up",
     },
     {
       label: "% showing improvement",
@@ -353,9 +362,10 @@ function HeadlineStrip({
       unit: "%",
       hint: "≥ 5-point drop over 6 weeks",
       suppressed: stats.improvedPct.suppressed,
-      badTrend: "down" as const,
+      badTrend: "down",
     },
   ];
+
   return (
     <div className="lg:col-span-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
       {items.map((it) => (
