@@ -14,16 +14,15 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsAppearanceRouteImport } from './routes/settings.appearance'
+import { Route as ReportsPrintRouteImport } from './routes/reports.print'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated.departments'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedReportsIndexRouteImport } from './routes/_authenticated.reports.index'
 import { Route as AuthenticatedSignalsWellbeingRouteImport } from './routes/_authenticated.signals.wellbeing'
 import { Route as AuthenticatedSignalsScreeningsRouteImport } from './routes/_authenticated.signals.screenings'
 import { Route as AuthenticatedSignalsMoodRouteImport } from './routes/_authenticated.signals.mood'
 import { Route as AuthenticatedSignalsHeatmapRouteImport } from './routes/_authenticated.signals.heatmap'
 import { Route as AuthenticatedSignalsEngagementRouteImport } from './routes/_authenticated.signals.engagement'
-import { Route as AuthenticatedReportsTermRouteImport } from './routes/_authenticated.reports.term'
-import { Route as AuthenticatedReportsExportsRouteImport } from './routes/_authenticated.reports.exports'
-import { Route as AuthenticatedReportsBenchmarksRouteImport } from './routes/_authenticated.reports.benchmarks'
 import { Route as AuthenticatedCohortsYearRouteImport } from './routes/_authenticated.cohorts.year'
 import { Route as AuthenticatedCohortsDemographicsRouteImport } from './routes/_authenticated.cohorts.demographics'
 import { Route as AuthenticatedCohortsCompareRouteImport } from './routes/_authenticated.cohorts.compare'
@@ -57,6 +56,11 @@ const SettingsAppearanceRoute = SettingsAppearanceRouteImport.update({
   path: '/appearance',
   getParentRoute: () => SettingsRoute,
 } as any)
+const ReportsPrintRoute = ReportsPrintRouteImport.update({
+  id: '/reports/print',
+  path: '/reports/print',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDepartmentsRoute =
   AuthenticatedDepartmentsRouteImport.update({
     id: '/departments',
@@ -68,6 +72,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedReportsIndexRoute =
+  AuthenticatedReportsIndexRouteImport.update({
+    id: '/reports/',
+    path: '/reports/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSignalsWellbeingRoute =
   AuthenticatedSignalsWellbeingRouteImport.update({
     id: '/signals/wellbeing',
@@ -96,24 +106,6 @@ const AuthenticatedSignalsEngagementRoute =
   AuthenticatedSignalsEngagementRouteImport.update({
     id: '/signals/engagement',
     path: '/signals/engagement',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReportsTermRoute =
-  AuthenticatedReportsTermRouteImport.update({
-    id: '/reports/term',
-    path: '/reports/term',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReportsExportsRoute =
-  AuthenticatedReportsExportsRouteImport.update({
-    id: '/reports/exports',
-    path: '/reports/exports',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReportsBenchmarksRoute =
-  AuthenticatedReportsBenchmarksRouteImport.update({
-    id: '/reports/benchmarks',
-    path: '/reports/benchmarks',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedCohortsYearRoute =
@@ -169,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
+  '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
@@ -178,14 +171,12 @@ export interface FileRoutesByFullPath {
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/reports/term': typeof AuthenticatedReportsTermRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/reports/': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -193,6 +184,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
+  '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
@@ -202,14 +194,12 @@ export interface FileRoutesByTo {
   '/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/reports/term': typeof AuthenticatedReportsTermRoute
   '/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/reports': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -219,6 +209,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
+  '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
   '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
@@ -228,14 +219,12 @@ export interface FileRoutesById {
   '/_authenticated/cohorts/compare': typeof AuthenticatedCohortsCompareRoute
   '/_authenticated/cohorts/demographics': typeof AuthenticatedCohortsDemographicsRoute
   '/_authenticated/cohorts/year': typeof AuthenticatedCohortsYearRoute
-  '/_authenticated/reports/benchmarks': typeof AuthenticatedReportsBenchmarksRoute
-  '/_authenticated/reports/exports': typeof AuthenticatedReportsExportsRoute
-  '/_authenticated/reports/term': typeof AuthenticatedReportsTermRoute
   '/_authenticated/signals/engagement': typeof AuthenticatedSignalsEngagementRoute
   '/_authenticated/signals/heatmap': typeof AuthenticatedSignalsHeatmapRoute
   '/_authenticated/signals/mood': typeof AuthenticatedSignalsMoodRoute
   '/_authenticated/signals/screenings': typeof AuthenticatedSignalsScreeningsRoute
   '/_authenticated/signals/wellbeing': typeof AuthenticatedSignalsWellbeingRoute
+  '/_authenticated/reports/': typeof AuthenticatedReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -245,6 +234,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/dashboard'
     | '/departments'
+    | '/reports/print'
     | '/settings/appearance'
     | '/admin/access'
     | '/admin/audit'
@@ -254,14 +244,12 @@ export interface FileRouteTypes {
     | '/cohorts/compare'
     | '/cohorts/demographics'
     | '/cohorts/year'
-    | '/reports/benchmarks'
-    | '/reports/exports'
-    | '/reports/term'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
     | '/signals/wellbeing'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -269,6 +257,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/dashboard'
     | '/departments'
+    | '/reports/print'
     | '/settings/appearance'
     | '/admin/access'
     | '/admin/audit'
@@ -278,14 +267,12 @@ export interface FileRouteTypes {
     | '/cohorts/compare'
     | '/cohorts/demographics'
     | '/cohorts/year'
-    | '/reports/benchmarks'
-    | '/reports/exports'
-    | '/reports/term'
     | '/signals/engagement'
     | '/signals/heatmap'
     | '/signals/mood'
     | '/signals/screenings'
     | '/signals/wellbeing'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -294,6 +281,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/_authenticated/dashboard'
     | '/_authenticated/departments'
+    | '/reports/print'
     | '/settings/appearance'
     | '/_authenticated/admin/access'
     | '/_authenticated/admin/audit'
@@ -303,14 +291,12 @@ export interface FileRouteTypes {
     | '/_authenticated/cohorts/compare'
     | '/_authenticated/cohorts/demographics'
     | '/_authenticated/cohorts/year'
-    | '/_authenticated/reports/benchmarks'
-    | '/_authenticated/reports/exports'
-    | '/_authenticated/reports/term'
     | '/_authenticated/signals/engagement'
     | '/_authenticated/signals/heatmap'
     | '/_authenticated/signals/mood'
     | '/_authenticated/signals/screenings'
     | '/_authenticated/signals/wellbeing'
+    | '/_authenticated/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -318,6 +304,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  ReportsPrintRoute: typeof ReportsPrintRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -357,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsAppearanceRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/reports/print': {
+      id: '/reports/print'
+      path: '/reports/print'
+      fullPath: '/reports/print'
+      preLoaderRoute: typeof ReportsPrintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/departments': {
       id: '/_authenticated/departments'
       path: '/departments'
@@ -369,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/reports/': {
+      id: '/_authenticated/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof AuthenticatedReportsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/signals/wellbeing': {
@@ -404,27 +405,6 @@ declare module '@tanstack/react-router' {
       path: '/signals/engagement'
       fullPath: '/signals/engagement'
       preLoaderRoute: typeof AuthenticatedSignalsEngagementRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reports/term': {
-      id: '/_authenticated/reports/term'
-      path: '/reports/term'
-      fullPath: '/reports/term'
-      preLoaderRoute: typeof AuthenticatedReportsTermRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reports/exports': {
-      id: '/_authenticated/reports/exports'
-      path: '/reports/exports'
-      fullPath: '/reports/exports'
-      preLoaderRoute: typeof AuthenticatedReportsExportsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reports/benchmarks': {
-      id: '/_authenticated/reports/benchmarks'
-      path: '/reports/benchmarks'
-      fullPath: '/reports/benchmarks'
-      preLoaderRoute: typeof AuthenticatedReportsBenchmarksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/cohorts/year': {
@@ -497,14 +477,12 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCohortsCompareRoute: typeof AuthenticatedCohortsCompareRoute
   AuthenticatedCohortsDemographicsRoute: typeof AuthenticatedCohortsDemographicsRoute
   AuthenticatedCohortsYearRoute: typeof AuthenticatedCohortsYearRoute
-  AuthenticatedReportsBenchmarksRoute: typeof AuthenticatedReportsBenchmarksRoute
-  AuthenticatedReportsExportsRoute: typeof AuthenticatedReportsExportsRoute
-  AuthenticatedReportsTermRoute: typeof AuthenticatedReportsTermRoute
   AuthenticatedSignalsEngagementRoute: typeof AuthenticatedSignalsEngagementRoute
   AuthenticatedSignalsHeatmapRoute: typeof AuthenticatedSignalsHeatmapRoute
   AuthenticatedSignalsMoodRoute: typeof AuthenticatedSignalsMoodRoute
   AuthenticatedSignalsScreeningsRoute: typeof AuthenticatedSignalsScreeningsRoute
   AuthenticatedSignalsWellbeingRoute: typeof AuthenticatedSignalsWellbeingRoute
+  AuthenticatedReportsIndexRoute: typeof AuthenticatedReportsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -518,14 +496,12 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCohortsCompareRoute: AuthenticatedCohortsCompareRoute,
   AuthenticatedCohortsDemographicsRoute: AuthenticatedCohortsDemographicsRoute,
   AuthenticatedCohortsYearRoute: AuthenticatedCohortsYearRoute,
-  AuthenticatedReportsBenchmarksRoute: AuthenticatedReportsBenchmarksRoute,
-  AuthenticatedReportsExportsRoute: AuthenticatedReportsExportsRoute,
-  AuthenticatedReportsTermRoute: AuthenticatedReportsTermRoute,
   AuthenticatedSignalsEngagementRoute: AuthenticatedSignalsEngagementRoute,
   AuthenticatedSignalsHeatmapRoute: AuthenticatedSignalsHeatmapRoute,
   AuthenticatedSignalsMoodRoute: AuthenticatedSignalsMoodRoute,
   AuthenticatedSignalsScreeningsRoute: AuthenticatedSignalsScreeningsRoute,
   AuthenticatedSignalsWellbeingRoute: AuthenticatedSignalsWellbeingRoute,
+  AuthenticatedReportsIndexRoute: AuthenticatedReportsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -549,6 +525,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  ReportsPrintRoute: ReportsPrintRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
