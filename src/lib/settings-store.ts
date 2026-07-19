@@ -354,7 +354,7 @@ export function applyAppearance(s: Settings) {
   try { localStorage.setItem("peacecode.theme.v1", mode); } catch {}
 
   // Accent
-  const acc = ACCENTS[a.accent] ?? ACCENTS.blue;
+  const acc = ACCENTS[a.accent] ?? ACCENTS.moss;
   root.style.setProperty("--pc-primary", acc.primary);
   root.style.setProperty("--pc-soft", acc.soft);
   root.style.setProperty("--pc-aurora-b", acc.soft);
