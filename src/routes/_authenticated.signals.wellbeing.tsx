@@ -410,7 +410,8 @@ function TrendChart({
   scale: ScaleId;
 }) {
   if (isSuppressed(series)) return <SuppressedTile label="Not enough activity to plot a segmented trend." />;
-  const palette = deriveAccentScale("var(--pc-accent)", Math.max(3, series.keys.length));
+  const scale3 = deriveAccentScale("#3F6B4E");
+  const palette = [scale3.a1, scale3.a2, scale3.a3, "var(--pc-accent-2)", "var(--pc-good)", "var(--pc-warn)"];
   return (
     <div className="h-64" role="img" aria-label={`${SCALE_LABEL[scale]} trend across ${series.keys.length} series.`}>
       <ResponsiveContainer width="100%" height="100%">
@@ -432,6 +433,7 @@ function TrendChart({
               dataKey={k}
               name={k}
               stroke={palette[i % palette.length]}
+
               strokeWidth={2}
               dot={false}
               isAnimationActive={false}
