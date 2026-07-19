@@ -8,3 +8,4 @@ export { TrendArea } from "./TrendArea";
 export { ChordMini } from "./ChordMini";
 export { Donut } from "./Donut";
 export { BeeswarmDots } from "./BeeswarmDots";
+export { RadarSmall } from "./RadarSmall";
