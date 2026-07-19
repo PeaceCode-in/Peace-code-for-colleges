@@ -100,7 +100,14 @@ function AppearancePage() {
       </Section>
 
       <Section title="Motion & effects">
-        <Row label="Reduce motion" hint="Fewer animations and transitions." action={<Toggle checked={a.reduceMotion} onChange={(v) => set("reduceMotion", v)} />} />
+        <Row label="Motion intensity" hint="How lively animations feel across the app." action={
+          <Segmented<"reduced" | "standard" | "expressive">
+            value={a.motionIntensity}
+            onChange={(v) => set("motionIntensity", v)}
+            options={[{ value: "reduced", label: "Reduced" }, { value: "standard", label: "Standard" }, { value: "expressive", label: "Expressive" }]}
+          />
+        } />
+        <Row label="Reduce motion" hint="Overrides intensity — disables animations entirely." action={<Toggle checked={a.reduceMotion} onChange={(v) => set("reduceMotion", v)} />} />
         <Row label="Glass effects" hint="Frosted surfaces on cards and modals." action={<Toggle checked={a.glassEffects} onChange={(v) => set("glassEffects", v)} />} />
       </Section>
 
