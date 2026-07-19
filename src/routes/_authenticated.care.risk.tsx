@@ -84,8 +84,9 @@ function EarlyWarningPage() {
   const system = useMemo(() => getSystemHealth(window), [window]);
 
   const setSearch = (patch: Partial<z.infer<typeof searchSchema>>) => {
-    navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true });
+    navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, ...patch }), replace: true });
   };
+
 
   const sla = system.sla24h.withinPct;
   const slaStatus = sla >= 90 ? "on" : sla >= 75 ? "warn" : "breach";
