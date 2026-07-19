@@ -256,6 +256,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               <div className="flex-1 flex justify-center">
                 <CommandK />
               </div>
+              <SeedModePill />
               <span
                 aria-label="k-anonymity threshold: 10"
                 className="hidden sm:inline-flex text-[11px] font-mono px-1.5 py-0.5 rounded"
