@@ -54,7 +54,7 @@ function hash(s: string): number {
   for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
   return h >>> 0;
 }
-function positiveTrend(key: string, points: number): { x: string; value: number }[] {
+function positiveTrend(key: string, points: number): { x: string; y: number }[] {
   const rand = mulberry32(SEED_ROOT ^ hash(`${key}:pos`));
   const out: { x: string; value: number }[] = [];
   const today = new Date();
