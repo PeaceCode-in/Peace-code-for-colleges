@@ -1,0 +1,1228 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   PeaceCode — Design System
+   Palette inspired by Apple Health, Headspace, Calm, Notion.
+   All colors are calm, editorial, softly luminous.
+   ============================================================ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 20px);
+  --radius-4xl: calc(var(--radius) + 32px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand tokens */
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-cream: var(--cream);
+  --color-cream-warm: var(--cream-warm);
+  --color-lavender: var(--lavender);
+  --color-sky: var(--sky);
+  --color-fog: var(--fog);
+  --color-moss: var(--moss);
+  --color-peach: var(--peach);
+  --color-blue-soft: var(--blue-soft);
+  --color-ember: var(--ember);
+
+  --font-serif: "Fraunces", "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1rem;
+
+  /* PeaceCode palette — Soft. Calm. Mindful.
+     Primary blues: #F7FAFF #EAF3FF #D6E6FB #AFC9F5 #7FA8E6 #4B6CB7
+     Neutrals ink: #1D2A44 #4A5A7A #7587A6 #A6B6CC #DCE3EF #F2F5F9 */
+  --background: oklch(0.985 0.008 255);      /* #F7FAFF-ish */
+  --foreground: oklch(0.24 0.06 260);        /* #1D2A44 */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.06 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.06 260);
+
+  --primary: oklch(0.55 0.13 260);           /* #4B6CB7 */
+  --primary-foreground: oklch(0.985 0.008 255);
+  --secondary: oklch(0.94 0.03 265);         /* #EAF3FF / lavender wash */
+  --secondary-foreground: oklch(0.28 0.07 265);
+  --muted: oklch(0.955 0.014 260);           /* #F2F5F9 */
+  --muted-foreground: oklch(0.55 0.04 265);  /* #7587A6 */
+  --accent: oklch(0.9 0.05 295);             /* lavender */
+  --accent-foreground: oklch(0.28 0.07 265);
+  --destructive: oklch(0.7 0.14 20);
+  --destructive-foreground: oklch(0.99 0.005 255);
+  --border: oklch(0.9 0.02 260 / 0.7);       /* #DCE3EF */
+  --input: oklch(0.9 0.02 260);
+  --ring: oklch(0.72 0.09 260);              /* #7FA8E6 */
+
+  /* Brand palette (mapped to soft-blue system) */
+  --navy: oklch(0.24 0.06 260);              /* #1D2A44 */
+  --navy-soft: oklch(0.42 0.06 262);         /* #4A5A7A */
+  --cream: oklch(0.985 0.008 255);           /* #F7FAFF */
+  --cream-warm: oklch(0.965 0.018 265);      /* #EAF3FF */
+  --lavender: oklch(0.88 0.06 300);          /* #D5C9F7 */
+  --sky: oklch(0.87 0.07 255);               /* #AFC9F5 */
+  --fog: oklch(0.94 0.014 260);              /* #DCE3EF */
+  --moss: oklch(0.9 0.05 155);               /* #CDEBD9 */
+  --peach: oklch(0.9 0.055 40);              /* #FCE8F1 / #FFE8D6 */
+  --blue-soft: oklch(0.78 0.1 258);          /* #7FA8E6 */
+  --ember: oklch(0.82 0.09 350);             /* #F8CADA blush */
+
+  /* Signature gradients — Sky Breeze / Lavender Dream / Sunset Calm */
+  --gradient-aurora: radial-gradient(
+      ellipse at 20% 0%,
+      oklch(0.9 0.06 255 / 0.55),
+      transparent 55%
+    ),
+    radial-gradient(ellipse at 80% 10%, oklch(0.88 0.06 300 / 0.55), transparent 50%),
+    radial-gradient(ellipse at 50% 100%, oklch(0.9 0.055 350 / 0.5), transparent 55%);
+  --gradient-hero: linear-gradient(135deg, oklch(0.96 0.025 260) 0%, oklch(0.92 0.05 285) 55%, oklch(0.92 0.055 350) 100%);
+  --gradient-orb: radial-gradient(
+    circle at 30% 30%,
+    oklch(0.95 0.04 255),
+    oklch(0.78 0.1 258) 40%,
+
+    oklch(0.42 0.09 275) 90%
+  );
+  --gradient-forest: linear-gradient(180deg, oklch(0.95 0.03 230), oklch(0.9 0.045 155));
+  --gradient-editorial: linear-gradient(120deg, oklch(0.28 0.06 265), oklch(0.42 0.09 275) 60%, oklch(0.6 0.1 230));
+
+  /* Shadows — soft, editorial */
+  --shadow-float: 0 1px 2px oklch(0.24 0.06 265 / 0.04),
+    0 12px 32px -8px oklch(0.24 0.06 265 / 0.08),
+    0 32px 64px -24px oklch(0.24 0.06 265 / 0.12);
+  --shadow-glass: 0 1px 0 oklch(1 0 0 / 0.6) inset,
+    0 0 0 1px oklch(1 0 0 / 0.35) inset,
+    0 20px 60px -20px oklch(0.24 0.06 265 / 0.18);
+  --shadow-soft: 0 1px 3px oklch(0.24 0.06 265 / 0.04),
+    0 6px 20px -6px oklch(0.24 0.06 265 / 0.08);
+  --shadow-glow-blue: 0 0 40px oklch(0.78 0.09 245 / 0.35);
+}
+
+.dark {
+  --background: oklch(0.16 0.03 265);
+  --foreground: oklch(0.96 0.01 85);
+  --card: oklch(0.22 0.04 265);
+  --card-foreground: oklch(0.96 0.01 85);
+  --primary: oklch(0.9 0.02 260);
+  --primary-foreground: oklch(0.22 0.04 265);
+  --muted: oklch(0.26 0.03 265);
+  --muted-foreground: oklch(0.72 0.02 260);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.12);
+}
+
+/* ---- PeaceCode themeable palette (used via inline styles across the app) ---- */
+:root {
+  --pc-bg:       #F7FAFF;
+  --pc-surface:  #FFFFFF;
+  --pc-surface2: #EAF3FF;
+  --pc-border:   #DCE3EF;
+  --pc-ink:      #1D2A44;
+  --pc-muted:    #7587A6;
+  --pc-primary:  #4B6CB7;
+  --pc-soft:     #AFC9F5;
+  --pc-lavender: #D5C9F7;
+  --pc-shell:    rgba(255,255,255,0.78);
+  --pc-header:   rgba(247,250,255,0.92);
+  --pc-scrim:    rgba(29,42,68,0.35);
+  --pc-aurora-a: #D5C9F7;
+  --pc-aurora-b: #AFC9F5;
+  --pc-aurora-c: #EAF3FF;
+}
+.dark, [data-theme="dark"] {
+  --pc-bg:       #0B1020;
+  --pc-surface:  #141B33;
+  --pc-surface2: #1E2745;
+  --pc-border:   #2A3557;
+  --pc-ink:      #E8ECF7;
+  --pc-muted:    #8E9BC0;
+  --pc-primary:  #93B0F0;
+  --pc-soft:     #4C6CB0;
+  --pc-lavender: #6B5FA8;
+  --pc-shell:    rgba(20,27,51,0.72);
+  --pc-header:   rgba(11,16,32,0.88);
+  --pc-scrim:    rgba(0,0,0,0.55);
+  --pc-aurora-a: #3B2E6B;
+  --pc-aurora-b: #1E3A6E;
+  --pc-aurora-c: #12203E;
+}
+html { color-scheme: light; }
+html.dark, html[data-theme="dark"] { color-scheme: dark; }
+
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  .font-serif {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ---------- Utilities ---------- */
+
+@utility glass {
+  background: color-mix(in oklab, white 68%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid color-mix(in oklab, white 55%, transparent);
+  box-shadow: var(--shadow-glass);
+}
+
+@utility glass-strong {
+  background: color-mix(in oklab, white 82%, transparent);
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid color-mix(in oklab, white 65%, transparent);
+  box-shadow: var(--shadow-glass);
+}
+
+@utility card-float {
+  background: var(--card);
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-float);
+  border: 1px solid color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+
+@utility text-editorial {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+@utility bg-aurora {
+  background-image: var(--gradient-aurora);
+}
+
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+
+@utility bg-editorial {
+  background-image: var(--gradient-editorial);
+}
+
+@utility ring-soft {
+  box-shadow: 0 0 0 1px oklch(1 0 0 / 0.6) inset,
+    0 0 0 1px color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+/* ---------- Keyframes ---------- */
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); filter: blur(0px) brightness(1); }
+  50% { transform: scale(1.06); filter: blur(0.5px) brightness(1.08); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-14px) translateX(6px); }
+}
+@keyframes drift {
+  0% { transform: translate3d(0,0,0) rotate(0deg); }
+  100% { transform: translate3d(0,0,0) rotate(360deg); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+@keyframes aurora-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@utility animate-breathe { animation: breathe 6s ease-in-out infinite; }
+@utility animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+@utility animate-drift { animation: drift 40s linear infinite; }
+@utility animate-rise { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@utility animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+@utility animate-aurora {
+  background-size: 200% 200%;
+  animation: aurora-shift 18s ease infinite;
+}
+@utility animate-wave { animation: wave 3.5s ease-in-out infinite; }
+
+/* Cursor-friendly focus rings */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* Hide scrollbars on opt-in containers (horizontal rails) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+/* Thin, editorial scrollbar for the sidebar nav */
+@utility scrollbar-soft {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 115, 80, 0.35) transparent;
+}
+.scrollbar-soft::-webkit-scrollbar { width: 4px; height: 4px; }
+.scrollbar-soft::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-soft::-webkit-scrollbar-thumb {
+  background: rgba(140, 115, 80, 0.28);
+  border-radius: 999px;
+}
+.scrollbar-soft::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 115, 80, 0.5);
+}
+
+/* Only one scrollbar on the page — the window itself.
+   Prevent stray horizontal overflow from decorative elements. */
+html, body, #root { max-width: 100%; overflow-x: hidden; }
+html { overflow-y: auto; }
+body { overflow-y: visible; }
+
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select,
+  button,
+  a {
+    min-width: 0;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  .rounded-3xl {
+    border-radius: 24px;
+  }
+}
+
+/* ---------- Premium card micro-interactions ---------- */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.45) rotate(-6deg); }
+  70% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+@keyframes shine-sweep {
+  0% { transform: translateX(-120%) skewX(-18deg); }
+  100% { transform: translateX(220%) skewX(-18deg); }
+}
+@keyframes ink-underline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes soft-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-heart-pop { animation: heart-pop 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Card lifts smoothly, casts a soft ambient shadow, and hosts a shine sweep. */
+.card-lift {
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 380ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 380ms ease;
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 1px 2px rgba(38, 34, 28, 0.04),
+    0 22px 44px -22px rgba(38, 34, 28, 0.28),
+    0 40px 80px -40px rgba(38, 34, 28, 0.18);
+}
+.card-lift .shine {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+.card-lift:hover .shine { opacity: 1; }
+.card-lift .shine::before {
+  content: "";
+  position: absolute; top: 0; bottom: 0;
+  width: 45%;
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 244, 220, 0.55), transparent);
+  animation: shine-sweep 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-lift .reveal {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 320ms ease, transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-lift:hover .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cursor-tracked ambient glow for tiles. Pair with inline --mx/--my % vars. */
+.cursor-glow {
+  position: relative;
+  overflow: hidden;
+}
+.cursor-glow::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(201, 166, 121, 0.28),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.cursor-glow:hover::after { opacity: 1; }
+
+/* Underline draw for section headings on hover of parent. */
+.ink-underline {
+  position: relative; display: inline-block;
+}
+.ink-underline::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px;
+  background: currentColor;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:hover .ink-underline::after { transform: scaleX(1); }
+
+/* ============================================================
+   Resources / Screening — Liquid Glass page treatment
+   Scoped only to pages that explicitly opt in.
+   ============================================================ */
+/* Body background is owned by the global theme (html[data-pc-bg]) only.
+   No per-page override may set `body { background: ... }`. */
+
+/* Dim AppShell's aurora so the matte backdrop reads */
+:is(html[data-pc-resources],html[data-pc-screening]) .fixed.inset-0.pointer-events-none.z-0 > div { opacity: 0 !important; }
+
+/* Lift page content above the fixed backdrop */
+:is(html[data-pc-resources],html[data-pc-screening]) main { position: relative; z-index: 2; }
+
+/* Ink tuned for a soft matte background — desaturated, near-white */
+:is(html[data-pc-resources],html[data-pc-screening]) main { --pc-ink: #15233F; --pc-muted: #5C6D86; }
+:is(html[data-pc-resources],html[data-pc-screening]) main { color: #15233F; }
+
+/* Frosted glass — almost invisible white, with a hairline border and a very soft shadow */
+.pc-glass-card,
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-full:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main [class*="rounded-[1"]:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main [class*="rounded-[2"]:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main [class*="rounded-[3"]:not(.no-glass):not(.pc-solid) {
+  background: rgba(255, 255, 255, 0.32) !important;
+  backdrop-filter: blur(32px) saturate(115%);
+  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  box-shadow:
+    0 10px 30px rgba(18, 25, 38, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  position: relative;
+}
+
+/* Top light seam */
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid)::before,
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid)::before,
+.pc-glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Left highlight edge */
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid)::after,
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid)::after,
+.pc-glass-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 1px; height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), transparent);
+  pointer-events: none;
+}
+
+/* Ensure clipped children don't bleed through the pseudo edges */
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid) {
+  overflow: hidden;
+}
+
+/* Transitions */
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-full:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main input:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main textarea:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main select:not(.no-glass):not(.pc-solid),
+.pc-glass-card {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    backdrop-filter 200ms ease;
+}
+
+/* Inputs stay transparent — the surrounding container carries the glass */
+:is(html[data-pc-resources],html[data-pc-screening]) input,
+:is(html[data-pc-resources],html[data-pc-screening]) textarea,
+:is(html[data-pc-resources],html[data-pc-screening]) select {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  color: #15233F !important;
+}
+:is(html[data-pc-resources],html[data-pc-screening]) input::placeholder,
+:is(html[data-pc-resources],html[data-pc-screening]) textarea::placeholder {
+  color: #8B98AD !important;
+}
+:is(html[data-pc-resources],html[data-pc-screening]) select option {
+  background: #ffffff !important;
+  color: #15233F !important;
+}
+
+/* Hover: brighten glass slightly — no lift, no scale */
+:is(html[data-pc-resources],html[data-pc-screening]) main a:hover > .rounded-2xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main a:hover > .rounded-3xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main a:focus-visible > .rounded-2xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main a:focus-visible > .rounded-3xl:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main button.rounded-2xl:hover:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main button.rounded-3xl:hover:not(.no-glass):not(.pc-solid),
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid):hover,
+:is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid):hover,
+.pc-glass-card:hover,
+.pc-glass-card:focus-within {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(36px) saturate(120%);
+  border-color: rgba(255, 255, 255, 0.55) !important;
+  box-shadow:
+    0 12px 32px rgba(20, 30, 60, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Focus ring for keyboard users */
+:is(html[data-pc-resources],html[data-pc-screening]) main :focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(141, 175, 247, 0.35),
+    0 10px 30px rgba(18, 25, 38, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(html[data-pc-resources],html[data-pc-screening]) main *,
+  .pc-glass-card,
+  .pc-glass-card::before {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Muted-token override for the desaturated palette */
+:is(html[data-pc-resources],html[data-pc-screening]) main [style*="var(--pc-muted)"] { color: #5C6D86 !important; }
+
+
+
+/* ============================================================
+   Premium Frosted-Glass Sidebar (global — all routes)
+   Layered glass + hairline highlights + fine SVG grain
+   ============================================================ */
+/* Premium Frosted-Glass Sidebar — blended, faint, matte */
+.pc-glass-sidebar {
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,0.42), rgba(255,255,255,0.28) 60%, rgba(255,255,255,0.22) 100%);
+  backdrop-filter: blur(32px) saturate(115%);
+  border: 1px solid rgba(255,255,255,0.32);
+  box-shadow:
+    0 10px 30px rgba(18, 25, 38, 0.05),
+    inset 0 1px 0 rgba(255,255,255,0.55);
+  isolation: isolate;
+}
+
+.pc-glass-sidebar::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pc-glass-sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.12  0 0 0 0 0.16  0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  mix-blend-mode: multiply;
+  opacity: 0.05;
+}
+
+.pc-glass-sidebar > * { position: relative; z-index: 3; }
+
+:is(html[data-pc-resources],html[data-pc-screening]) .pc-glass-sidebar {
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,0.38), rgba(255,255,255,0.22) 60%, rgba(255,255,255,0.18) 100%);
+  border-color: rgba(255,255,255,0.32);
+}
+
+
+/* ============================================================
+   Sidebar: animated grain + premium item interactions
+   ============================================================ */
+
+/* Living grain — two subtle drift animations run at low opacity */
+@keyframes pc-grain-drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(-6px, 4px, 0); }
+  50%  { transform: translate3d(4px, -3px, 0); }
+  75%  { transform: translate3d(-3px, -5px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+@keyframes pc-grain-flicker {
+  0%, 100% { opacity: 0.42; }
+  50%      { opacity: 0.55; }
+}
+
+/* Grain is static — no animation. Keeps sidebar feeling alive without per-frame cost. */
+.pc-glass-sidebar::after { animation: none !important; will-change: auto; }
+
+
+/* Nav items — premium lift + soft glow, GPU-only transforms */
+.pc-nav-item {
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease;
+  will-change: transform;
+}
+.pc-nav-item:hover,
+.pc-nav-item:focus-visible {
+  outline: none;
+  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--pc-ink);
+  box-shadow:
+    0 10px 24px -14px rgba(30, 60, 120, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+.dark .pc-nav-item:hover,
+.dark .pc-nav-item:focus-visible {
+  background: rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 10px 24px -14px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+}
+/* Icon micro-motion */
+.pc-nav-item .pc-nav-icon {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 220ms ease;
+}
+.pc-nav-item:hover .pc-nav-icon,
+.pc-nav-item:focus-visible .pc-nav-icon {
+  transform: scale(1.12) rotate(-2deg);
+  filter: drop-shadow(0 0 8px rgba(120, 170, 240, 0.55));
+}
+/* Smooth label reveal (slides from -4px while parent group is hovered) */
+.pc-nav-label {
+  transform: translateX(-4px);
+  transition: opacity 260ms ease 60ms, transform 260ms cubic-bezier(0.22, 1, 0.36, 1) 60ms;
+}
+.group:hover .pc-nav-label,
+.pc-nav-item:focus-visible .pc-nav-label {
+  transform: translateX(0);
+}
+
+/* ============================================================
+   Mobile: frosted glass slide-in drawer
+   ============================================================ */
+@keyframes pc-drawer-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes pc-scrim-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.pc-mobile-scrim {
+  background: rgba(15, 30, 55, 0.35);
+  backdrop-filter: blur(6px);
+  animation: pc-scrim-in 220ms ease-out both;
+}
+.pc-mobile-drawer {
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.55) 0%,
+      rgba(255,255,255,0.30) 45%,
+      rgba(255,255,255,0.45) 100%);
+  backdrop-filter: blur(30px) saturate(180%);
+  border-left: 1px solid rgba(255,255,255,0.55);
+  box-shadow:
+    -30px 0 60px -20px rgba(20, 40, 80, 0.35),
+    inset 1px 0 0 rgba(255,255,255,0.75);
+  animation: pc-drawer-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  isolation: isolate;
+}
+.dark .pc-mobile-drawer {
+  background:
+    linear-gradient(180deg,
+      rgba(20, 24, 40, 0.72) 0%,
+      rgba(20, 24, 40, 0.55) 45%,
+      rgba(20, 24, 40, 0.68) 100%);
+  border-left-color: rgba(255,255,255,0.10);
+}
+.pc-mobile-drawer::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.12  0 0 0 0 0.20  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+  /* static grain — no animation for max performance */
+}
+.pc-mobile-drawer > * { position: relative; z-index: 1; }
+
+/* Touch-friendly hit targets inside the drawer */
+.pc-mobile-drawer .pc-nav-item { min-height: 48px; }
+.pc-mobile-drawer .pc-nav-item:active {
+  transform: scale(0.98);
+  background: rgba(255,255,255,0.65);
+}
+.dark .pc-mobile-drawer .pc-nav-item:active { background: rgba(255,255,255,0.14); }
+
+/* ============================================================
+   prefers-reduced-motion — fade instead of animate
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  /* Kill animations globally; keep opacity transitions */
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: opacity, background-color, color, border-color !important;
+    transition-duration: 200ms !important;
+  }
+  /* Neutralize any transforms used only for motion */
+  .pc-nav-item:hover,
+  .pc-nav-item:focus-visible,
+  .pc-nav-item:hover .pc-nav-icon,
+  .pc-nav-item:focus-visible .pc-nav-icon,
+  .pc-nav-label,
+  .group:hover .pc-nav-label,
+  .pc-glass-sidebar::after,
+  .pc-mobile-drawer,
+  .pc-mobile-drawer::after,
+  :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid):hover,
+  :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid):hover {
+    transform: none !important;
+  }
+  /* Replace shimmer sweep with a soft fade */
+  :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid):hover::before,
+  :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid):hover::before {
+    animation: none !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.95), transparent) !important;
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   Adaptive grain — low-end devices get lighter, slower noise
+   Set by AppShell via <html data-pc-perf="low|med|high">.
+   • low  → static grain at reduced opacity, no drift/flicker
+   • med  → slower drift, no flicker, mid opacity
+   • high → default (unchanged)
+   Also respects the Save-Data hint via prefers-reduced-data.
+   ============================================================ */
+html[data-pc-perf="med"] .pc-glass-sidebar::after,
+html[data-pc-perf="med"] .pc-mobile-drawer::after {
+  animation: pc-grain-drift 28s ease-in-out infinite !important;
+  opacity: 0.28 !important;
+  will-change: auto;
+}
+html[data-pc-perf="low"] .pc-glass-sidebar::after,
+html[data-pc-perf="low"] .pc-mobile-drawer::after {
+  animation: none !important;
+  opacity: 0.18 !important;
+  background-size: 260px 260px;
+  will-change: auto;
+  mix-blend-mode: normal;
+}
+@media (prefers-reduced-data: reduce) {
+  .pc-glass-sidebar::after,
+  .pc-mobile-drawer::after {
+    animation: none !important;
+    opacity: 0.2 !important;
+    will-change: auto;
+  }
+}
+
+
+/* ============================================================
+   Pinned sidebar — persists expanded state across refresh.
+   When [data-pinned="true"], reveal the labels that are normally
+   only shown on hover, and enable vertical scrolling.
+   ============================================================ */
+.pc-glass-sidebar[data-pinned="true"] [class~="group-hover:opacity-100"] { opacity: 1 !important; }
+.pc-glass-sidebar[data-pinned="true"] nav.group-hover\:overflow-y-auto,
+.pc-glass-sidebar[data-pinned="true"] [class~="group-hover:overflow-y-auto"] { overflow-y: auto !important; }
+
+/* ============================================================
+   Premium themable backdrops — driven by html[data-pc-bg="key"]
+   Each preset sets:
+     • body background (gradient composition)
+     • --pc-ink / --pc-muted / --pc-border tokens for readable text
+     • a shared grain layer via body::before
+   Selecting a theme in Settings > Appearance persists to
+   peacecode.settings.v1 and applies globally.
+   ============================================================ */
+
+html[data-pc-bg] body {
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: var(--pc-ink);
+  transition: background-color 400ms ease, color 400ms ease;
+}
+/* Coarse grain — creates depth and film-like texture */
+html[data-pc-bg] body::before {
+  content: "";
+  position: fixed; inset: -20px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.08  0 0 0 0 0.14  0 0 0 0.95 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 360px 360px;
+  mix-blend-mode: multiply;
+  opacity: 0.16;
+}
+/* Fine grain — a sharper micro-layer over the top */
+html[data-pc-bg] body::after {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' stitchTiles='stitch' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.10  0 0 0 0 0.14  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: multiply;
+  opacity: 0.09;
+}
+html[data-pc-bg][data-theme="dark"] body::before,
+html[data-pc-bg="midnight"] body::before,
+html[data-pc-bg="noir"] body::before {
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+}
+html[data-pc-bg][data-theme="dark"] body::after,
+html[data-pc-bg="midnight"] body::after,
+html[data-pc-bg="noir"] body::after {
+  mix-blend-mode: overlay;
+  opacity: 0.14;
+}
+
+/* Daylight — soft haze */
+html[data-pc-bg="daylight"] body {
+  background:
+    radial-gradient(60% 45% at 18% 12%, #DDEEFF 0%, transparent 60%),
+    radial-gradient(55% 50% at 88% 8%, #FFF5EE 0%, transparent 62%),
+    radial-gradient(70% 55% at 82% 92%, #EAF2FF 0%, transparent 65%),
+    radial-gradient(80% 60% at 20% 90%, #F7F8FC 0%, transparent 70%),
+    linear-gradient(180deg, #FFFFFF 0%, #F5F7FB 100%);
+  --pc-ink: #15233F; --pc-muted: #5C6D86; --pc-border: rgba(20,30,60,0.10);
+}
+
+/* Aurora — iridescent lavender + pink */
+html[data-pc-bg="aurora"] body {
+  background:
+    radial-gradient(50% 40% at 12% 10%, #E9E4FF 0%, transparent 65%),
+    radial-gradient(55% 45% at 88% 18%, #FCE7F3 0%, transparent 65%),
+    radial-gradient(60% 50% at 75% 90%, #DDF1FF 0%, transparent 65%),
+    radial-gradient(60% 50% at 15% 85%, #FFF1D6 0%, transparent 70%),
+    linear-gradient(160deg, #F8F5FF 0%, #FDF1F7 55%, #EEF6FF 100%);
+  --pc-ink: #2A1E4A; --pc-muted: #6B5E85; --pc-border: rgba(60,40,110,0.12);
+}
+
+/* Dusk — sunset peach + rose */
+html[data-pc-bg="dusk"] body {
+  background:
+    radial-gradient(55% 45% at 18% 12%, #FFE7D6 0%, transparent 65%),
+    radial-gradient(60% 50% at 88% 22%, #F8CAD7 0%, transparent 65%),
+    radial-gradient(65% 55% at 78% 92%, #E9D6F5 0%, transparent 70%),
+    linear-gradient(155deg, #FFF2E6 0%, #FBE0DA 50%, #F1E0F5 100%);
+  --pc-ink: #3B1F2E; --pc-muted: #7A5766; --pc-border: rgba(90,40,60,0.14);
+}
+
+/* Sage Paper — muted green on warm paper */
+html[data-pc-bg="sage"] body {
+  background:
+    radial-gradient(60% 50% at 15% 15%, #E6EFD9 0%, transparent 65%),
+    radial-gradient(55% 45% at 88% 20%, #F1EFE6 0%, transparent 70%),
+    radial-gradient(70% 60% at 80% 95%, #DDE7D6 0%, transparent 65%),
+    linear-gradient(180deg, #F7F4EB 0%, #EEEFE0 100%);
+  --pc-ink: #24361F; --pc-muted: #5F7458; --pc-border: rgba(50,70,40,0.14);
+}
+
+/* Linen — cream + warm sand */
+html[data-pc-bg="linen"] body {
+  background:
+    radial-gradient(65% 55% at 20% 15%, #FBF7EF 0%, transparent 70%),
+    radial-gradient(60% 50% at 85% 20%, #F0E8DA 0%, transparent 70%),
+    radial-gradient(70% 55% at 80% 90%, #E6D8C1 0%, transparent 65%),
+    linear-gradient(180deg, #FAF6F0 0%, #F1E8D6 100%);
+  --pc-ink: #3A2F20; --pc-muted: #7A6B54; --pc-border: rgba(90,70,40,0.16);
+}
+
+/* Ocean — cool teal + foam */
+html[data-pc-bg="ocean"] body {
+  background:
+    radial-gradient(60% 50% at 18% 15%, #EAF6F8 0%, transparent 65%),
+    radial-gradient(55% 45% at 88% 22%, #D9EEF3 0%, transparent 65%),
+    radial-gradient(70% 60% at 78% 92%, #B8D9E6 0%, transparent 60%),
+    linear-gradient(160deg, #F1F9FA 0%, #D0E7ED 100%);
+  --pc-ink: #0C2735; --pc-muted: #4A6C7A; --pc-border: rgba(20,60,80,0.14);
+}
+
+/* Sunrise — warm coral */
+html[data-pc-bg="sunrise"] body {
+  background:
+    radial-gradient(60% 50% at 20% 12%, #FDEFD9 0%, transparent 65%),
+    radial-gradient(55% 45% at 85% 18%, #FFE4C7 0%, transparent 65%),
+    radial-gradient(70% 60% at 75% 92%, #F6A69B 0%, transparent 65%),
+    linear-gradient(160deg, #FFF5E4 0%, #FFCFBB 100%);
+  --pc-ink: #4A1E1A; --pc-muted: #8A5648; --pc-border: rgba(120,50,30,0.16);
+}
+
+/* Iridescent — vapor chrome pastels */
+html[data-pc-bg="iris"] body {
+  background:
+    radial-gradient(55% 45% at 15% 12%, #C9F0F2 0%, transparent 65%),
+    radial-gradient(55% 45% at 85% 15%, #E9D8FF 0%, transparent 65%),
+    radial-gradient(60% 50% at 75% 90%, #FFE0EF 0%, transparent 65%),
+    radial-gradient(60% 55% at 20% 90%, #F0F7FF 0%, transparent 70%),
+    linear-gradient(140deg, #EAFAFB 0%, #F1E4FF 55%, #FFE9F2 100%);
+  --pc-ink: #2A1F4A; --pc-muted: #6D5F8A; --pc-border: rgba(80,50,140,0.14);
+}
+
+/* Midnight — deep navy w/ lavender aurora (dark) */
+html[data-pc-bg="midnight"] body {
+  background:
+    radial-gradient(55% 45% at 18% 10%, #3A2E6B 0%, transparent 60%),
+    radial-gradient(55% 45% at 85% 20%, #1E3A6E 0%, transparent 60%),
+    radial-gradient(70% 60% at 80% 92%, #12203E 0%, transparent 60%),
+    linear-gradient(160deg, #0B1020 0%, #141B33 60%, #0B1020 100%);
+  --pc-ink: #E8ECF7; --pc-muted: #A8B4D0; --pc-border: rgba(255,255,255,0.10);
+  --pc-surface: rgba(255,255,255,0.06); --pc-surface2: rgba(255,255,255,0.10);
+}
+
+/* Noir Gold — charcoal + gold whisper (dark) */
+html[data-pc-bg="noir"] body {
+  background:
+    radial-gradient(55% 45% at 20% 10%, #2A2418 0%, transparent 60%),
+    radial-gradient(50% 40% at 82% 22%, #3A2E1C 0%, transparent 60%),
+    radial-gradient(70% 60% at 80% 92%, #1A1712 0%, transparent 60%),
+    linear-gradient(160deg, #0D0D0D 0%, #1A1A1A 60%, #0D0D0D 100%);
+  --pc-ink: #F5EEDD; --pc-muted: #B8AC90; --pc-border: rgba(201,168,76,0.20);
+  --pc-primary: #C9A84C; --pc-soft: #E6D28A;
+  --pc-surface: rgba(255,255,255,0.05); --pc-surface2: rgba(201,168,76,0.10);
+}
+
+/* Lilac Haze — pink to indigo (grainy dream) */
+html[data-pc-bg="lilac"] body {
+  background:
+    radial-gradient(55% 45% at 12% 15%, #F3E8FF 0%, transparent 65%),
+    radial-gradient(60% 50% at 85% 25%, #D8C4FF 0%, transparent 60%),
+    radial-gradient(70% 60% at 88% 90%, #4B2FB8 0%, transparent 55%),
+    radial-gradient(70% 60% at 15% 85%, #7A5CFF 0%, transparent 55%),
+    linear-gradient(140deg, #F5E4FF 0%, #C8AEFF 45%, #5A3ED9 100%);
+  --pc-ink: #1E1447; --pc-muted: #4A3A7A; --pc-border: rgba(60,30,140,0.16);
+}
+
+/* Fresh Mint — cool celadon paper */
+html[data-pc-bg="mint"] body {
+  background:
+    radial-gradient(55% 45% at 15% 12%, #E7F7EE 0%, transparent 65%),
+    radial-gradient(60% 50% at 85% 20%, #D0EEDB 0%, transparent 65%),
+    radial-gradient(70% 60% at 80% 90%, #A6DFB8 0%, transparent 60%),
+    linear-gradient(180deg, #F5FBF6 0%, #DFF1E4 100%);
+  --pc-ink: #10331E; --pc-muted: #4E7059; --pc-border: rgba(20,70,40,0.14);
+}
+
+/* Sakura — cherry blossom */
+html[data-pc-bg="sakura"] body {
+  background:
+    radial-gradient(55% 45% at 15% 12%, #FFEEF3 0%, transparent 65%),
+    radial-gradient(60% 50% at 85% 20%, #FFD3E0 0%, transparent 65%),
+    radial-gradient(70% 60% at 80% 90%, #F6B5CA 0%, transparent 60%),
+    radial-gradient(60% 55% at 20% 90%, #FFF7FA 0%, transparent 70%),
+    linear-gradient(160deg, #FFF5F8 0%, #FFDDE7 100%);
+  --pc-ink: #3F1226; --pc-muted: #8A4A65; --pc-border: rgba(120,30,60,0.14);
+}
+
+/* Ember — charcoal with warm ember glow (dark) */
+html[data-pc-bg="ember"] body {
+  background:
+    radial-gradient(55% 45% at 18% 12%, #4A2416 0%, transparent 55%),
+    radial-gradient(50% 40% at 85% 22%, #7A2E1A 0%, transparent 55%),
+    radial-gradient(70% 60% at 82% 92%, #2A1108 0%, transparent 60%),
+    linear-gradient(160deg, #1A0F0A 0%, #26160E 55%, #120904 100%);
+  --pc-ink: #F7E6DA; --pc-muted: #C69984; --pc-border: rgba(232,93,58,0.22);
+  --pc-primary: #E85D3A; --pc-soft: #F0916E;
+  --pc-surface: rgba(255,255,255,0.05); --pc-surface2: rgba(232,93,58,0.10);
+}
+
+/* Graphite — slate paper (dark) */
+html[data-pc-bg="graphite"] body {
+  background:
+    radial-gradient(55% 45% at 18% 12%, #232833 0%, transparent 60%),
+    radial-gradient(55% 45% at 85% 22%, #2E3648 0%, transparent 60%),
+    radial-gradient(70% 60% at 80% 92%, #14171E 0%, transparent 60%),
+    linear-gradient(160deg, #0F1116 0%, #191D25 60%, #0F1116 100%);
+  --pc-ink: #E6ECF5; --pc-muted: #9AA6BC; --pc-border: rgba(255,255,255,0.09);
+  --pc-surface: rgba(255,255,255,0.05); --pc-surface2: rgba(255,255,255,0.08);
+}
+
+/* Ensure page content sits above the grain layer — only when not already
+   positioned (fixed/sticky/absolute must win over this fallback). */
+html[data-pc-bg] main:not(.fixed):not(.sticky):not(.absolute),
+html[data-pc-bg] aside:not(.fixed):not(.sticky):not(.absolute),
+html[data-pc-bg] header:not(.fixed):not(.sticky):not(.absolute),
+html[data-pc-bg] footer:not(.fixed):not(.sticky):not(.absolute) { position: relative; z-index: 1; }
+
+
+/* Dark-tone presets: tune the frosted glass for readability */
+html[data-pc-bg="midnight"] .pc-glass-card,
+html[data-pc-bg="noir"] .pc-glass-card,
+html[data-pc-bg="midnight"] main .rounded-2xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="midnight"] main .rounded-3xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="noir"] main .rounded-2xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="noir"] main .rounded-3xl:not(.no-glass):not(.pc-solid) {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.10) !important;
+  color: var(--pc-ink);
+}
+html[data-pc-bg="midnight"] main,
+html[data-pc-bg="noir"] main { color: var(--pc-ink); }
+html[data-pc-bg="midnight"] input,
+html[data-pc-bg="midnight"] textarea,
+html[data-pc-bg="midnight"] select,
+html[data-pc-bg="noir"] input,
+html[data-pc-bg="noir"] textarea,
+html[data-pc-bg="noir"] select { color: var(--pc-ink) !important; }
+html[data-pc-bg="midnight"] input::placeholder,
+html[data-pc-bg="noir"] input::placeholder { color: var(--pc-muted) !important; }
+
+/* Sidebar adapts to dark themes — the inline #0f2540 ink is unreadable on dark glass */
+html[data-pc-bg="midnight"] .pc-glass-sidebar,
+html[data-pc-bg="noir"] .pc-glass-sidebar,
+html[data-pc-bg="ember"] .pc-glass-sidebar,
+html[data-pc-bg="graphite"] .pc-glass-sidebar {
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,0.09), rgba(255,255,255,0.05) 60%, rgba(255,255,255,0.03) 100%) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-sidebar::before,
+html[data-pc-bg="noir"] .pc-glass-sidebar::before,
+html[data-pc-bg="ember"] .pc-glass-sidebar::before,
+html[data-pc-bg="graphite"] .pc-glass-sidebar::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+}
+html[data-pc-bg="midnight"] .pc-glass-sidebar a,
+html[data-pc-bg="midnight"] .pc-glass-sidebar button,
+html[data-pc-bg="midnight"] .pc-glass-sidebar span,
+html[data-pc-bg="midnight"] .pc-glass-sidebar div,
+html[data-pc-bg="noir"] .pc-glass-sidebar a,
+html[data-pc-bg="noir"] .pc-glass-sidebar button,
+html[data-pc-bg="noir"] .pc-glass-sidebar span,
+html[data-pc-bg="noir"] .pc-glass-sidebar div,
+html[data-pc-bg="ember"] .pc-glass-sidebar a,
+html[data-pc-bg="ember"] .pc-glass-sidebar button,
+html[data-pc-bg="ember"] .pc-glass-sidebar span,
+html[data-pc-bg="ember"] .pc-glass-sidebar div,
+html[data-pc-bg="graphite"] .pc-glass-sidebar a,
+html[data-pc-bg="graphite"] .pc-glass-sidebar button,
+html[data-pc-bg="graphite"] .pc-glass-sidebar span,
+html[data-pc-bg="graphite"] .pc-glass-sidebar div {
+  color: rgba(240, 244, 252, 0.92) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-sidebar .pc-nav-item[style*="background"],
+html[data-pc-bg="noir"] .pc-glass-sidebar .pc-nav-item[style*="background"],
+html[data-pc-bg="ember"] .pc-glass-sidebar .pc-nav-item[style*="background"],
+html[data-pc-bg="graphite"] .pc-glass-sidebar .pc-nav-item[style*="background"] {
+  background: rgba(255,255,255,0.10) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-sidebar .pc-nav-item:hover,
+html[data-pc-bg="noir"] .pc-glass-sidebar .pc-nav-item:hover,
+html[data-pc-bg="ember"] .pc-glass-sidebar .pc-nav-item:hover,
+html[data-pc-bg="graphite"] .pc-glass-sidebar .pc-nav-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+/* Mobile drawer + top bar too */
+html[data-pc-bg="midnight"] .pc-glass-drawer,
+html[data-pc-bg="noir"] .pc-glass-drawer,
+html[data-pc-bg="ember"] .pc-glass-drawer,
+html[data-pc-bg="graphite"] .pc-glass-drawer {
+  background: rgba(18, 22, 32, 0.72) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  color: rgba(240, 244, 252, 0.92);
+}
+
+@keyframes pcMenu {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ============================================================
+   Live-appearance controls — density, radius, motion, glass, card style
+   These read attributes set by src/lib/settings-store.ts::applyAppearance
+   so the toggles in /settings/appearance produce visible changes everywhere.
+   ============================================================ */
+
+/* Corner radius — global override for common Tailwind radii */
+html[style*="--pc-radius-scale"] .rounded-2xl,
+html[style*="--pc-radius-scale"] .rounded-3xl {
+  border-radius: var(--pc-radius-scale) !important;
+}
+html[style*="--pc-radius-scale"] .rounded-xl {
+  border-radius: calc(var(--pc-radius-scale) * 0.75) !important;
+}
+
+/* Interface density — scales vertical rhythm of the main content column */
+html[data-density="compact"]      main { --pc-density: 0.78; }
+html[data-density="comfortable"]  main { --pc-density: 1;    }
+html[data-density="spacious"]     main { --pc-density: 1.28; }
+html[data-density] main { padding-top: calc(var(--pc-density,1) * 1rem); padding-bottom: calc(var(--pc-density,1) * 1rem); }
+html[data-density] main .space-y-4  > * + * { margin-top: calc(var(--pc-density,1) * 1rem)   !important; }
+html[data-density] main .space-y-6  > * + * { margin-top: calc(var(--pc-density,1) * 1.5rem) !important; }
+html[data-density] main .space-y-8  > * + * { margin-top: calc(var(--pc-density,1) * 2rem)   !important; }
+html[data-density] main .gap-3 { gap: calc(var(--pc-density,1) * 0.75rem) !important; }
+html[data-density] main .gap-4 { gap: calc(var(--pc-density,1) * 1rem)    !important; }
+html[data-density] main .gap-6 { gap: calc(var(--pc-density,1) * 1.5rem)  !important; }
+html[data-density] main .py-4 { padding-top: calc(var(--pc-density,1) * 1rem) !important; padding-bottom: calc(var(--pc-density,1) * 1rem) !important; }
+html[data-density] main .py-5 { padding-top: calc(var(--pc-density,1) * 1.25rem) !important; padding-bottom: calc(var(--pc-density,1) * 1.25rem) !important; }
+html[data-density] main .py-8 { padding-top: calc(var(--pc-density,1) * 2rem) !important; padding-bottom: calc(var(--pc-density,1) * 2rem) !important; }
+
+/* Reduce motion — kill all transitions/animations */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Glass effects OFF — strip blur + saturate everywhere */
+html[data-glass="off"] *,
+html[data-glass="off"] *::before,
+html[data-glass="off"] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-glass="off"] .pc-glass-sidebar,
+html[data-glass="off"] .pc-glass-card {
+  background: var(--pc-surface, #fff) !important;
+}
+
+/* Card style — flat / outlined / elevated (default) */
+html[data-card-style="flat"] main .rounded-2xl,
+html[data-card-style="flat"] main .rounded-3xl,
+html[data-card-style="flat"] .pc-glass-card {
+  box-shadow: none !important;
+}
+html[data-card-style="outlined"] main .rounded-2xl,
+html[data-card-style="outlined"] main .rounded-3xl,
+html[data-card-style="outlined"] .pc-glass-card {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 1px solid rgba(20,30,60,0.14) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-card-style="elevated"] main .rounded-2xl,
+html[data-card-style="elevated"] main .rounded-3xl {
+  box-shadow: 0 10px 30px -14px rgba(20,30,60,0.14);
+}
+
+/* Chart style — expose as a CSS var chart components can pick up */
+html[data-chart-style="smooth"]  { --pc-chart-tension: 0.55; --pc-chart-dash: 0;    }
+html[data-chart-style="sharp"]   { --pc-chart-tension: 0;    --pc-chart-dash: 0;    }
+html[data-chart-style="dotted"]  { --pc-chart-tension: 0.4;  --pc-chart-dash: 4 6;  }
+html[data-chart-style] svg path.pc-chart-line,
+html[data-chart-style] svg polyline.pc-chart-line {
+  stroke-dasharray: var(--pc-chart-dash) !important;
+}
