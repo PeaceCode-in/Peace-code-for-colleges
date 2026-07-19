@@ -29,8 +29,6 @@ import { Route as AuthenticatedCohortsCompareRouteImport } from './routes/_authe
 import { Route as AuthenticatedCareRiskRouteImport } from './routes/_authenticated.care.risk'
 import { Route as AuthenticatedCareReferralsRouteImport } from './routes/_authenticated.care.referrals'
 import { Route as AuthenticatedCareCapacityRouteImport } from './routes/_authenticated.care.capacity'
-import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated.admin.audit'
-import { Route as AuthenticatedAdminAccessRouteImport } from './routes/_authenticated.admin.access'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -143,17 +141,6 @@ const AuthenticatedCareCapacityRoute =
     path: '/care/capacity',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
-  id: '/admin/audit',
-  path: '/admin/audit',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAdminAccessRoute =
-  AuthenticatedAdminAccessRouteImport.update({
-    id: '/admin/access',
-    path: '/admin/access',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,8 +150,6 @@ export interface FileRoutesByFullPath {
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/admin/access': typeof AuthenticatedAdminAccessRoute
-  '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
@@ -186,8 +171,6 @@ export interface FileRoutesByTo {
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/admin/access': typeof AuthenticatedAdminAccessRoute
-  '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/care/risk': typeof AuthenticatedCareRiskRoute
@@ -211,8 +194,6 @@ export interface FileRoutesById {
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/reports/print': typeof ReportsPrintRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
-  '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
-  '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/_authenticated/care/capacity': typeof AuthenticatedCareCapacityRoute
   '/_authenticated/care/referrals': typeof AuthenticatedCareReferralsRoute
   '/_authenticated/care/risk': typeof AuthenticatedCareRiskRoute
@@ -236,8 +217,6 @@ export interface FileRouteTypes {
     | '/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/admin/access'
-    | '/admin/audit'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
@@ -259,8 +238,6 @@ export interface FileRouteTypes {
     | '/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/admin/access'
-    | '/admin/audit'
     | '/care/capacity'
     | '/care/referrals'
     | '/care/risk'
@@ -283,8 +260,6 @@ export interface FileRouteTypes {
     | '/_authenticated/departments'
     | '/reports/print'
     | '/settings/appearance'
-    | '/_authenticated/admin/access'
-    | '/_authenticated/admin/audit'
     | '/_authenticated/care/capacity'
     | '/_authenticated/care/referrals'
     | '/_authenticated/care/risk'
@@ -449,28 +424,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCareCapacityRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/admin/audit': {
-      id: '/_authenticated/admin/audit'
-      path: '/admin/audit'
-      fullPath: '/admin/audit'
-      preLoaderRoute: typeof AuthenticatedAdminAuditRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/access': {
-      id: '/_authenticated/admin/access'
-      path: '/admin/access'
-      fullPath: '/admin/access'
-      preLoaderRoute: typeof AuthenticatedAdminAccessRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
-  AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
-  AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
   AuthenticatedCareCapacityRoute: typeof AuthenticatedCareCapacityRoute
   AuthenticatedCareReferralsRoute: typeof AuthenticatedCareReferralsRoute
   AuthenticatedCareRiskRoute: typeof AuthenticatedCareRiskRoute
@@ -488,8 +447,6 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
-  AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
-  AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
   AuthenticatedCareCapacityRoute: AuthenticatedCareCapacityRoute,
   AuthenticatedCareReferralsRoute: AuthenticatedCareReferralsRoute,
   AuthenticatedCareRiskRoute: AuthenticatedCareRiskRoute,
