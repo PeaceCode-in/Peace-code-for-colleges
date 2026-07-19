@@ -30,8 +30,7 @@ if (urls.size === 0) {
 // route-manifest, e.g. '"/dashboard": ...' or 'path: "/care/routing"'.
 const missing: string[] = [];
 for (const url of urls) {
-  const needle = `"${url}"`;
-  if (!tree.includes(needle)) missing.push(url);
+  if (!tree.includes(`"${url}"`) && !tree.includes(`'${url}'`)) missing.push(url);
 }
 
 if (missing.length) {
