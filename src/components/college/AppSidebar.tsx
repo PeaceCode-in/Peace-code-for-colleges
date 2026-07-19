@@ -27,11 +27,13 @@ const GROUPS: Group[] = [
     { title: "Compare cohorts", url: "/cohorts/compare", icon: GitCompareArrows },
   ]},
   { label: "Wellbeing signals", items: [
+    { title: "Overview", url: "/signals/wellbeing", icon: Activity },
     { title: "Mood trends", url: "/signals/mood", icon: Activity },
     { title: "Screening outcomes", url: "/signals/screenings", icon: ClipboardList },
     { title: "Engagement rhythm", url: "/signals/engagement", icon: Waves },
     { title: "Wellness heatmap", url: "/signals/heatmap", icon: Grid3x3 },
   ]},
+
   { label: "Early warning & care", items: [
     { title: "Risk signals", url: "/care/risk", icon: AlertTriangle },
     { title: "Referral pipeline", url: "/care/referrals", icon: Share2 },
