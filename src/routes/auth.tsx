@@ -11,16 +11,52 @@ import {
 import { isInstitutionEmail, startSession } from "@/lib/auth-store";
 import { setCollegeFromEmail } from "@/lib/college-context";
 
+const AUTH_URL = "https://colleges.peacecode.in/auth";
+const AUTH_TITLE = "Institution Sign-In — PeaceCode for Colleges";
+const AUTH_DESC =
+  "Sign in to PeaceCode for Colleges with your verified institution email to access your campus's anonymized wellbeing dashboard. Aggregate insights only, k-anonymity ≥ 10.";
+
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — PeaceCode for Colleges" },
+      { title: AUTH_TITLE },
+      { name: "description", content: AUTH_DESC },
+      { name: "robots", content: "index,follow,max-snippet:-1,max-image-preview:large" },
+      { property: "og:title", content: AUTH_TITLE },
+      { property: "og:description", content: AUTH_DESC },
+      { property: "og:url", content: AUTH_URL },
+      { property: "og:type", content: "website" },
+      { name: "twitter:title", content: AUTH_TITLE },
+      { name: "twitter:description", content: AUTH_DESC },
+    ],
+    links: [{ rel: "canonical", href: AUTH_URL }],
+    scripts: [
       {
-        name: "description",
-        content:
-          "Sign in with your institution email to view your college's anonymized wellbeing dashboard.",
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: AUTH_TITLE,
+          url: AUTH_URL,
+          description: AUTH_DESC,
+          isPartOf: { "@id": "https://colleges.peacecode.in/#website" },
+          about: { "@id": "https://colleges.peacecode.in/#app" },
+          primaryImageOfPage: undefined,
+          potentialAction: {
+            "@type": "LoginAction",
+            target: AUTH_URL,
+            name: "Sign in with institution email",
+          },
+          breadcrumb: {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "PeaceCode", item: "https://peacecode.in" },
+              { "@type": "ListItem", position: 2, name: "For Colleges", item: "https://colleges.peacecode.in" },
+              { "@type": "ListItem", position: 3, name: "Sign in", item: AUTH_URL },
+            ],
+          },
+        }),
       },
-      { name: "robots", content: "noindex" },
     ],
   }),
   component: SignInPage,
