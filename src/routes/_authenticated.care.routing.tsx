@@ -341,6 +341,7 @@ function RoutingPage() {
                 headline={a.headline}
                 sub={a.sub}
                 sparkline={a.sparkline}
+                onOpen={() => {}}
               />
             ))}
           </div>
