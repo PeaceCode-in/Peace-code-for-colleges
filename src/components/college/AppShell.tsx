@@ -243,7 +243,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
           <AppSidebar />
           <SidebarInset style={{ background: "transparent" }}>
             <header
-              className="pc-glass-header sticky top-3 z-30 h-14 flex items-center gap-3 px-4 mx-3 mt-3 rounded-full"
+              className="pc-glass-header sticky top-2 z-30 h-12 flex items-center gap-3 px-4 mx-3 mt-2 rounded-full"
               style={{
                 background: "var(--pc-header)",
                 border: "1px solid var(--pc-border)",
@@ -291,7 +291,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               {/* Legacy UserMenu removed — ProfileMenu supersedes it. */}
               {false && <UserMenu />}
             </header>
-            <main id="main-content" className="px-5 sm:px-8 py-6 lg:py-8 max-w-[1400px] w-full">
+            <main id="main-content" className="px-5 sm:px-8 py-4 lg:py-5 max-w-[1400px] w-full">
               <Breadcrumbs />
               <PageTransition pathname={shellPathname}>{children}</PageTransition>
             </main>

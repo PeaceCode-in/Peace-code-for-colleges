@@ -49,19 +49,12 @@ export function PageHeader({
 }) {
   return (
     <header
-      className="pb-5 mb-6"
+      className="pb-4 mb-5"
       style={{ borderBottom: "1px solid var(--pc-border)" }}
     >
       <div className="flex items-end justify-between gap-6 flex-wrap">
         <div className="min-w-0">
-          {eyebrow && (
-            <div
-              className="text-[10.5px] uppercase mb-2"
-              style={{ letterSpacing: "0.14em", color: "var(--pc-muted)", fontFamily: "var(--font-serif)" }}
-            >
-              {eyebrow}
-            </div>
-          )}
+          {/* Eyebrow intentionally hidden — the shell already renders a breadcrumb trail above the page header. */}
           <h1
             className="font-serif text-[clamp(1.6rem,3.4vw,2.25rem)] leading-[1.1] tracking-tight"
             style={{ color: "var(--pc-ink)" }}
