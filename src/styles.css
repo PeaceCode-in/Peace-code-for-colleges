@@ -1687,3 +1687,70 @@ html[data-pc-bg="graphite"] .pc-nav-chip {
     transform: none !important;
   }
 }
+
+/* ============================================================
+ * Mobile / app-like polish
+ * ========================================================== */
+
+html, body { overflow-x: hidden; overscroll-behavior-y: none; }
+body { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+
+/* Safe-area helpers */
+.pc-safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+.pc-safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Ensure interactive controls hit a comfortable tap target on touch. */
+@media (hover: none) and (pointer: coarse) {
+  button, a[role="button"], [role="button"], .pc-mobile-tab {
+    min-height: 40px;
+  }
+  input, textarea, select { font-size: 16px; } /* avoid iOS zoom-on-focus */
+}
+
+/* Charts & wide content should never blow horizontal layout on phones. */
+@media (max-width: 640px) {
+  main .recharts-responsive-container,
+  main svg { max-width: 100%; }
+  main table { display: block; width: 100%; overflow-x: auto; }
+}
+
+/* Sidebar sheet width on mobile (shadcn floats a Sheet on <md). */
+[data-sidebar="sidebar"][data-mobile="true"] {
+  width: min(84vw, 320px) !important;
+}
+
+/* ------------------------------------------------------------
+ * Mobile bottom tab bar
+ * ---------------------------------------------------------- */
+.pc-mobile-tabbar {
+  background: color-mix(in oklab, var(--pc-surface) 88%, transparent);
+  border-top: 1px solid var(--pc-border);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -6px 24px -18px color-mix(in oklab, var(--pc-ink) 45%, transparent);
+}
+.dark .pc-mobile-tabbar {
+  background: color-mix(in oklab, var(--pc-surface) 78%, transparent);
+}
+.pc-mobile-tab {
+  color: var(--pc-muted);
+  transition: color 160ms ease, transform 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.pc-mobile-tab:active { transform: scale(0.96); }
+.pc-mobile-tab[data-active="true"] { color: var(--pc-primary); }
+.pc-mobile-tab[data-active="true"] .pc-mobile-tab-ico {
+  background: color-mix(in oklab, var(--pc-primary) 14%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--pc-primary) 22%, transparent) inset;
+}
+.pc-mobile-tab-ico {
+  transition: background 180ms ease, box-shadow 180ms ease;
+  width: 32px; height: 22px;
+}
+
+/* Header should never wrap on tight mobile widths. */
+@media (max-width: 480px) {
+  .pc-glass-header { padding-left: 8px; padding-right: 8px; gap: 6px; }
+}
