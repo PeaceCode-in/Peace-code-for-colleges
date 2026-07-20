@@ -115,10 +115,12 @@ function CapacityPage() {
   const weeks = WINDOW_WEEKS[windowKey];
 
   // Site scaling — deterministic cohort size per site for the k-check
-  const cohortN = { all: 1240, main: 620, north: 310, hostels: 220, telehealth: 90 }[site] ?? 1240;
+  const COHORT_N: Record<string, number> = { all: 1240, main: 620, north: 310, hostels: 220, telehealth: 90 };
+  const BASE_CAP: Record<string, number> = { all: 220, main: 120, north: 60, hostels: 40, telehealth: 30 };
+  const cohortN = COHORT_N[site] ?? 1240;
   const suppressed = cohortN < N_MIN;
 
-  const baseCap = { all: 220, main: 120, north: 60, hostels: 40, telehealth: 30 }[site] ?? 220;
+  const baseCap = BASE_CAP[site] ?? 220;
   const baseDem = baseCap * 0.86;
   const series = useMemo(() => weeklySeries(`${site}:${windowKey}`, weeks, baseCap, baseDem), [site, windowKey, weeks, baseCap, baseDem]);
   const totalCapacity = series.reduce((a, b) => a + b.capacity, 0);
