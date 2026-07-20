@@ -245,7 +245,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
           <AppSidebar />
           <SidebarInset style={{ background: "transparent" }}>
             <header
-              className="pc-glass-header sticky top-2 z-30 h-12 flex items-center gap-3 px-4 mx-3 mt-2 rounded-full"
+              className="pc-glass-header sticky top-2 z-30 h-12 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 mx-2 sm:mx-3 mt-2 rounded-full pc-safe-top"
               style={{
                 background: "var(--pc-header)",
                 border: "1px solid var(--pc-border)",
@@ -264,13 +264,13 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               >
                 {college?.shortName ?? "PeaceCode for Colleges"}
               </div>
-              <div className="flex-1 flex justify-center">
+              <div className="flex-1 flex justify-center min-w-0">
                 <CommandK />
               </div>
-              <SeedModePill />
+              <div className="hidden sm:contents"><SeedModePill /></div>
               <span
                 aria-label="k-anonymity threshold: 10"
-                className="hidden sm:inline-flex text-[11px] font-mono px-1.5 py-0.5 rounded"
+                className="hidden md:inline-flex text-[11px] font-mono px-1.5 py-0.5 rounded"
                 style={{ background: "var(--pc-surface2)", color: "var(--pc-muted)", border: "1px solid var(--pc-border)" }}
               >
                 k=10
@@ -279,7 +279,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
                 type="button"
                 onClick={() => setHelpOpen(true)}
                 aria-label="Keyboard shortcuts"
-                className="p-2 rounded-full focus-visible:outline-none focus-visible:ring-2"
+                className="hidden sm:inline-grid p-2 rounded-full focus-visible:outline-none focus-visible:ring-2 place-items-center"
                 style={{ color: "var(--pc-ink-2)", background: "var(--pc-surface2)", border: "1px solid var(--pc-border)" }}
               >
                 <Keyboard className="h-4 w-4" />
@@ -287,20 +287,23 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               <button
                 onClick={toggleDark}
                 aria-label="Toggle theme"
-                className="p-2 rounded-full focus-visible:outline-none focus-visible:ring-2"
+                className="p-2 rounded-full focus-visible:outline-none focus-visible:ring-2 inline-grid place-items-center"
                 style={{ color: "var(--pc-ink-2)", background: "var(--pc-surface2)", border: "1px solid var(--pc-border)" }}
               >
                 {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
               <NotificationsBell />
               <ProfileMenu />
-              {/* Legacy UserMenu removed — ProfileMenu supersedes it. */}
               {false && <UserMenu />}
             </header>
-            <main id="main-content" className="px-5 sm:px-8 py-4 lg:py-5 max-w-[1400px] w-full">
+            <main
+              id="main-content"
+              className="px-3 sm:px-5 md:px-8 py-4 lg:py-5 max-w-[1400px] w-full pb-[calc(env(safe-area-inset-bottom,0px)+76px)] md:pb-4"
+            >
               <Breadcrumbs />
               <PageTransition pathname={shellPathname}>{children}</PageTransition>
             </main>
+            <MobileTabBar />
           </SidebarInset>
         </div>
       </SidebarProvider>
