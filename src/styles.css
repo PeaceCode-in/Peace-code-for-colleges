@@ -1435,3 +1435,67 @@ html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="group-label"],
 html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="group-label"] {
   color: rgba(220,228,240,0.72) !important;
 }
+
+/* ============================================================
+   Dark bg themes — force readable ink inside cards / main content.
+   Many components ship inline style={{ color: "#..." }} hard-coded
+   for light backgrounds; !important on CSS wins over non-important
+   inline styles, so text becomes bright on dark canvases.
+   ============================================================ */
+html[data-pc-bg="midnight"] main,
+html[data-pc-bg="noir"]     main,
+html[data-pc-bg="ember"]    main,
+html[data-pc-bg="graphite"] main {
+  color: var(--pc-ink) !important;
+}
+html[data-pc-bg="midnight"] main :is(h1,h2,h3,h4,h5,h6,p,span,div,li,dt,dd,label,figcaption,th,td,button,a),
+html[data-pc-bg="noir"]     main :is(h1,h2,h3,h4,h5,h6,p,span,div,li,dt,dd,label,figcaption,th,td,button,a),
+html[data-pc-bg="ember"]    main :is(h1,h2,h3,h4,h5,h6,p,span,div,li,dt,dd,label,figcaption,th,td,button,a),
+html[data-pc-bg="graphite"] main :is(h1,h2,h3,h4,h5,h6,p,span,div,li,dt,dd,label,figcaption,th,td,button,a) {
+  color: var(--pc-ink) !important;
+}
+/* Muted / secondary text — anything the app tagged as pc-muted keeps softer tone */
+html[data-pc-bg="midnight"] main [style*="--pc-muted"],
+html[data-pc-bg="noir"]     main [style*="--pc-muted"],
+html[data-pc-bg="ember"]    main [style*="--pc-muted"],
+html[data-pc-bg="graphite"] main [style*="--pc-muted"],
+html[data-pc-bg="midnight"] main .text-muted-foreground,
+html[data-pc-bg="noir"]     main .text-muted-foreground,
+html[data-pc-bg="ember"]    main .text-muted-foreground,
+html[data-pc-bg="graphite"] main .text-muted-foreground {
+  color: var(--pc-muted) !important;
+}
+/* Accent-colored text (buttons, KPI numbers) should keep the primary/accent */
+html[data-pc-bg="midnight"] main [style*="--pc-primary"],
+html[data-pc-bg="noir"]     main [style*="--pc-primary"],
+html[data-pc-bg="ember"]    main [style*="--pc-primary"],
+html[data-pc-bg="graphite"] main [style*="--pc-primary"],
+html[data-pc-bg="midnight"] main [style*="--pc-accent"],
+html[data-pc-bg="noir"]     main [style*="--pc-accent"],
+html[data-pc-bg="ember"]    main [style*="--pc-accent"],
+html[data-pc-bg="graphite"] main [style*="--pc-accent"] {
+  color: var(--pc-primary) !important;
+}
+/* Ember + graphite cards — match midnight/noir treatment */
+html[data-pc-bg="ember"] .pc-glass-card,
+html[data-pc-bg="graphite"] .pc-glass-card,
+html[data-pc-bg="ember"] main .rounded-2xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="ember"] main .rounded-3xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="graphite"] main .rounded-2xl:not(.no-glass):not(.pc-solid),
+html[data-pc-bg="graphite"] main .rounded-3xl:not(.no-glass):not(.pc-solid) {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.10) !important;
+  color: var(--pc-ink) !important;
+}
+/* Inputs / textareas on ember & graphite */
+html[data-pc-bg="ember"]    input,
+html[data-pc-bg="ember"]    textarea,
+html[data-pc-bg="ember"]    select,
+html[data-pc-bg="graphite"] input,
+html[data-pc-bg="graphite"] textarea,
+html[data-pc-bg="graphite"] select { color: var(--pc-ink) !important; }
+html[data-pc-bg="ember"]    input::placeholder,
+html[data-pc-bg="graphite"] input::placeholder { color: var(--pc-muted) !important; }
