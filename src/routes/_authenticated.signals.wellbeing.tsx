@@ -375,7 +375,7 @@ function HeadlineStrip({
   ];
 
   return (
-    <div className="lg:col-span-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="md:col-span-6 lg:col-span-12 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {items.map((it) => (
         <GlassCard key={it.label} className="p-4">
           <div
