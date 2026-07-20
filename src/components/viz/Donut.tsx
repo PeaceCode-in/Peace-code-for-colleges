@@ -78,8 +78,8 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
           const dim = focus !== null && !isFocus;
           return (
             <circle
-              key={i}
-              className={isPicked && pulseKey ? "pc-svg-pick" : undefined}
+              key={isPicked ? `${i}-${pulseKey}` : i}
+              className={isPicked ? "pc-svg-pick" : undefined}
               cx={size / 2}
               cy={size / 2}
               r={r}
