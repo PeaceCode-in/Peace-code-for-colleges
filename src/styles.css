@@ -1553,3 +1553,137 @@ html[data-pc-bg="ember"]    .pc-glass-header::before,
 html[data-pc-bg="graphite"] .pc-glass-header::before {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
 }
+
+/* ─── Premium animated nav icons ─────────────────────────────── */
+.pc-nav-row {
+  position: relative;
+  width: 100%;
+  color: var(--pc-ink-2);
+  transition: color 220ms ease;
+}
+.pc-nav-row:hover,
+.pc-nav-row[data-active="true"] { color: var(--pc-primary); }
+
+.pc-nav-chip {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--pc-ink-2);
+  background:
+    linear-gradient(155deg,
+      color-mix(in oklab, var(--pc-primary) 6%, var(--pc-surface2)) 0%,
+      color-mix(in oklab, var(--pc-primary) 2%, var(--pc-surface)) 100%);
+  border: 1px solid color-mix(in oklab, var(--pc-border) 80%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 30%, transparent),
+    0 1px 2px -1px color-mix(in oklab, var(--pc-ink) 22%, transparent);
+  transition:
+    transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    color 240ms ease;
+  overflow: hidden;
+}
+.pc-nav-chip::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg,
+    transparent 30%,
+    color-mix(in oklab, white 55%, transparent) 50%,
+    transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 620ms ease;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.pc-nav-chip-glow {
+  position: absolute; inset: -6px;
+  border-radius: 14px;
+  background: radial-gradient(closest-side,
+    color-mix(in oklab, var(--pc-primary) 45%, transparent),
+    transparent 70%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.pc-nav-ico {
+  position: relative;
+  transition: transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hover state */
+.pc-nav-row:hover .pc-nav-chip,
+.pc-nav-row:focus-visible .pc-nav-chip {
+  transform: translateY(-1px) scale(1.06);
+  color: var(--pc-primary);
+  border-color: color-mix(in oklab, var(--pc-primary) 45%, var(--pc-border));
+  background:
+    linear-gradient(155deg,
+      color-mix(in oklab, var(--pc-primary) 18%, var(--pc-surface)) 0%,
+      color-mix(in oklab, var(--pc-primary) 6%, var(--pc-surface2)) 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
+    0 6px 18px -10px color-mix(in oklab, var(--pc-primary) 65%, transparent);
+}
+.pc-nav-row:hover .pc-nav-chip::before { transform: translateX(120%); }
+.pc-nav-row:hover .pc-nav-ico { transform: rotate(-6deg) scale(1.08); }
+.pc-nav-row:hover .pc-nav-chip-glow,
+.pc-nav-row[data-active="true"] .pc-nav-chip-glow { opacity: 0.55; }
+
+/* Active state — luminous */
+.pc-nav-row[data-active="true"] .pc-nav-chip {
+  color: var(--pc-primary);
+  border-color: color-mix(in oklab, var(--pc-primary) 55%, transparent);
+  background:
+    linear-gradient(155deg,
+      color-mix(in oklab, var(--pc-primary) 28%, var(--pc-surface)) 0%,
+      color-mix(in oklab, var(--pc-primary) 10%, var(--pc-surface2)) 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 35%, transparent),
+    0 8px 22px -10px color-mix(in oklab, var(--pc-primary) 55%, transparent);
+}
+.pc-nav-row[data-active="true"] .pc-nav-ico {
+  animation: pcNavBreath 3.2s ease-in-out infinite;
+}
+.pc-nav-label {
+  position: relative;
+  transition: transform 240ms ease, color 240ms ease;
+}
+.pc-nav-row:hover .pc-nav-label { transform: translateX(2px); }
+
+@keyframes pcNavBreath {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50%      { transform: scale(1.06); filter: drop-shadow(0 0 6px color-mix(in oklab, var(--pc-primary) 60%, transparent)); }
+}
+
+/* Dark mode — richer chip */
+.dark .pc-nav-chip,
+html[data-pc-bg="midnight"] .pc-nav-chip,
+html[data-pc-bg="noir"] .pc-nav-chip,
+html[data-pc-bg="ember"] .pc-nav-chip,
+html[data-pc-bg="graphite"] .pc-nav-chip {
+  background:
+    linear-gradient(155deg,
+      color-mix(in oklab, var(--pc-primary) 10%, rgba(255,255,255,0.04)) 0%,
+      rgba(255,255,255,0.02) 100%);
+  border-color: color-mix(in oklab, var(--pc-primary) 22%, rgba(255,255,255,0.08));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 1px 2px rgba(0,0,0,0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-nav-chip, .pc-nav-ico, .pc-nav-label,
+  .pc-nav-chip::before, .pc-nav-chip-glow {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
