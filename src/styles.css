@@ -1242,3 +1242,94 @@ html[data-chart-style] svg path.pc-chart-line,
 html[data-chart-style] svg polyline.pc-chart-line {
   stroke-dasharray: var(--pc-chart-dash) !important;
 }
+
+/* ============================================================
+   Glass Tube Sidebar — floating, luminous, capsule
+   ============================================================ */
+[data-slot="sidebar-container"] {
+  padding: 12px 0 12px 12px;
+}
+[data-slot="sidebar-inner"] {
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-surface) 78%, transparent) 0%,
+      color-mix(in oklab, var(--pc-surface) 62%, transparent) 100%);
+  border: 1px solid color-mix(in oklab, var(--pc-border) 90%, transparent);
+  backdrop-filter: blur(22px) saturate(160%);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, #fff 55%, transparent) inset,
+    0 -1px 0 color-mix(in oklab, var(--pc-primary) 8%, transparent) inset,
+    0 30px 60px -30px color-mix(in oklab, var(--pc-ink) 45%, transparent),
+    0 10px 30px -18px color-mix(in oklab, var(--pc-primary) 30%, transparent);
+  overflow: hidden;
+  position: relative;
+}
+/* Subtle inner sheen down the left edge — the "tube" highlight */
+[data-slot="sidebar-inner"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 0% 0%,
+      color-mix(in oklab, var(--pc-primary) 10%, transparent) 0%,
+      transparent 55%),
+    radial-gradient(120% 60% at 100% 100%,
+      color-mix(in oklab, var(--pc-lavender, var(--pc-accent)) 12%, transparent) 0%,
+      transparent 55%);
+}
+.dark [data-slot="sidebar-inner"] {
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-surface) 55%, transparent) 0%,
+      color-mix(in oklab, var(--pc-surface) 38%, transparent) 100%);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, #fff 8%, transparent) inset,
+    0 -1px 0 color-mix(in oklab, var(--pc-primary) 20%, transparent) inset,
+    0 30px 60px -25px rgba(0,0,0,0.6),
+    0 10px 30px -18px color-mix(in oklab, var(--pc-primary) 35%, transparent);
+}
+
+/* Menu buttons become glass pills */
+[data-slot="sidebar-menu-button"] {
+  border-radius: 999px !important;
+  transition: background .2s ease, color .2s ease, box-shadow .3s ease, transform .2s ease;
+  position: relative;
+}
+[data-slot="sidebar-menu-button"]:hover {
+  background: color-mix(in oklab, var(--pc-primary) 8%, transparent) !important;
+}
+[data-slot="sidebar-menu-button"][data-active="true"] {
+  background: linear-gradient(90deg,
+    color-mix(in oklab, var(--pc-primary) 18%, transparent),
+    color-mix(in oklab, var(--pc-primary) 6%, transparent)) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--pc-primary) 35%, transparent) inset,
+    0 6px 18px -8px color-mix(in oklab, var(--pc-primary) 55%, transparent),
+    0 0 20px -4px color-mix(in oklab, var(--pc-primary) 40%, transparent);
+}
+[data-slot="sidebar-menu-button"][data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: 6px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 60%;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--pc-primary),
+    color-mix(in oklab, var(--pc-primary) 40%, transparent));
+  box-shadow: 0 0 10px color-mix(in oklab, var(--pc-primary) 60%, transparent);
+}
+
+/* Group label spacing */
+[data-slot="sidebar-group-label"] {
+  padding-top: 6px;
+}
+
+/* Trigger button feels glassy too */
+[data-slot="sidebar-trigger"] {
+  border-radius: 999px !important;
+  background: color-mix(in oklab, var(--pc-surface) 60%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--pc-border);
+}
