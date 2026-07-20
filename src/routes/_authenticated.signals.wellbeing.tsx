@@ -135,36 +135,39 @@ function WellbeingSignalsPage() {
 
       {/* ── Sticky filter bar ──────────────────────────────── */}
       <div
-        className="sticky top-14 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 mb-5"
+        className="sticky top-14 z-20 -mx-3 sm:-mx-5 md:-mx-8 px-3 sm:px-5 md:px-8 py-3 mb-5 rounded-none sm:rounded-2xl"
         style={{
-          background: "color-mix(in oklab, var(--pc-surface) 88%, transparent)",
-          borderBottom: "1px solid var(--pc-border)",
-          backdropFilter: "blur(10px)",
+          background: "color-mix(in oklab, var(--pc-surface) 92%, transparent)",
+          border: "1px solid var(--pc-border)",
+          backdropFilter: "blur(14px) saturate(140%)",
+          WebkitBackdropFilter: "blur(14px) saturate(140%)",
         }}
       >
-        <div className="flex flex-wrap items-center gap-4">
-          <FilterChipGroup
-            label="Time range"
-            options={RANGE_OPTIONS}
-            value={range}
-            onChange={(v) => patch({ range: v })}
-          />
-          <FilterChipGroup
-            label="Scale"
-            options={SCALE_OPTIONS}
-            value={scale}
-            onChange={(v) => patch({ scale: v })}
-          />
-          <FilterChipGroup
-            label="Segment"
-            options={SEG_OPTIONS}
-            value={seg}
-            onChange={(v) => patch({ seg: v })}
-          />
-          <div className="flex items-center gap-2 ml-auto">
+        <div className="flex flex-col md:flex-row md:flex-wrap md:items-center gap-3 md:gap-4">
+          <div className="flex gap-3 overflow-x-auto -mx-1 px-1 pb-1 md:contents no-scrollbar">
+            <FilterChipGroup
+              label="Time range"
+              options={RANGE_OPTIONS}
+              value={range}
+              onChange={(v) => patch({ range: v })}
+            />
+            <FilterChipGroup
+              label="Scale"
+              options={SCALE_OPTIONS}
+              value={scale}
+              onChange={(v) => patch({ scale: v })}
+            />
+            <FilterChipGroup
+              label="Segment"
+              options={SEG_OPTIONS}
+              value={seg}
+              onChange={(v) => patch({ seg: v })}
+            />
+          </div>
+          <div className="flex items-center gap-2 md:ml-auto flex-wrap">
             <AnonymityBadge n={stats.nActive} k={K_MIN} />
             <span
-              className="text-[11px] px-2 py-1 rounded-full"
+              className="text-[11px] px-2 py-1 rounded-full whitespace-nowrap"
               style={{
                 background: "var(--pc-surface2)",
                 border: "1px solid var(--pc-border)",
@@ -177,7 +180,7 @@ function WellbeingSignalsPage() {
           </div>
         </div>
         {band !== "all" && (
-          <div className="mt-2 text-[11.5px] flex items-center gap-2" style={{ color: "var(--pc-ink-2)" }}>
+          <div className="mt-2 text-[11.5px] flex items-center gap-2 flex-wrap" style={{ color: "var(--pc-ink-2)" }}>
             Filtered to <strong>{band}</strong> band ·
             <button
               type="button"
@@ -192,12 +195,12 @@ function WellbeingSignalsPage() {
       </div>
 
       {/* ── Body ────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-3 sm:gap-4 auto-rows-min">
         {/* 1. Headline stats strip */}
         <HeadlineStrip stats={stats} scale={scale} range={range} />
 
-        {/* 2. Severity band stacked area (span 8) */}
-        <GlassCard className="p-5 lg:col-span-8">
+        {/* 2. Severity band stacked area */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-8 flex flex-col min-w-0">
           <TileHeader
             title={`${SCALE_LABEL[scale]} severity mix`}
             sub={`Share of active students by severity · ${rangeLabel(range)}`}
@@ -206,26 +209,30 @@ function WellbeingSignalsPage() {
           <div className="mb-2">
             <ScaleLegend scale={scale} activeBand={band} onSelect={(k) => patch({ band: k })} />
           </div>
-          <SeverityStack scale={scale} range={range} band={band} onSelectBand={(k) => patch({ band: k })} />
+          <div className="flex-1 min-h-[300px] lg:min-h-[380px]">
+            <SeverityStack scale={scale} range={range} band={band} onSelectBand={(k) => patch({ band: k })} />
+          </div>
         </GlassCard>
 
-        {/* 9. Signal alerts feed (span 4) */}
-        <GlassCard className="p-5 lg:col-span-4">
+        {/* 9. Signal alerts feed */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-4 flex flex-col min-w-0">
           <TileHeader title="Signal alerts" sub="Aggregate anomalies worth a look" n={stats.nActive} />
-          <SignalAlertsFeed
-            onOpen={(a) => {
-              const next: Record<string, string> = {};
-              if (a.linkSearch.range) next.range = a.linkSearch.range;
-              if (a.linkSearch.scale) next.scale = a.linkSearch.scale;
-              if (a.linkSearch.seg)   next.seg = a.linkSearch.seg;
-              if (a.linkSearch.band)  next.band = a.linkSearch.band;
-              patch(next);
-            }}
-          />
+          <div className="flex-1 lg:max-h-[440px] overflow-y-auto pr-1 -mr-1">
+            <SignalAlertsFeed
+              onOpen={(a) => {
+                const next: Record<string, string> = {};
+                if (a.linkSearch.range) next.range = a.linkSearch.range;
+                if (a.linkSearch.scale) next.scale = a.linkSearch.scale;
+                if (a.linkSearch.seg)   next.seg = a.linkSearch.seg;
+                if (a.linkSearch.band)  next.band = a.linkSearch.band;
+                patch(next);
+              }}
+            />
+          </div>
         </GlassCard>
 
-        {/* 3. Ridgeline distribution (span 6) */}
-        <GlassCard className="p-5 lg:col-span-6">
+        {/* 3. Ridgeline distribution */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-5 min-w-0">
           <TileHeader
             title={`${SCALE_LABEL[scale]} score distributions`}
             sub={`One curve per month · median tick per row`}
@@ -234,20 +241,20 @@ function WellbeingSignalsPage() {
           <RidgelineDistribution scale={scale} range={range} />
         </GlassCard>
 
-        {/* 4. Improvement funnel (span 3) */}
-        <GlassCard className="p-5 lg:col-span-3">
+        {/* 4. Improvement funnel */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-3 lg:col-span-4 min-w-0">
           <TileHeader title="Improvement funnel" sub={rangeLabel(range)} n={stats.nActive} />
           <ImprovementFunnel range={range} />
         </GlassCard>
 
-        {/* 7. Assessment completion donut (span 3) */}
-        <GlassCard className="p-5 lg:col-span-3">
+        {/* 7. Assessment completion donut */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-3 lg:col-span-3 min-w-0">
           <TileHeader title="Reassessment completion" sub={rangeLabel(range)} n={stats.nActive} />
           <CompletionDonut range={range} />
         </GlassCard>
 
-        {/* Segmented trend (span 8) */}
-        <GlassCard className="p-5 lg:col-span-8">
+        {/* Segmented trend */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-8 min-w-0">
           <TileHeader
             title={`${SCALE_LABEL[scale]} trend — ${SEG_OPTIONS.find((s) => s.value === seg)?.label}`}
             sub={`Weekly averages across ${RANGE_WEEKS[range]} weeks`}
@@ -256,20 +263,20 @@ function WellbeingSignalsPage() {
           <TrendChart series={series} scale={scale} />
         </GlassCard>
 
-        {/* 5. Session cadence (span 4) */}
-        <GlassCard className="p-5 lg:col-span-4">
+        {/* 5. Session cadence */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-4 min-w-0">
           <TileHeader title="Session cadence" sub="Weekly starts · median minutes" n={stats.nActive} />
           <SessionCadence range={range} />
         </GlassCard>
 
-        {/* 6. Time-of-day heatmap (span 6) */}
-        <GlassCard className="p-5 lg:col-span-6">
+        {/* 6. Time-of-day heatmap */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-6 min-w-0 overflow-x-auto">
           <TileHeader title="Time-of-day engagement" sub="When students actually show up" n={stats.nActive} />
           <TodHeatmap />
         </GlassCard>
 
-        {/* 8. Correlation strip (span 6) */}
-        <GlassCard className="p-5 lg:col-span-6">
+        {/* 8. Correlation strip */}
+        <GlassCard className="p-4 sm:p-5 md:col-span-6 lg:col-span-6 min-w-0 overflow-x-auto">
           <TileHeader
             title="Department-level correlations"
             sub="Aggregate points only · N ≥ 10 per department"
@@ -282,7 +289,7 @@ function WellbeingSignalsPage() {
         </GlassCard>
 
         {/* Assessment completion footer note */}
-        <div className="lg:col-span-12 text-[11px]" style={{ color: "var(--pc-muted)" }}>
+        <div className="md:col-span-6 lg:col-span-12 text-[11px]" style={{ color: "var(--pc-muted)" }}>
           Completion figure this window:{" "}
           {isSuppressed(completion)
             ? "hidden — sample too small."
@@ -292,6 +299,7 @@ function WellbeingSignalsPage() {
     </div>
   );
 }
+
 
 // ─── Tile header ─────────────────────────────────────────────
 function TileHeader({ title, sub, n }: { title: string; sub?: string; n: number }) {
