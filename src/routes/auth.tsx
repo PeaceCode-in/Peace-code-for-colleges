@@ -151,6 +151,22 @@ function SignInPage() {
       >
         Aggregate insights only. No individual student is ever identifiable. DPDP-compliant by design.
       </p>
+
+      <nav
+        aria-label="PeaceCode"
+        className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] mt-3 pt-3"
+        style={{ color: "#8a7360", borderTop: "1px solid rgba(125,90,68,0.12)" }}
+      >
+        <a href="https://peacecode.in" className="hover:underline underline-offset-4">PeaceCode home</a>
+        <span aria-hidden>·</span>
+        <a href="https://peacecode.in/colleges" className="hover:underline underline-offset-4">For Colleges</a>
+        <span aria-hidden>·</span>
+        <a href="https://peacecode.in/about" className="hover:underline underline-offset-4">About</a>
+        <span aria-hidden>·</span>
+        <a href="https://peacecode.in/privacy" className="hover:underline underline-offset-4">Privacy</a>
+        <span aria-hidden>·</span>
+        <a href="mailto:partnerships@peacecode.in" className="hover:underline underline-offset-4">Contact</a>
+      </nav>
     </AuthShell>
   );
 }
