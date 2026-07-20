@@ -84,7 +84,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" style={{ background: "var(--pc-surface)", borderColor: "var(--pc-border)" }}>
+    <Sidebar collapsible="icon" variant="floating" className="pc-glass-tube" style={{ background: "transparent", borderColor: "transparent" }}>
       <SidebarContent style={{ background: "var(--pc-surface)" }}>
         {GROUPS.map((g) => {
           return (
