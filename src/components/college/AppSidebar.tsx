@@ -113,9 +113,6 @@ export function AppSidebar() {
                             className="flex items-center gap-2"
                             style={{
                               color: active ? "var(--pc-primary)" : "var(--pc-ink-2)",
-                              background: active
-                                ? "color-mix(in oklab, var(--pc-primary) 10%, transparent)"
-                                : "transparent",
                             }}
                           >
                             <item.icon className="h-4 w-4" />
