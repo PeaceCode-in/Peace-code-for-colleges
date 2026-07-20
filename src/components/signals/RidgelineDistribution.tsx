@@ -42,7 +42,7 @@ export function RidgelineDistribution({
   const maxDensity = Math.max(...rows.flatMap((r) => r.bins.map((b) => b.density))) || 1;
 
   const bandFor = (score: number) =>
-    bands.find((b) => score >= b.range[0] && score <= b.range[1]);
+    bands.find((b) => score >= b.min && score <= b.max);
 
   return (
     <div
