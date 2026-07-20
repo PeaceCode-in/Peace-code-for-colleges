@@ -72,6 +72,68 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const SITE_URL = "https://colleges.peacecode.in";
+const SITE_NAME = "PeaceCode for Colleges";
+const SITE_DESC =
+  "PeaceCode for Colleges is a privacy-first institutional wellbeing dashboard for universities and colleges. Aggregate-only insights on student mental health — k-anonymity ≥ 10, no individual student is ever identifiable.";
+
+const ORG_JSONLD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#org`,
+      name: "PeaceCode",
+      alternateName: "PeaceCode for Colleges",
+      url: SITE_URL,
+      logo: `${SITE_URL}/favicon.png`,
+      sameAs: ["https://peacecode.in"],
+      email: "partnerships@peacecode.in",
+      description: SITE_DESC,
+      knowsAbout: [
+        "student mental health",
+        "college counselling analytics",
+        "wellbeing dashboards",
+        "PHQ-9",
+        "GAD-7",
+        "k-anonymity",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": `${SITE_URL}/#org` },
+      inLanguage: "en",
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${SITE_URL}/#app`,
+      name: SITE_NAME,
+      applicationCategory: "BusinessApplication",
+      applicationSubCategory: "Higher-Education Analytics",
+      operatingSystem: "Web",
+      url: SITE_URL,
+      description: SITE_DESC,
+      audience: {
+        "@type": "EducationalAudience",
+        educationalRole: "college administrator",
+      },
+      featureList: [
+        "Executive wellbeing dashboard",
+        "Department & cohort deep-dive",
+        "PHQ-9 / GAD-7 screening signals",
+        "Early-warning risk routing",
+        "Aggregate reporting & exports",
+        "k-anonymity ≥ 10 enforcement",
+      ],
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      provider: { "@id": `${SITE_URL}/#org` },
+    },
+  ],
+};
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -84,31 +146,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "PeaceCode" },
       { name: "format-detection", content: "telephone=no" },
-      { title: "PeaceCode for Colleges — Institutional Wellbeing Dashboard" },
-      {
-        name: "description",
-        content:
-          "PeaceCode for Colleges — anonymized, aggregate-only student mental wellbeing insights for partnered universities and colleges.",
-      },
+      { title: `${SITE_NAME} — Institutional Wellbeing Dashboard` },
+      { name: "description", content: SITE_DESC },
       { name: "author", content: "PeaceCode" },
-      { property: "og:title", content: "PeaceCode for Colleges" },
-      {
-        property: "og:description",
-        content:
-          "The institutional admin dashboard for colleges partnered with PeaceCode. Aggregate insights only. No individual student is ever identifiable.",
-      },
+      { name: "application-name", content: SITE_NAME },
+      { name: "keywords", content: "college mental health dashboard, university wellbeing analytics, student counselling insights, PHQ-9 GAD-7 institutional, k-anonymity student data, higher education wellness platform, PeaceCode" },
+      { property: "og:site_name", content: SITE_NAME },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:title", content: `${SITE_NAME} — Institutional Wellbeing Dashboard` },
+      { property: "og:description", content: SITE_DESC },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@PeaceCode" },
+      { name: "twitter:title", content: `${SITE_NAME} — Institutional Wellbeing Dashboard` },
+      { name: "twitter:description", content: SITE_DESC },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;500;600&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(ORG_JSONLD),
       },
     ],
   }),
