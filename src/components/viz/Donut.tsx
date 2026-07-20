@@ -31,6 +31,8 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
   const intensity = useMotionIntensity();
   const [on, setOn] = useState(intensity === "reduced");
   const [hover, setHover] = useState<number | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const tip = useChartTooltip();
 
   useEffect(() => {
