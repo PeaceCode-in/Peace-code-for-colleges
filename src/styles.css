@@ -1885,3 +1885,8 @@ body { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; -webkit
     transition: none !important;
   }
 }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
