@@ -14,6 +14,7 @@ import { SeedModePill } from "@/components/college/SeedModePill";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { NotificationsBell } from "@/components/college/NotificationsBell";
 import { ProfileMenu } from "@/components/college/ProfileMenu";
+import { BrandLockup } from "@/components/college/BrandMark";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
@@ -252,9 +253,13 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
               }}
             >
               <SidebarTrigger />
+              <Link to="/dashboard" aria-label="PeaceCode home" className="shrink-0">
+                <BrandLockup compact />
+              </Link>
+              <span aria-hidden className="hidden md:inline h-4 w-px" style={{ background: "var(--pc-border)" }} />
               <div
-                className="font-serif text-[15px] truncate"
-                style={{ color: "var(--pc-ink)" }}
+                className="font-serif text-[13.5px] truncate hidden md:block"
+                style={{ color: "var(--pc-ink-2)" }}
               >
                 {college?.shortName ?? "PeaceCode for Colleges"}
               </div>
