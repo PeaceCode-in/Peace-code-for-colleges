@@ -523,6 +523,21 @@ body { overflow-y: visible; }
   overflow: hidden;
 }
 
+/* Sidebar width animation — GPU-friendly, no backdrop-filter thrash */
+.pc-sidebar-anim { will-change: width; }
+.pc-sidebar-anim,
+.pc-sidebar-anim * {
+  /* Prevent expensive filter/backdrop transitions from riding along width */
+  transition-property: width, left, right, transform, opacity, background-color, color, border-color, box-shadow;
+}
+[data-sidebar="sidebar"],
+[data-sidebar="menu-button"] {
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+              padding 320ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 200ms ease,
+              color 200ms ease !important;
+}
+
 /* Transitions */
 :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-2xl:not(.no-glass):not(.pc-solid),
 :is(html[data-pc-resources],html[data-pc-screening]) main .rounded-3xl:not(.no-glass):not(.pc-solid),
