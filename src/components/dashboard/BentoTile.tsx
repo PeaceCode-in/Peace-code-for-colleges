@@ -141,21 +141,23 @@ export function BentoTile({
   }
 
   if (onExpand) {
+    const isNestedInteractive = (t: HTMLElement, self: HTMLElement) => {
+      const hit = t.closest('button, a, input, select, textarea, [data-no-expand]') as HTMLElement | null;
+      // The tile itself has role="button"; ignore matches that resolve to the tile.
+      return hit !== null && hit !== self;
+    };
     const onKey = (e: KeyboardEvent<HTMLElement>) => {
       if (e.key === "Enter" || e.key === " ") {
-        const t = e.target as HTMLElement;
-        if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
+        if (isNestedInteractive(e.target as HTMLElement, e.currentTarget)) return;
         e.preventDefault();
         onExpand();
       }
     };
-    const onClick = (e: React.MouseEvent) => {
-      const t = e.target as HTMLElement;
-      // Ignore clicks on nested interactive elements so tile-internal
-      // controls (legend chips, link rows, chart hovers) still work.
-      if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+      if (isNestedInteractive(e.target as HTMLElement, e.currentTarget)) return;
       onExpand();
     };
+
     return (
       <section
         role="button"
