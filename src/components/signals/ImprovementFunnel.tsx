@@ -10,6 +10,8 @@ import { SuppressedTile } from "@/components/primitives/SuppressedTile";
 export function ImprovementFunnel({ range }: { range: RangeKey }) {
   const res = useMemo(() => getFunnel(range), [range]);
   const [hover, setHover] = useState<number | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   useTouchAsHover(wrapRef);
   if (isSuppressed(res)) return <SuppressedTile label="Too few screenings in this window to draw a funnel." />;
