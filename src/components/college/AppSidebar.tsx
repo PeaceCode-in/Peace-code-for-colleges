@@ -112,6 +112,7 @@ export function AppSidebar() {
         <div aria-hidden className="mx-3 my-1 h-px" style={{ background: "var(--pc-border)" }} />
       </SidebarHeader>
       <SidebarContent style={{ background: "transparent" }}>
+        <NavGlider deps={[pathname, collapsed]}>
         {GROUPS.map((g) => {
           return (
             <SidebarGroup key={g.label}>
@@ -154,6 +155,7 @@ export function AppSidebar() {
             </SidebarGroup>
           );
         })}
+        </NavGlider>
       </SidebarContent>
 
       <SidebarFooter style={{ background: "transparent" }}>
