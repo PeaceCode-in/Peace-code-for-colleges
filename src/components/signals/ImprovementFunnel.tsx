@@ -10,12 +10,14 @@ import { SuppressedTile } from "@/components/primitives/SuppressedTile";
 export function ImprovementFunnel({ range }: { range: RangeKey }) {
   const res = useMemo(() => getFunnel(range), [range]);
   const [hover, setHover] = useState<number | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  useTouchAsHover(wrapRef);
   if (isSuppressed(res)) return <SuppressedTile label="Too few screenings in this window to draw a funnel." />;
   const { steps } = res;
   const max = steps[0].n || 1;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div ref={wrapRef} className="flex flex-col gap-1.5" onMouseLeave={() => setHover(null)}>
       {steps.map((s, i) => {
         const pct = Math.round((s.n / max) * 1000) / 10;
         const prev = i > 0 ? steps[i - 1].n : null;
