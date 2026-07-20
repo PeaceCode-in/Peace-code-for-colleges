@@ -208,6 +208,16 @@ export function AppSidebar() {
                 </div>
               </div>
             </div>
+            <a
+              href="https://peacecode.in"
+              target="_blank"
+              rel="noopener"
+              className="w-full flex items-center justify-center gap-1.5 text-[10.5px] py-1 rounded-full"
+              style={{ color: "var(--pc-muted)" }}
+              title="Visit peacecode.in"
+            >
+              ← peacecode.in
+            </a>
             <button
               onClick={signOut}
               className="w-full flex items-center justify-center gap-2 text-[11.5px] py-1.5 rounded-full"
