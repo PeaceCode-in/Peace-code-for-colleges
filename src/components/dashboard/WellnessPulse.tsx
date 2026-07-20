@@ -7,7 +7,7 @@ import { DeltaChip } from "./DeltaChip";
 import { Sparkline } from "./Sparkline";
 import type { ExecutiveSnapshot } from "@/lib/dashboard-mock";
 
-export function WellnessPulse({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function WellnessPulse({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const w = snap.wellnessIndex;
   return (
     <BentoTile
@@ -15,6 +15,8 @@ export function WellnessPulse({ snap, className = "" }: { snap: ExecutiveSnapsho
       eyebrow="Composite index · this week"
       className={className}
       hoverable
+      onExpand={onExpand}
+      expandLabel="Open pulse details"
     >
       <div className="flex flex-col justify-between h-full gap-6">
         <div className="flex items-end gap-4 flex-wrap">
