@@ -15,6 +15,7 @@ import { PageTransition } from "@/components/motion/PageTransition";
 import { NotificationsBell } from "@/components/college/NotificationsBell";
 import { ProfileMenu } from "@/components/college/ProfileMenu";
 import { BrandLockup } from "@/components/college/BrandMark";
+import { MobileTabBar } from "@/components/college/MobileTabBar";
 
 // Human labels for breadcrumb segments. Fallback: title-case the slug.
 const LABELS: Record<string, string> = {
