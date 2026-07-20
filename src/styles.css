@@ -1499,3 +1499,55 @@ html[data-pc-bg="graphite"] textarea,
 html[data-pc-bg="graphite"] select { color: var(--pc-ink) !important; }
 html[data-pc-bg="ember"]    input::placeholder,
 html[data-pc-bg="graphite"] input::placeholder { color: var(--pc-muted) !important; }
+
+/* ============================================================
+   Glass-tube header — matches the floating sidebar aesthetic.
+   Pill-shaped, luminous top edge, soft accent-tinted glow.
+   ============================================================ */
+.pc-glass-header {
+  border-radius: 999px !important;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, #fff 70%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 10%, transparent),
+    0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 30%, transparent),
+    0 20px 50px -30px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
+.pc-glass-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in oklab, #fff 80%, transparent) 30%,
+    color-mix(in oklab, #fff 80%, transparent) 70%,
+    transparent);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.pc-glass-header > * { position: relative; z-index: 1; }
+
+/* Dark bg themes — brighten the tube, keep accent glow */
+html[data-pc-bg="midnight"] .pc-glass-header,
+html[data-pc-bg="noir"]     .pc-glass-header,
+html[data-pc-bg="ember"]    .pc-glass-header,
+html[data-pc-bg="graphite"] .pc-glass-header {
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.09) 0%,
+      rgba(255,255,255,0.04) 100%) !important;
+  border-color: color-mix(in oklab, var(--pc-primary) 28%, rgba(255,255,255,0.10)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 26%, transparent),
+    0 20px 50px -25px rgba(0,0,0,0.7),
+    0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 45%, transparent) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-header::before,
+html[data-pc-bg="noir"]     .pc-glass-header::before,
+html[data-pc-bg="ember"]    .pc-glass-header::before,
+html[data-pc-bg="graphite"] .pc-glass-header::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+}

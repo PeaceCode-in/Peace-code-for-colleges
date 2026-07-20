@@ -243,11 +243,12 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
           <AppSidebar />
           <SidebarInset style={{ background: "transparent" }}>
             <header
-              className="sticky top-0 z-30 h-14 flex items-center gap-3 px-4"
+              className="pc-glass-header sticky top-3 z-30 h-14 flex items-center gap-3 px-4 mx-3 mt-3 rounded-full"
               style={{
                 background: "var(--pc-header)",
-                borderBottom: "1px solid var(--pc-border)",
-                backdropFilter: "blur(14px)",
+                border: "1px solid var(--pc-border)",
+                backdropFilter: "blur(18px) saturate(140%)",
+                WebkitBackdropFilter: "blur(18px) saturate(140%)",
               }}
             >
               <SidebarTrigger />
