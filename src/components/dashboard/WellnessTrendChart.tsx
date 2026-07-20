@@ -18,7 +18,7 @@ const SERIES: { key: SeriesKey; label: string; token: "a1" | "a2" | "a3" }[] = [
   { key: "finalYear", label: "Final-year", token: "a3" },
 ];
 
-export function WellnessTrendChart({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function WellnessTrendChart({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const [on, setOn] = useState<Record<SeriesKey, boolean>>({
     overall: true, firstYear: true, finalYear: true,
   });
@@ -43,7 +43,9 @@ export function WellnessTrendChart({ snap, className = "" }: { snap: ExecutiveSn
       title="Wellness trend"
       eyebrow="Last 12 weeks"
       className={className}
-      footer={<>Series recolor with the active accent · tap a chip to toggle</>}
+      footer={<>Series recolor with the active accent · tap a chip to toggle · expand for 26-week view</>}
+      onExpand={onExpand}
+      expandLabel="Open 26-week trend"
     >
       <div className="flex items-center justify-end gap-2 flex-wrap mb-2">
         {SERIES.map((s) => {
