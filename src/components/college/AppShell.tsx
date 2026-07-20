@@ -240,7 +240,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
         Skip to main content
       </a>
       <GlassFX />
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <div className="min-h-dvh flex w-full">
           <AppSidebar />
           <SidebarInset style={{ background: "transparent" }}>

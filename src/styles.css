@@ -1837,16 +1837,35 @@ body { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; -webkit
   margin: 0;
 }
 
-/* The active-state left rail marker snaps to a centered dot when the
-   panel is collapsed so it doesn't clip against the edge. */
+/* Collapsed icon rail — soft pill highlight behind the active icon
+   like the reference: no left-bar, just a filled rounded square. */
 .pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"][data-active="true"]::before {
-  left: 50%;
-  top: auto;
-  bottom: 4px;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 3px;
-  border-radius: 3px;
+  content: none;
+}
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"] {
+  border-radius: 12px;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"][data-active="true"] {
+  background: color-mix(in oklab, var(--pc-primary) 18%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
+    0 4px 14px -8px color-mix(in oklab, var(--pc-primary) 55%, transparent);
+}
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"]:hover {
+  background: color-mix(in oklab, var(--pc-primary) 10%, transparent);
+}
+.pc-glass-tube[data-state="collapsed"] .pc-nav-row[data-active="true"] .pc-nav-ico {
+  animation: none;
+  filter: none;
+}
+/* Hide the floating active-glider in collapsed mode — pill highlight takes over. */
+.pc-glass-tube[data-state="collapsed"] .pc-nav-glider { display: none; }
+/* Divider above the sign-out footer, matching the reference. */
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="footer"] {
+  border-top: 1px solid color-mix(in oklab, var(--pc-border) 70%, transparent);
+  margin-top: 6px;
+  padding-top: 8px;
 }
 
 /* Footer avatar / sign-out row: shrink cleanly instead of wrapping. */
