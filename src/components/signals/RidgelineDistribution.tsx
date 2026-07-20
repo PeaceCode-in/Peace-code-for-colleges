@@ -2,7 +2,8 @@
 // One horizontal density curve per ~4-week month with a median tick.
 // Interactive: hover any row to spotlight it and inspect the score bin
 // under the cursor via a floating tooltip.
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useTouchAsHover } from "@/components/viz/ChartTooltip";
 import { getRidgeline, type RangeKey } from "@/lib/signals-selectors";
 import { isSuppressed } from "@/lib/cohort-selectors";
 import { SuppressedTile } from "@/components/primitives/SuppressedTile";
