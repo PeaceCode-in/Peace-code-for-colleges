@@ -1,6 +1,8 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, Moon, Sun, User, Keyboard } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Search, Moon, Sun, User, Keyboard, CornerDownLeft } from "lucide-react";
+import { SIDEBAR_GROUPS } from "@/components/college/AppSidebar";
+
 import {
   SidebarProvider, SidebarTrigger, SidebarInset,
 } from "@/components/ui/sidebar";
@@ -87,8 +89,43 @@ function Breadcrumbs() {
   );
 }
 
+type CmdItem = { title: string; group: string; url: string; icon: React.ComponentType<{ className?: string }>; keywords: string };
+
+function useCommandItems(): CmdItem[] {
+  return useMemo(() => {
+    const items: CmdItem[] = [];
+    for (const g of SIDEBAR_GROUPS) {
+      for (const it of g.items) {
+        items.push({
+          title: it.title,
+          group: g.label,
+          url: it.url,
+          icon: it.icon,
+          keywords: `${it.title} ${g.label} ${it.url}`.toLowerCase(),
+        });
+      }
+    }
+    return items;
+  }, []);
+}
+
 function CommandK() {
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const [active, setActive] = useState(0);
+  const navigate = useNavigate();
+  const items = useCommandItems();
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const results = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    if (!s) return items;
+    const tokens = s.split(/\s+/);
+    return items.filter((it) => tokens.every((t) => it.keywords.includes(t)));
+  }, [q, items]);
+
+  useEffect(() => { setActive(0); }, [q, open]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -101,6 +138,24 @@ function CommandK() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  useEffect(() => {
+    if (!open) { setQ(""); return; }
+    const el = listRef.current?.querySelector<HTMLElement>(`[data-idx="${active}"]`);
+    el?.scrollIntoView({ block: "nearest" });
+  }, [active, open]);
+
+  const go = (url: string) => {
+    setOpen(false);
+    navigate({ to: url });
+  };
+
+  const onListKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive((i) => Math.min(i + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
+    else if (e.key === "Enter") { e.preventDefault(); const r = results[active]; if (r) go(r.url); }
+  };
+
   return (
     <>
       <button
@@ -124,38 +179,92 @@ function CommandK() {
       </button>
       {open && (
         <div
-          className="fixed inset-0 z-50 grid place-items-start pt-[18vh] px-4"
+          className="fixed inset-0 z-50 grid place-items-start pt-[14vh] px-4"
           style={{ background: "var(--pc-scrim)" }}
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-xl rounded-2xl p-6"
+            role="dialog"
+            aria-label="Command palette"
+            className="w-full max-w-xl rounded-2xl overflow-hidden"
             style={{
               background: "var(--pc-surface)",
               border: "1px solid var(--pc-border)",
               boxShadow: "0 24px 60px -20px color-mix(in oklab, var(--pc-ink) 40%, transparent)",
             }}
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={onListKey}
           >
-            <div className="flex items-center gap-2 pb-3" style={{ borderBottom: "1px solid var(--pc-border)" }}>
+            <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid var(--pc-border)" }}>
               <Search className="h-4 w-4" style={{ color: "var(--pc-muted)" }} />
               <input
                 autoFocus
-                placeholder="Search — command palette arrives with Prompt 2"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Jump to page — try 'departments', 'reports', 'audit'"
                 className="flex-1 bg-transparent outline-none text-[14px]"
                 style={{ color: "var(--pc-ink)" }}
               />
-              <span className="text-[10.5px]" style={{ color: "var(--pc-muted)" }}>Esc</span>
+              <span className="text-[10.5px] px-1.5 py-0.5 rounded" style={{ color: "var(--pc-muted)", border: "1px solid var(--pc-border)" }}>Esc</span>
             </div>
-            <p className="mt-4 text-[12px]" style={{ color: "var(--pc-muted)" }}>
-              A searchable jump-to for every route and cohort will live here.
-            </p>
+            <div ref={listRef} className="max-h-[52vh] overflow-y-auto py-1">
+              {results.length === 0 && (
+                <div className="px-4 py-8 text-center text-[12.5px]" style={{ color: "var(--pc-muted)" }}>
+                  No matches for “{q}”.
+                </div>
+              )}
+              {(() => {
+                let currentGroup = "";
+                return results.map((r, i) => {
+                  const showHeader = r.group !== currentGroup;
+                  currentGroup = r.group;
+                  const isActive = i === active;
+                  const Icon = r.icon;
+                  return (
+                    <div key={r.url + i}>
+                      {showHeader && (
+                        <div
+                          className="px-4 pt-2 pb-1 text-[10px] uppercase tracking-wider"
+                          style={{ color: "var(--pc-muted)", letterSpacing: "0.12em" }}
+                        >
+                          {r.group}
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        data-idx={i}
+                        onMouseEnter={() => setActive(i)}
+                        onClick={() => go(r.url)}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-left text-[13px]"
+                        style={{
+                          background: isActive ? "var(--pc-surface2)" : "transparent",
+                          color: "var(--pc-ink)",
+                        }}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span className="flex-1 truncate">{r.title}</span>
+                        <span className="text-[10.5px] font-mono truncate" style={{ color: "var(--pc-muted)" }}>{r.url}</span>
+                        {isActive && <CornerDownLeft className="h-3.5 w-3.5" style={{ color: "var(--pc-muted)" }} />}
+                      </button>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+            <div
+              className="flex items-center justify-between px-4 py-2 text-[10.5px]"
+              style={{ borderTop: "1px solid var(--pc-border)", color: "var(--pc-muted)" }}
+            >
+              <span>{results.length} result{results.length === 1 ? "" : "s"}</span>
+              <span>↑ ↓ navigate · ↵ open · Esc close</span>
+            </div>
           </div>
         </div>
       )}
     </>
   );
 }
+
 
 function UserMenu() {
   const [open, setOpen] = useState(false);
