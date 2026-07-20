@@ -1,4 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Sparkles, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
   HeartPulse, LineChart, ClipboardList, Waves, CalendarClock, Grid3x3,
@@ -111,6 +112,7 @@ export function AppSidebar() {
         <div aria-hidden className="mx-3 my-1 h-px" style={{ background: "var(--pc-border)" }} />
       </SidebarHeader>
       <SidebarContent style={{ background: "transparent" }}>
+        <NavGlider deps={[pathname, collapsed]}>
         {GROUPS.map((g) => {
           return (
             <SidebarGroup key={g.label}>
@@ -153,6 +155,7 @@ export function AppSidebar() {
             </SidebarGroup>
           );
         })}
+        </NavGlider>
       </SidebarContent>
 
       <SidebarFooter style={{ background: "transparent" }}>
@@ -201,5 +204,64 @@ export function AppSidebar() {
         )}
       </SidebarFooter>
     </Sidebar>
+  );
+}
+
+function NavGlider({ children, deps }: { children: React.ReactNode; deps: unknown[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<{ top: number; height: number; visible: boolean }>({
+    top: 0,
+    height: 0,
+    visible: false,
+  });
+
+  const measure = () => {
+    const container = ref.current;
+    if (!container) return;
+    const active = container.querySelector<HTMLElement>(
+      '[data-sidebar="menu-button"][data-active="true"]',
+    );
+    if (!active) {
+      setRect((r) => ({ ...r, visible: false }));
+      return;
+    }
+    const cRect = container.getBoundingClientRect();
+    const aRect = active.getBoundingClientRect();
+    setRect({
+      top: aRect.top - cRect.top + container.scrollTop,
+      height: aRect.height,
+      visible: true,
+    });
+  };
+
+  useLayoutEffect(() => {
+    measure();
+    // Re-measure after transitions settle (sidebar collapse ~320ms).
+    const t = window.setTimeout(measure, 340);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  useEffect(() => {
+    const onResize = () => measure();
+    window.addEventListener("resize", onResize);
+    const ro = new ResizeObserver(onResize);
+    if (ref.current) ro.observe(ref.current);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <span
+        aria-hidden
+        className="pc-nav-glider"
+        data-visible={rect.visible ? "true" : "false"}
+        style={{ transform: `translateY(${rect.top}px)`, height: rect.height }}
+      />
+      {children}
+    </div>
   );
 }

@@ -1319,18 +1319,41 @@ html[data-chart-style] svg polyline.pc-chart-line {
   transform: translateX(1px);
 }
 .pc-glass-tube [data-sidebar="menu-button"][data-active="true"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.pc-glass-tube [data-sidebar="menu-button"][data-active="true"]::before {
+  content: none !important;
+}
+
+/* Gliding active indicator — a floating capsule that slides between items.
+   Positioned in the SidebarContent overlay so icons never shift. */
+.pc-nav-glider {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  opacity: 0;
+  z-index: 0;
   background: linear-gradient(90deg,
     color-mix(in oklab, var(--pc-primary) 22%, transparent),
-    color-mix(in oklab, var(--pc-primary) 6%, transparent)) !important;
+    color-mix(in oklab, var(--pc-primary) 6%, transparent));
   box-shadow:
     inset 0 0 0 1px color-mix(in oklab, var(--pc-primary) 40%, transparent),
     0 6px 18px -8px color-mix(in oklab, var(--pc-primary) 55%, transparent),
-    0 0 22px -6px color-mix(in oklab, var(--pc-primary) 50%, transparent) !important;
+    0 0 22px -6px color-mix(in oklab, var(--pc-primary) 50%, transparent);
+  transition:
+    transform 380ms cubic-bezier(0.32, 0.72, 0.2, 1),
+    height 380ms cubic-bezier(0.32, 0.72, 0.2, 1),
+    opacity 220ms ease;
+  will-change: transform, height;
 }
-.pc-glass-tube [data-sidebar="menu-button"][data-active="true"]::before {
+.pc-nav-glider::before {
   content: "";
   position: absolute;
-  left: 4px; top: 50%;
+  left: 0; top: 50%;
   transform: translateY(-50%);
   width: 3px; height: 55%;
   border-radius: 3px;
@@ -1339,6 +1362,15 @@ html[data-chart-style] svg polyline.pc-chart-line {
     color-mix(in oklab, var(--pc-primary) 35%, transparent));
   box-shadow: 0 0 12px color-mix(in oklab, var(--pc-primary) 70%, transparent);
 }
+.pc-nav-glider[data-visible="true"] { opacity: 1; }
+
+/* Menu items sit above the glider */
+.pc-glass-tube [data-sidebar="menu-button"] { z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-nav-glider { transition: opacity 120ms ease; }
+}
+
 .pc-glass-tube [data-sidebar="group-label"] {
   padding-top: 8px;
   opacity: 0.85;
