@@ -84,8 +84,8 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" style={{ background: "var(--pc-surface)", borderColor: "var(--pc-border)" }}>
-      <SidebarContent style={{ background: "var(--pc-surface)" }}>
+    <Sidebar collapsible="icon" variant="floating" className="pc-glass-tube" style={{ background: "transparent", borderColor: "transparent" }}>
+      <SidebarContent style={{ background: "transparent" }}>
         {GROUPS.map((g) => {
           return (
             <SidebarGroup key={g.label}>
@@ -113,9 +113,6 @@ export function AppSidebar() {
                             className="flex items-center gap-2"
                             style={{
                               color: active ? "var(--pc-primary)" : "var(--pc-ink-2)",
-                              background: active
-                                ? "color-mix(in oklab, var(--pc-primary) 10%, transparent)"
-                                : "transparent",
                             }}
                           >
                             <item.icon className="h-4 w-4" />
@@ -132,7 +129,7 @@ export function AppSidebar() {
         })}
       </SidebarContent>
 
-      <SidebarFooter style={{ background: "var(--pc-surface)", borderTop: "1px solid var(--pc-border)" }}>
+      <SidebarFooter style={{ background: "transparent" }}>
         {collapsed ? (
           <div className="flex flex-col items-center gap-2 py-2">
             <div
