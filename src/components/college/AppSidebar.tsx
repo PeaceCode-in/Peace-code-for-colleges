@@ -1,4 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Sparkles, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
   HeartPulse, LineChart, ClipboardList, Waves, CalendarClock, Grid3x3,
