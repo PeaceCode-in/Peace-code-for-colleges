@@ -18,6 +18,8 @@ function hourLabel(h: number) {
 export function TodHeatmap() {
   const res = useMemo(() => getTod(), []);
   const [hover, setHover] = useState<{ day: number; hour: number; v: number } | null>(null);
+  const [picked, setPicked] = useState<{ day: number; hour: number } | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   useTouchAsHover(wrapRef);
 
@@ -64,27 +66,33 @@ export function TodHeatmap() {
             {row.map((v, hour) => {
               const t = v / max;
               const isHover = hover?.day === day && hover?.hour === hour;
-              const dim = hover && !isHover && hover.day !== day && hover.hour !== hour;
+              const isPicked = picked?.day === day && picked?.hour === hour;
+              const isFocus = isHover || isPicked;
+              const dim = hover && !isFocus && hover.day !== day && hover.hour !== hour;
               return (
                 <div
-                  key={hour}
+                  key={`${hour}-${isPicked ? pulseKey : "u"}`}
                   onMouseEnter={() => setHover({ day, hour, v })}
                   onMouseLeave={() => setHover((h) => (h?.day === day && h?.hour === hour ? null : h))}
                   onTouchStart={() => setHover({ day, hour, v })}
-                  className="w-4 h-4 rounded-sm cursor-pointer transition-all duration-150"
+                  onClick={() => {
+                    setPicked((p) => (p?.day === day && p?.hour === hour ? null : { day, hour }));
+                    setPulseKey((k) => k + 1);
+                  }}
+                  className={`w-4 h-4 rounded-sm cursor-pointer transition-all duration-150 ${isPicked ? "pc-tap-pulse" : ""}`}
                   style={{
                     background: v === 0
                       ? "var(--pc-surface2)"
                       : `color-mix(in oklab, var(--pc-accent) ${Math.round(12 + t * 78)}%, var(--pc-surface))`,
-                    border: isHover
-                      ? "1px solid var(--pc-accent)"
+                    border: isFocus
+                      ? `${isPicked ? "1.5px" : "1px"} solid var(--pc-accent)`
                       : "1px solid color-mix(in oklab, var(--pc-border) 60%, transparent)",
                     opacity: dim ? 0.35 : 1,
-                    transform: isHover ? "scale(1.35)" : "scale(1)",
-                    boxShadow: isHover
+                    transform: isFocus ? "scale(1.35)" : "scale(1)",
+                    boxShadow: isFocus
                       ? "0 4px 12px -4px color-mix(in oklab, var(--pc-accent) 70%, transparent)"
                       : "none",
-                    zIndex: isHover ? 5 : 1,
+                    zIndex: isFocus ? 5 : 1,
                     position: "relative",
                   }}
                 />

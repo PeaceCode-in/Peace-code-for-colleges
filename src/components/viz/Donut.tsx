@@ -31,6 +31,8 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
   const intensity = useMotionIntensity();
   const [on, setOn] = useState(intensity === "reduced");
   const [hover, setHover] = useState<number | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const tip = useChartTooltip();
 
   useEffect(() => {
@@ -44,8 +46,9 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
   const c = 2 * Math.PI * r;
   let acc = 0;
 
-  const active = hover !== null ? slices[hover] : null;
-  const activeColor = active ? (active.color ?? FALLBACK[hover! % FALLBACK.length]) : null;
+  const focus = hover ?? picked;
+  const active = focus !== null ? slices[focus] : null;
+  const activeColor = active ? (active.color ?? FALLBACK[focus! % FALLBACK.length]) : null;
   const displayLabel = active ? active.label : centerLabel;
   const displaySub = active
     ? `${((active.value / total) * 100).toFixed(1)}%${unit ? ` · ${unit}` : ""}`
@@ -70,15 +73,18 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
           acc += on ? len : 0;
           const color = s.color ?? FALLBACK[i % FALLBACK.length];
           const isHover = hover === i;
-          const dim = hover !== null && !isHover;
+          const isPicked = picked === i;
+          const isFocus = isHover || isPicked;
+          const dim = focus !== null && !isFocus;
           return (
             <circle
-              key={i}
+              key={isPicked ? `${i}-${pulseKey}` : i}
+              className={isPicked ? "pc-svg-pick" : undefined}
               cx={size / 2}
               cy={size / 2}
               r={r}
               stroke={color}
-              strokeWidth={isHover ? stroke + 3 : stroke}
+              strokeWidth={isFocus ? stroke + 3 : stroke}
               fill="none"
               strokeDasharray={`${on ? len : 0} ${c}`}
               strokeDashoffset={dashOffset}
@@ -86,6 +92,11 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
               style={{
                 transition: `stroke-dasharray 700ms cubic-bezier(0.2,0.7,0.2,1) ${i * 80}ms, opacity 160ms ease-out, stroke-width 160ms ease-out`,
                 cursor: "pointer",
+                filter: isPicked ? `drop-shadow(0 0 6px color-mix(in oklab, ${color} 55%, transparent))` : undefined,
+              }}
+              onClick={() => {
+                setPicked((p) => (p === i ? null : i));
+                setPulseKey((k) => k + 1);
               }}
               onMouseEnter={(e) => {
                 setHover(i);
@@ -95,6 +106,7 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
                     <TooltipRow dot={color} label="Value" value={`${s.value.toLocaleString()}${unit ? ` ${unit}` : ""}`} />
                     <TooltipRow label="Share" value={`${((s.value / total) * 100).toFixed(1)}%`} />
                     <TooltipRow label="Total" value={total.toLocaleString()} />
+                    {isPicked && <TooltipRow label="Status" value="Selected" />}
                   </>,
                   e,
                 );

@@ -19,6 +19,8 @@ interface Props {
 export function FunnelBars({ steps, color = "var(--pc-primary)", ariaLabel, unit = "records" }: Props) {
   const [on, setOn] = useState(false);
   const [hover, setHover] = useState<number | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const intensity = useMotionIntensity();
   const tip = useChartTooltip();
 
@@ -40,12 +42,22 @@ export function FunnelBars({ steps, color = "var(--pc-primary)", ariaLabel, unit
           const drop = i === 0 ? 0 : (steps[i - 1]?.value || 0) - s.value;
           const overall = (s.value / totalIn) * 100;
           const isHover = hover === i;
-          const dim = hover !== null && !isHover;
+          const isPicked = picked === i;
+          const focus = hover ?? picked;
+          const dim = focus !== null && focus !== i;
           return (
             <li
-              key={s.label}
-              className="flex items-center gap-3 text-[11px]"
-              style={{ opacity: dim ? 0.55 : 1, transition: "opacity 140ms ease-out", cursor: "pointer" }}
+              key={`${s.label}-${isPicked ? pulseKey : "u"}`}
+              className={`flex items-center gap-3 text-[11px] rounded-md ${isPicked ? "pc-tap-pulse" : ""}`}
+              style={{
+                opacity: dim ? 0.55 : 1,
+                transition: "opacity 140ms ease-out, transform 140ms ease-out",
+                cursor: "pointer",
+                transform: isHover || isPicked ? "translateX(2px)" : "none",
+                outline: isPicked ? "1.5px solid var(--pc-accent)" : "none",
+                outlineOffset: "2px",
+              }}
+              onClick={() => { setPicked((p) => (p === i ? null : i)); setPulseKey((k) => k + 1); }}
               onMouseEnter={(e) => {
                 setHover(i);
                 tip.show(
