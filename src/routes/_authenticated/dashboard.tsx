@@ -167,10 +167,10 @@ function DashboardPage() {
 
       <TileDetailSheet
         open={openKey !== null}
-        onOpenChange={(v) => !v && setOpenKey(null)}
+        onOpenChange={(v) => { if (!v) setOpenKey(null); }}
         title={meta?.title ?? ""}
         eyebrow={meta?.eyebrow}
-        description={meta?.description}
+        footer={meta?.footer}
       >
         {openKey && <TileDetailPanel tileKey={openKey} snap={snap} />}
       </TileDetailSheet>
