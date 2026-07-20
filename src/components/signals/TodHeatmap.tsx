@@ -1,7 +1,8 @@
 // 7 × 24 session-start heatmap for the selected window. Colour scale
 // derives from --pc-accent; cell values are session counts.
 // Interactive: hover/tap a cell for a rich tooltip and axis highlight.
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useTouchAsHover } from "@/components/viz/ChartTooltip";
 import { getTod } from "@/lib/signals-selectors";
 import { isSuppressed } from "@/lib/cohort-selectors";
 import { SuppressedTile } from "@/components/primitives/SuppressedTile";
