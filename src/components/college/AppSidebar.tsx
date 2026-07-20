@@ -1,12 +1,12 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
-  Activity, ClipboardList, Waves, Grid3x3, CalendarClock,
-  AlertTriangle, Share2, Gauge, Route as RouteIcon,
+  Sparkles, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
+  HeartPulse, LineChart, ClipboardList, Waves, CalendarClock, Grid3x3,
+  AlertTriangle, Route as RouteIcon, Share2, Gauge,
   FileText, History,
   ShieldCheck, UserCog, Landmark, ScrollText,
-  Palette, User as UserIcon, BellRing,
-  HelpCircle, TerminalSquare, Braces,
+  Palette, UserCircle2, BellRing,
+  LifeBuoy, TerminalSquare, Braces,
   LogOut,
 } from "lucide-react";
 import {
@@ -22,7 +22,7 @@ type Group = { label: string; items: Item[] };
 
 export const SIDEBAR_GROUPS: Group[] = [
   { label: "Overview", items: [
-    { title: "Executive overview", url: "/dashboard", icon: LayoutDashboard },
+    { title: "Executive overview", url: "/dashboard", icon: Sparkles },
   ]},
   { label: "Cohort insights", items: [
     { title: "Departments",     url: "/departments",          icon: Building2 },
@@ -32,8 +32,8 @@ export const SIDEBAR_GROUPS: Group[] = [
     { title: "Compare cohorts", url: "/cohorts/compare",      icon: GitCompareArrows },
   ]},
   { label: "Wellbeing signals", items: [
-    { title: "Overview",           url: "/signals/wellbeing",   icon: Activity },
-    { title: "Mood trends",        url: "/signals/mood",        icon: Activity },
+    { title: "Overview",           url: "/signals/wellbeing",   icon: HeartPulse },
+    { title: "Mood trends",        url: "/signals/mood",        icon: LineChart },
     { title: "Screening outcomes", url: "/signals/screenings",  icon: ClipboardList },
     { title: "Engagement rhythm",  url: "/signals/engagement",  icon: Waves },
     { title: "Sessions",           url: "/signals/sessions",    icon: CalendarClock },
@@ -57,11 +57,11 @@ export const SIDEBAR_GROUPS: Group[] = [
   ]},
   { label: "Settings", items: [
     { title: "Appearance",    url: "/settings/appearance",    icon: Palette },
-    { title: "Account",       url: "/settings/account",       icon: UserIcon },
+    { title: "Account",       url: "/settings/account",       icon: UserCircle2 },
     { title: "Notifications", url: "/settings/notifications", icon: BellRing },
   ]},
   { label: "Support", items: [
-    { title: "Help & policy",    url: "/help",     icon: HelpCircle },
+    { title: "Help & policy",    url: "/help",     icon: LifeBuoy },
     { title: "QA self-check",    url: "/qa",       icon: TerminalSquare },
     { title: "QA data dump",     url: "/qa-data",  icon: Braces },
   ]},
