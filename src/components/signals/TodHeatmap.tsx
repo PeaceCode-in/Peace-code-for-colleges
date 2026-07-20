@@ -18,6 +18,8 @@ function hourLabel(h: number) {
 export function TodHeatmap() {
   const res = useMemo(() => getTod(), []);
   const [hover, setHover] = useState<{ day: number; hour: number; v: number } | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  useTouchAsHover(wrapRef);
 
   if (isSuppressed(res)) return <SuppressedTile label="Not enough sessions to draw a heatmap." />;
   const { grid } = res;
@@ -27,9 +29,11 @@ export function TodHeatmap() {
 
   return (
     <div
+      ref={wrapRef}
       className="w-full overflow-x-auto relative"
       role="img"
       aria-label="Seven-day by 24-hour heatmap of session starts. Evenings and Sunday nights are the most active."
+      onMouseLeave={() => setHover(null)}
     >
       <div className="inline-flex flex-col gap-0.5">
         <div className="flex gap-0.5 pl-9">
