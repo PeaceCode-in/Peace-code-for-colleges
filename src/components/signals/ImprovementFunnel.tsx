@@ -26,6 +26,9 @@ export function ImprovementFunnel({ range }: { range: RangeKey }) {
         const conv = prev && prev > 0 ? Math.round((s.n / prev) * 1000) / 10 : null;
         const dropped = prev !== null ? Math.max(0, prev - s.n) : 0;
         const isHover = hover === i;
+        const isPicked = picked === i;
+        const focus = hover ?? picked;
+        const isFocus = focus === i;
 
         return (
           <div key={s.key}>
@@ -40,18 +43,22 @@ export function ImprovementFunnel({ range }: { range: RangeKey }) {
             )}
             <button
               type="button"
+              key={isPicked ? `p-${pulseKey}` : "u"}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
               onFocus={() => setHover(i)}
               onBlur={() => setHover(null)}
-              className="relative w-full text-left rounded-md overflow-hidden transition-transform duration-150 focus:outline-none"
+              onClick={() => { setPicked((p) => (p === i ? null : i)); setPulseKey((k) => k + 1); }}
+              className={`relative w-full text-left rounded-md overflow-hidden transition-transform duration-150 focus:outline-none ${isPicked ? "pc-tap-pulse" : ""}`}
               style={{
                 background: "var(--pc-surface2)",
-                border: `1px solid ${isHover ? "var(--pc-accent)" : "var(--pc-border)"}`,
-                transform: isHover ? "translateY(-1px)" : "none",
-                boxShadow: isHover ? "0 6px 18px -10px color-mix(in oklab, var(--pc-accent) 60%, transparent)" : "none",
+                border: `1px solid ${isFocus ? "var(--pc-accent)" : "var(--pc-border)"}`,
+                borderWidth: isPicked ? "1.5px" : "1px",
+                transform: isFocus ? "translateY(-1px)" : "none",
+                boxShadow: isFocus ? "0 6px 18px -10px color-mix(in oklab, var(--pc-accent) 60%, transparent)" : "none",
+                opacity: focus !== null && !isFocus ? 0.7 : 1,
               }}
-              title={`${s.label} — ${s.n.toLocaleString()} students (${pct}% of screened)${conv !== null ? ` · ${conv}% carry-forward` : ""}`}
+              title={`${s.label} — ${s.n.toLocaleString()} students (${pct}% of screened)${conv !== null ? ` · ${conv}% carry-forward` : ""}${isPicked ? " · Selected" : ""}`}
             >
               {/* proportional fill */}
               <div
