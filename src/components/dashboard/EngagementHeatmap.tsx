@@ -13,7 +13,7 @@ const HOUR_LABEL = (bucket: number) => {
   return `${fmt(startHour)}–${fmt(endHour)}`;
 };
 
-export function EngagementHeatmap({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function EngagementHeatmap({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const max = Math.max(1, ...snap.engagement.map((c) => c.n));
   // Build a fast lookup so we render in row/col order.
   const map = new Map<string, HeatCell>();
@@ -25,6 +25,8 @@ export function EngagementHeatmap({ snap, className = "" }: { snap: ExecutiveSna
       eyebrow="Day × 2-hour bucket"
       className={className}
       footer="Warmer cells = more sessions. All cohorts above the anonymity floor."
+      onExpand={onExpand}
+      expandLabel="Open heatmap breakdown"
     >
       <div
         role="img"

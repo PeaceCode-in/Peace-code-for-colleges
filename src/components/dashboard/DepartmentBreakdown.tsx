@@ -5,10 +5,10 @@
 import { BentoTile } from "./BentoTile";
 import type { ExecutiveSnapshot } from "@/lib/dashboard-mock";
 
-export function DepartmentBreakdown({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function DepartmentBreakdown({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const rows = snap.departments.slice(0, 6);
   return (
-    <BentoTile title="Departments" eyebrow="Participation, top 6" className={className}>
+    <BentoTile title="Departments" eyebrow="Participation, top 6" className={className} onExpand={onExpand} expandLabel="Open full department list">
       <ul className="flex flex-col gap-2" role="list">
         {rows.map((r, i) => {
           const opacity = 1 - i * 0.12;

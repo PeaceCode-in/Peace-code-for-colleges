@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/college/primitives";
 import { getExecutiveSnapshot } from "@/lib/dashboard-mock";
 import { isSuppressed } from "@/lib/anonymity";
@@ -7,13 +7,14 @@ import { BentoTile } from "@/components/dashboard/BentoTile";
 import { KpiNumber } from "@/components/dashboard/KpiNumber";
 import { DeltaChip } from "@/components/dashboard/DeltaChip";
 import { SuppressedChip } from "@/components/dashboard/SuppressedChip";
-import { Sparkline } from "@/components/dashboard/Sparkline";
 import { WellnessPulse } from "@/components/dashboard/WellnessPulse";
 import { DepartmentBreakdown } from "@/components/dashboard/DepartmentBreakdown";
 import { WellnessTrendChart } from "@/components/dashboard/WellnessTrendChart";
 import { RiskFunnel } from "@/components/dashboard/RiskFunnel";
 import { ConcernTags } from "@/components/dashboard/ConcernTags";
 import { EngagementHeatmap } from "@/components/dashboard/EngagementHeatmap";
+import { TileDetailSheet } from "@/components/dashboard/TileDetailSheet";
+import { TileDetailPanel, TILE_META, type TileKey } from "@/components/dashboard/TileDetails";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Executive overview — PeaceCode for Colleges" }] }),
@@ -23,6 +24,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function DashboardPage() {
   const snap = useMemo(() => getExecutiveSnapshot(), []);
   const enrolledLabel = snap.enrolledTotal.toLocaleString();
+  const [openKey, setOpenKey] = useState<TileKey | null>(null);
+  const open = (k: TileKey) => () => setOpenKey(k);
+  const meta = openKey ? TILE_META[openKey] : null;
 
   return (
     <>
@@ -33,13 +37,15 @@ function DashboardPage() {
       />
       <div className="grid grid-cols-1 lg:grid-cols-6 xl:grid-cols-12 gap-4">
         {/* Row 1 — hero + 2x2 KPI cluster ────────────────────── */}
-        <WellnessPulse snap={snap} className="xl:col-span-6 xl:row-span-2 lg:col-span-6" />
+        <WellnessPulse snap={snap} className="xl:col-span-6 xl:row-span-2 lg:col-span-6" onExpand={open("pulse")} />
 
         {/* Active students */}
         <BentoTile
           title="Active students"
           eyebrow="Logged in this week"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("active")}
+          expandLabel="Open active students detail"
         >
           <div className="flex items-center gap-4">
             <div className="min-w-0">
@@ -64,6 +70,8 @@ function DashboardPage() {
           eyebrow="Early-warning model"
           tone={snap.crisisSignals.highActive ? "danger" : "default"}
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("crisis")}
+          expandLabel="Open crisis signals detail"
         >
           <KpiNumber
             value={snap.crisisSignals.total.toLocaleString()}
@@ -99,6 +107,8 @@ function DashboardPage() {
           title="Sessions this week"
           eyebrow="Delivered · 7 days"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("sessions")}
+          expandLabel="Open sessions detail"
         >
           <div className="flex items-end justify-between gap-3">
             <div className="min-w-0">
@@ -119,6 +129,8 @@ function DashboardPage() {
           title="Average mood"
           eyebrow="Self-report · 1–10"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("mood")}
+          expandLabel="Open mood detail"
         >
           <div className="flex items-end gap-2">
             <KpiNumber value={snap.avgMood.score.toFixed(1)} suffix="/ 10" size="lg" />
@@ -144,14 +156,24 @@ function DashboardPage() {
         </BentoTile>
 
         {/* Row 2 ─────────────────────────────────────────────── */}
-        <DepartmentBreakdown snap={snap} className="xl:col-span-3 lg:col-span-6" />
-        <WellnessTrendChart snap={snap} className="xl:col-span-9 lg:col-span-6" />
+        <DepartmentBreakdown snap={snap} className="xl:col-span-3 lg:col-span-6" onExpand={open("departments")} />
+        <WellnessTrendChart snap={snap} className="xl:col-span-9 lg:col-span-6" onExpand={open("trend")} />
 
         {/* Row 3 ─────────────────────────────────────────────── */}
-        <RiskFunnel snap={snap} className="xl:col-span-4 lg:col-span-6" />
-        <ConcernTags snap={snap} className="xl:col-span-4 lg:col-span-6" />
-        <EngagementHeatmap snap={snap} className="xl:col-span-4 lg:col-span-6" />
+        <RiskFunnel snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("funnel")} />
+        <ConcernTags snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("concerns")} />
+        <EngagementHeatmap snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("heatmap")} />
       </div>
+
+      <TileDetailSheet
+        open={openKey !== null}
+        onOpenChange={(v) => { if (!v) setOpenKey(null); }}
+        title={meta?.title ?? ""}
+        eyebrow={meta?.eyebrow}
+        footer={meta?.footer}
+      >
+        {openKey && <TileDetailPanel tileKey={openKey} snap={snap} />}
+      </TileDetailSheet>
     </>
   );
 }

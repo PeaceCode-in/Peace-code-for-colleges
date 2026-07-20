@@ -7,12 +7,12 @@ import { SuppressedChip } from "./SuppressedChip";
 import { isSuppressed } from "@/lib/anonymity";
 import type { ExecutiveSnapshot } from "@/lib/dashboard-mock";
 
-export function RiskFunnel({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function RiskFunnel({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const stages = snap.riskFunnel;
   const first = stages[0];
   const base = !isSuppressed(first.n) ? first.n : 0;
   return (
-    <BentoTile title="Risk funnel" eyebrow="This week" className={className}>
+    <BentoTile title="Risk funnel" eyebrow="This week" className={className} onExpand={onExpand} expandLabel="Open funnel details">
       <ul className="flex flex-col gap-2.5" role="list">
         {stages.map((stage, i) => {
           const shown = !isSuppressed(stage.n);

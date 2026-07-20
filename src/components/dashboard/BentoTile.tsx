@@ -3,8 +3,15 @@
 // active corner-radius from the html attributes the appearance applier
 // sets. No colour is hardcoded — every fill and border resolves through
 // the design-system tokens so accent, theme, and presets flow through.
-import { type ReactNode, useId } from "react";
+//
+// A tile can be given `onExpand` to become a fully interactive card:
+// clicking anywhere on the surface (or pressing Enter/Space) fires
+// the callback so the dashboard can open a rich detail sheet. A small
+// "Expand" affordance is rendered top-right so the interaction is
+// discoverable — with a tooltip explaining the drill-down.
+import { type ReactNode, type KeyboardEvent, useId } from "react";
 import { Link } from "@tanstack/react-router";
+import { Maximize2 } from "lucide-react";
 import { loadSettings } from "@/lib/settings-store";
 
 type Tone = "default" | "danger";
@@ -19,6 +26,8 @@ export function BentoTile({
   tone = "default",
   hoverable = false,
   to,
+  onExpand,
+  expandLabel = "Open details",
 }: {
   title?: string;
   eyebrow?: string;
@@ -29,12 +38,15 @@ export function BentoTile({
   tone?: Tone;
   hoverable?: boolean;
   to?: string;
+  onExpand?: () => void;
+  expandLabel?: string;
 }) {
   const auto = useId();
   const hid = headingId ?? `bt-${auto}`;
   // Fallback for the rare SSR path where the appearance attrs aren't set.
   const s = typeof window !== "undefined" ? loadSettings() : null;
   const reduce = s?.appearance.reduceMotion || s?.accessibility.reduceAnim;
+  const interactive = Boolean(onExpand || to || hoverable);
 
   const shell: React.CSSProperties = {
     background: "var(--pc-surface)",
@@ -46,15 +58,39 @@ export function BentoTile({
         ? "3px solid var(--pc-danger)"
         : "1px solid var(--pc-border)",
     padding: "calc(var(--pc-density, 1) * 1.15rem)",
-    transition: reduce ? "none" : "transform 220ms ease, box-shadow 220ms ease",
+    transition: reduce ? "none" : "transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease",
+    cursor: onExpand || to ? "pointer" : undefined,
+    position: "relative",
   };
   const cls =
-    `pc-glass-card flex flex-col min-w-0 ${hoverable ? "hover:-translate-y-0.5" : ""} ${className}`;
+    `pc-glass-card flex flex-col min-w-0 group ${interactive ? "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--pc-accent)_45%,transparent)]" : ""} ${className}`;
+
+  const expandAffordance = onExpand ? (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onExpand();
+      }}
+      aria-label={expandLabel}
+      title={expandLabel}
+      className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 text-[10px] px-1.5 py-1 rounded-md opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none transition-opacity"
+      style={{
+        background: "color-mix(in oklab, var(--pc-surface2) 92%, transparent)",
+        border: "1px solid var(--pc-border)",
+        color: "var(--pc-ink-2)",
+      }}
+    >
+      <Maximize2 className="w-3 h-3" aria-hidden />
+      <span className="hidden sm:inline">Expand</span>
+    </button>
+  ) : null;
 
   const body = (
     <>
+      {expandAffordance}
       {(eyebrow || title) && (
-        <header className="mb-3 min-w-0">
+        <header className="mb-3 min-w-0 pr-16">
           {eyebrow && (
             <div
               className="text-[10px] uppercase mb-1 truncate"
@@ -103,6 +139,39 @@ export function BentoTile({
       </Link>
     );
   }
+
+  if (onExpand) {
+    const onKey = (e: KeyboardEvent<HTMLElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        const t = e.target as HTMLElement;
+        if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
+        e.preventDefault();
+        onExpand();
+      }
+    };
+    const onClick = (e: React.MouseEvent) => {
+      const t = e.target as HTMLElement;
+      // Ignore clicks on nested interactive elements so tile-internal
+      // controls (legend chips, link rows, chart hovers) still work.
+      if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
+      onExpand();
+    };
+    return (
+      <section
+        role="button"
+        tabIndex={0}
+        aria-labelledby={hid}
+        aria-haspopup="dialog"
+        onClick={onClick}
+        onKeyDown={onKey}
+        className={`${cls} focus-visible:outline-none focus-visible:ring-2`}
+        style={{ ...shell, ["--tw-ring-color" as any]: "var(--pc-accent)" }}
+      >
+        {body}
+      </section>
+    );
+  }
+
   return (
     <section role="group" aria-labelledby={hid} className={cls} style={shell}>
       {body}

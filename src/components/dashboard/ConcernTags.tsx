@@ -6,7 +6,7 @@ import { SuppressedChip } from "./SuppressedChip";
 import { isSuppressed } from "@/lib/anonymity";
 import type { ExecutiveSnapshot } from "@/lib/dashboard-mock";
 
-export function ConcernTags({ snap, className = "" }: { snap: ExecutiveSnapshot; className?: string }) {
+export function ConcernTags({ snap, className = "", onExpand }: { snap: ExecutiveSnapshot; className?: string; onExpand?: () => void }) {
   const rows = snap.concerns;
   const shownMax = Math.max(
     1,
@@ -18,6 +18,8 @@ export function ConcernTags({ snap, className = "" }: { snap: ExecutiveSnapshot;
       eyebrow="Anonymized tags"
       className={className}
       footer="Tags come from a fixed enum — no free-text ever leaves the pipeline."
+      onExpand={onExpand}
+      expandLabel="Open per-tag breakdown"
     >
       <ul className="flex flex-wrap gap-2" role="list">
         {rows.map((r) => {
