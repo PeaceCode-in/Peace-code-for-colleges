@@ -91,18 +91,33 @@ function FacetChart({ facet, points }: { facet: Facet; points: CorrelationPoint[
             <XAxis type="number" dataKey="x" stroke="var(--pc-muted)" fontSize={10} name={facet.xLabel} />
             <YAxis type="number" dataKey="y" stroke="var(--pc-muted)" fontSize={10} name={facet.yLabel} />
             <Tooltip
-              cursor={{ stroke: "var(--pc-border)" }}
+              cursor={{ stroke: "var(--pc-accent)", strokeDasharray: "3 3" }}
               contentStyle={{
                 background: "var(--pc-surface)", border: "1px solid var(--pc-border)",
                 color: "var(--pc-ink)", borderRadius: 8, fontSize: 12,
               }}
-              formatter={(v: number, key: string) => [v, key === "x" ? facet.xLabel : facet.yLabel]}
-              labelFormatter={() => ""}
+              content={({ active, payload }) => {
+                if (!active || !payload?.length) return null;
+                const p = payload[0].payload as { dept?: string; n?: number; x: number; y: number };
+                if (!p.dept) return null;
+                return (
+                  <div className="rounded-md px-2.5 py-1.5" style={{
+                    background: "var(--pc-surface)", border: "1px solid var(--pc-border)",
+                    color: "var(--pc-ink)", fontSize: 12, minWidth: 160,
+                  }}>
+                    <div className="font-medium">{p.dept}</div>
+                    <div style={{ color: "var(--pc-muted)" }}>{facet.xLabel}: {p.x}</div>
+                    <div style={{ color: "var(--pc-muted)" }}>{facet.yLabel}: {p.y}</div>
+                    <div style={{ color: "var(--pc-muted)" }}>n = {p.n?.toLocaleString?.() ?? p.n}</div>
+                  </div>
+                );
+              }}
             />
             <Scatter
               data={data}
               fill="var(--pc-accent)"
               isAnimationActive={false}
+              style={{ cursor: "pointer" }}
             />
             <Scatter
               data={trend}
