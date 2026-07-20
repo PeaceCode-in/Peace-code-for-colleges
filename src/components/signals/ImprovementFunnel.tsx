@@ -1,7 +1,8 @@
 // Improvement funnel: Screened → Elevated → Engaged → Reassessed → Improved.
 // Full-width rows with a proportional inner fill so labels never wrap ugly.
 // Fully interactive: hover reveals conversion math and drop-off counts.
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useTouchAsHover } from "@/components/viz/ChartTooltip";
 import { getFunnel, type RangeKey } from "@/lib/signals-selectors";
 import { isSuppressed } from "@/lib/cohort-selectors";
 import { SuppressedTile } from "@/components/primitives/SuppressedTile";
