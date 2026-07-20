@@ -37,11 +37,12 @@ export function TileDetailSheet({
           className={cn(
             "fixed z-50 inset-y-0 right-0 h-dvh flex flex-col outline-none",
             "w-full sm:max-w-[560px] lg:max-w-[720px]",
-            "border-l shadow-2xl transition ease-in-out",
-            "data-[state=closed]:duration-200 data-[state=open]:duration-300",
+            "border-l shadow-2xl transition ease-out",
+            "data-[state=closed]:duration-150 data-[state=open]:duration-150",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
           )}
+
           style={{
             background: "var(--pc-surface)",
             color: "var(--pc-ink)",
