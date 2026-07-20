@@ -1512,7 +1512,9 @@ html[data-pc-bg="graphite"] input::placeholder { color: var(--pc-muted) !importa
     0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 30%, transparent),
     0 20px 50px -30px rgba(0,0,0,0.25);
   position: relative;
-  overflow: hidden;
+  /* No overflow:hidden — header hosts absolutely-positioned dropdowns
+     (Notifications, Profile) that must escape the pill. The ::before
+     sheen is a 1px top edge that never overflows anyway. */
 }
 .pc-glass-header::before {
   content: "";
