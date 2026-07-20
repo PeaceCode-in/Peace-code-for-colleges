@@ -10,11 +10,12 @@ import {
   LogOut,
 } from "lucide-react";
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
+  Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from "@/components/ui/sidebar";
 import { useCollegeContext } from "@/lib/college-context";
 import { endSession } from "@/lib/auth-store";
+import { BrandMark, BrandLockup } from "@/components/college/BrandMark";
 
 type Item = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
 type Group = { label: string; items: Item[] };
@@ -85,6 +86,30 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" variant="floating" className="pc-glass-tube" style={{ background: "transparent", borderColor: "transparent" }}>
+      <SidebarHeader style={{ background: "transparent" }}>
+        <Link
+          to="/dashboard"
+          aria-label="PeaceCode home"
+          className="flex items-center justify-center px-2 pt-2 pb-1"
+        >
+          {collapsed ? (
+            <span
+              className="inline-grid place-items-center rounded-full"
+              style={{
+                width: 32, height: 32,
+                background: "color-mix(in oklab, var(--pc-primary) 14%, transparent)",
+                color: "var(--pc-primary)",
+                border: "1px solid color-mix(in oklab, var(--pc-primary) 25%, transparent)",
+              }}
+            >
+              <BrandMark size={18} />
+            </span>
+          ) : (
+            <BrandLockup />
+          )}
+        </Link>
+        <div aria-hidden className="mx-3 my-1 h-px" style={{ background: "var(--pc-border)" }} />
+      </SidebarHeader>
       <SidebarContent style={{ background: "transparent" }}>
         {GROUPS.map((g) => {
           return (
