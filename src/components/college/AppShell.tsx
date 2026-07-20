@@ -1,6 +1,8 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, Moon, Sun, User, Keyboard } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Search, Moon, Sun, User, Keyboard, CornerDownLeft } from "lucide-react";
+import { SIDEBAR_GROUPS } from "@/components/college/AppSidebar";
+
 import {
   SidebarProvider, SidebarTrigger, SidebarInset,
 } from "@/components/ui/sidebar";
