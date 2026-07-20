@@ -1355,3 +1355,83 @@ html[data-chart-style] svg polyline.pc-chart-line {
   backdrop-filter: blur(10px);
   border: 1px solid var(--pc-border) !important;
 }
+
+/* ============================================================
+   Dark background themes — brighten shell chrome so header/sidebar
+   feel glassy and readable instead of flat navy.
+   ============================================================ */
+html[data-pc-bg="midnight"],
+html[data-pc-bg="noir"],
+html[data-pc-bg="ember"],
+html[data-pc-bg="graphite"] {
+  --pc-header:   rgba(255,255,255,0.05);
+  --pc-surface:  rgba(255,255,255,0.07);
+  --pc-surface2: rgba(255,255,255,0.10);
+  --pc-ink:      #F2F5FA;
+  --pc-ink-2:    #DDE3EE;
+  --pc-muted:    #B6BFD0;
+  --pc-border:   rgba(255,255,255,0.14);
+}
+html[data-pc-bg="noir"]     { --pc-ink: #F7EFD8; --pc-ink-2: #E6D9B4; --pc-muted: #C7B98F; --pc-border: rgba(201,168,76,0.24); }
+html[data-pc-bg="ember"]    { --pc-ink: #FBEADF; --pc-ink-2: #EBCEBB; --pc-muted: #C99C87; --pc-border: rgba(232,93,58,0.26); }
+html[data-pc-bg="graphite"] { --pc-ink: #EEF2F9; --pc-ink-2: #C8D0DE; --pc-muted: #9BA6BA; }
+
+/* Header glass on dark canvases: translucent, luminous top edge */
+html[data-pc-bg="midnight"] header.sticky,
+html[data-pc-bg="noir"]     header.sticky,
+html[data-pc-bg="ember"]    header.sticky,
+html[data-pc-bg="graphite"] header.sticky {
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.08) 0%,
+      rgba(255,255,255,0.03) 100%) !important;
+  border-bottom-color: rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 8px 24px -18px rgba(0,0,0,0.7);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Glass-tube sidebar brightness on dark bg themes */
+html[data-pc-bg="midnight"] .pc-glass-tube [data-sidebar="sidebar"],
+html[data-pc-bg="noir"]     .pc-glass-tube [data-sidebar="sidebar"],
+html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="sidebar"],
+html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="sidebar"] {
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.09) 0%,
+      rgba(255,255,255,0.04) 100%) !important;
+  border-color: color-mix(in oklab, var(--pc-primary) 28%, rgba(255,255,255,0.10)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 26%, transparent),
+    0 30px 60px -25px rgba(0,0,0,0.7),
+    0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 50%, transparent) !important;
+}
+
+/* Brighten sidebar text/icons on dark canvases */
+html[data-pc-bg="midnight"] .pc-glass-tube [data-sidebar="menu-button"],
+html[data-pc-bg="noir"]     .pc-glass-tube [data-sidebar="menu-button"],
+html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="menu-button"],
+html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="menu-button"] {
+  color: rgba(238,244,255,0.92) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-tube [data-sidebar="menu-button"] svg,
+html[data-pc-bg="noir"]     .pc-glass-tube [data-sidebar="menu-button"] svg,
+html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="menu-button"] svg,
+html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="menu-button"] svg {
+  color: rgba(238,244,255,0.88) !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-tube [data-sidebar="menu-button"][data-active="true"],
+html[data-pc-bg="noir"]     .pc-glass-tube [data-sidebar="menu-button"][data-active="true"],
+html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="menu-button"][data-active="true"],
+html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="menu-button"][data-active="true"] {
+  color: #fff !important;
+}
+html[data-pc-bg="midnight"] .pc-glass-tube [data-sidebar="group-label"],
+html[data-pc-bg="noir"]     .pc-glass-tube [data-sidebar="group-label"],
+html[data-pc-bg="ember"]    .pc-glass-tube [data-sidebar="group-label"],
+html[data-pc-bg="graphite"] .pc-glass-tube [data-sidebar="group-label"] {
+  color: rgba(220,228,240,0.72) !important;
+}
