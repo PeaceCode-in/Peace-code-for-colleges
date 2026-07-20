@@ -49,9 +49,11 @@ export function RidgelineDistribution({
 
   return (
     <div
+      ref={wrapRef}
       role="img"
       aria-label={`${scale === "phq9" ? "PHQ-9" : "GAD-7"} score distributions per ${rows.length} months. Higher score = more severe.`}
       className="w-full overflow-x-auto relative"
+      onMouseLeave={() => setHover(null)}
     >
       <svg
         width={chartW}
