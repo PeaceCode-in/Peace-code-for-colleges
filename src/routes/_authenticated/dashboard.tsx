@@ -24,6 +24,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function DashboardPage() {
   const snap = useMemo(() => getExecutiveSnapshot(), []);
   const enrolledLabel = snap.enrolledTotal.toLocaleString();
+  const [openKey, setOpenKey] = useState<TileKey | null>(null);
+  const open = (k: TileKey) => () => setOpenKey(k);
+  const meta = openKey ? TILE_META[openKey] : null;
 
   return (
     <>
