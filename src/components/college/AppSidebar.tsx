@@ -129,7 +129,7 @@ export function AppSidebar() {
         })}
       </SidebarContent>
 
-      <SidebarFooter style={{ background: "var(--pc-surface)", borderTop: "1px solid var(--pc-border)" }}>
+      <SidebarFooter style={{ background: "transparent" }}>
         {collapsed ? (
           <div className="flex flex-col items-center gap-2 py-2">
             <div
