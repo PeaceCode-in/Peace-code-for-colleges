@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import {
   AuthShell,
   FieldLabel,
@@ -55,6 +55,20 @@ function SignInPage() {
       titleAccent="campus dashboard."
       subtitle="Aggregate insights for your counselling cell. Individual student data is never shown."
     >
+      <a
+        href="https://peacecode.in"
+        className="fixed top-4 left-4 z-50 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] backdrop-blur transition hover:-translate-x-0.5"
+        style={{
+          background: "rgba(255,255,255,0.55)",
+          border: "1px solid rgba(125,90,68,0.22)",
+          color: "#5a4230",
+          boxShadow: "0 4px 14px -6px rgba(125,90,68,0.25)",
+        }}
+        aria-label="Go back to peacecode.in"
+      >
+        <ArrowLeft className="w-3.5 h-3.5" strokeWidth={1.8} />
+        Go back
+      </a>
       <div>
         <FieldLabel hint="Access is granted per institution. If your college isn't onboarded yet, email hello@peacecode.in.">
           Institutional email
