@@ -1,7 +1,7 @@
 // Horizontal "violin" strips per selected year: PHQ-9 distribution rendered
 // as a mirrored Recharts area chart. We use Recharts AreaChart (per the
 // prompt) rather than a raw violin library.
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { marginalize, YEARS, type Filters } from "@/lib/cohort-cube";
 import { HatchedCell } from "@/components/primitives/HatchedCell";
 import { K_MIN } from "@/lib/cohort-selectors";
@@ -45,6 +45,41 @@ export function DistributionViolins({ filters }: { filters: Filters }) {
                   >
                     <XAxis dataKey="label" hide />
                     <YAxis hide domain={["dataMin", "dataMax"]} />
+                    <Tooltip
+                      cursor={{ stroke: "var(--pc-accent)", strokeOpacity: 0.4, strokeDasharray: "2 4" }}
+                      content={({ active, payload, label }) => {
+                        if (!active || !payload?.length) return null;
+                        const count = Math.abs(Number(payload[0].value));
+                        const pct = agg.n ? ((count / agg.n) * 100).toFixed(1) : "0";
+                        return (
+                          <div
+                            className="rounded-md px-3 py-2 text-[11.5px] shadow-lg animate-fade-in"
+                            style={{
+                              background: "var(--pc-surface)",
+                              border: "1px solid var(--pc-border)",
+                              color: "var(--pc-ink)",
+                              backdropFilter: "blur(12px) saturate(140%)",
+                            }}
+                          >
+                            <div className="text-[10.5px] uppercase tracking-wider mb-1" style={{ color: "var(--pc-muted)", letterSpacing: "0.12em" }}>
+                              PHQ-9 · {key} · bin {label}
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span style={{ color: "var(--pc-muted)" }}>Members in bin</span>
+                              <span className="font-mono">{count}</span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span style={{ color: "var(--pc-muted)" }}>Share of cohort</span>
+                              <span className="font-mono">{pct}%</span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span style={{ color: "var(--pc-muted)" }}>Cohort size</span>
+                              <span className="font-mono">{agg.n}</span>
+                            </div>
+                          </div>
+                        );
+                      }}
+                    />
                     <Area
                       type="monotone"
                       dataKey="up"
