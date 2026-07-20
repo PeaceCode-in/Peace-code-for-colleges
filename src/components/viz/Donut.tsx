@@ -48,6 +48,9 @@ export function Donut({ slices, size = 140, stroke = 14, centerLabel, centerSub,
 
   const active = hover !== null ? slices[hover] : null;
   const activeColor = active ? (active.color ?? FALLBACK[hover! % FALLBACK.length]) : null;
+  const focus = hover ?? picked;
+  const active = focus !== null ? slices[focus] : null;
+  const activeColor = active ? (active.color ?? FALLBACK[focus! % FALLBACK.length]) : null;
   const displayLabel = active ? active.label : centerLabel;
   const displaySub = active
     ? `${((active.value / total) * 100).toFixed(1)}%${unit ? ` · ${unit}` : ""}`
