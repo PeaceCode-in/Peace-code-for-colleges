@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/college/primitives";
 import { getExecutiveSnapshot } from "@/lib/dashboard-mock";
 import { isSuppressed } from "@/lib/anonymity";
@@ -7,13 +7,14 @@ import { BentoTile } from "@/components/dashboard/BentoTile";
 import { KpiNumber } from "@/components/dashboard/KpiNumber";
 import { DeltaChip } from "@/components/dashboard/DeltaChip";
 import { SuppressedChip } from "@/components/dashboard/SuppressedChip";
-import { Sparkline } from "@/components/dashboard/Sparkline";
 import { WellnessPulse } from "@/components/dashboard/WellnessPulse";
 import { DepartmentBreakdown } from "@/components/dashboard/DepartmentBreakdown";
 import { WellnessTrendChart } from "@/components/dashboard/WellnessTrendChart";
 import { RiskFunnel } from "@/components/dashboard/RiskFunnel";
 import { ConcernTags } from "@/components/dashboard/ConcernTags";
 import { EngagementHeatmap } from "@/components/dashboard/EngagementHeatmap";
+import { TileDetailSheet } from "@/components/dashboard/TileDetailSheet";
+import { TileDetailPanel, TILE_META, type TileKey } from "@/components/dashboard/TileDetails";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Executive overview — PeaceCode for Colleges" }] }),
