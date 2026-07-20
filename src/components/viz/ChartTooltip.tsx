@@ -140,6 +140,10 @@ export function useChartTooltip(): ChartTooltipApi {
 
   const hide = useCallback(() => setState(null), []);
 
+  // Touch/pen drags synthesize hover events on the elements under the finger,
+  // so every chart wired through this hook gets the same tooltip on mobile.
+  useTouchAsHover(wrapperRef);
+
   return { wrapperRef, onMove, show, hide, state };
 }
 
