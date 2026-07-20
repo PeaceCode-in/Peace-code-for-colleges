@@ -18,6 +18,8 @@ function hourLabel(h: number) {
 export function TodHeatmap() {
   const res = useMemo(() => getTod(), []);
   const [hover, setHover] = useState<{ day: number; hour: number; v: number } | null>(null);
+  const [picked, setPicked] = useState<{ day: number; hour: number } | null>(null);
+  const [pulseKey, setPulseKey] = useState(0);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   useTouchAsHover(wrapRef);
 
