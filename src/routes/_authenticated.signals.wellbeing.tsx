@@ -473,6 +473,8 @@ function CompletionDonut({ range }: { range: RangeKey }) {
     { key: "gap",  value: Math.max(0, 100 - pct) },
   ];
   const colors = ["var(--pc-accent)", "var(--pc-surface2)"];
+  const completed = res.completed.toLocaleString();
+  const missed = Math.max(0, res.active - res.completed).toLocaleString();
   return (
     <div className="h-40 relative" role="img" aria-label={`Reassessment completion ${pct}% of active students in the window.`}>
       <ResponsiveContainer width="100%" height="100%">
@@ -492,6 +494,18 @@ function CompletionDonut({ range }: { range: RangeKey }) {
               <Cell key={d.key} fill={colors[i]} />
             ))}
           </Pie>
+          <Tooltip
+            contentStyle={{
+              background: "var(--pc-surface)", border: "1px solid var(--pc-border)",
+              color: "var(--pc-ink)", borderRadius: 8, fontSize: 12,
+            }}
+            formatter={(_v, _n, item) => {
+              const key = (item?.payload as { key?: string })?.key;
+              return key === "done"
+                ? [`${completed} completed (${pct}%)`, "Reassessed"]
+                : [`${missed} missed (${100 - pct}%)`, "Not reassessed"];
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
