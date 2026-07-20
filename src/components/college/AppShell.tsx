@@ -229,7 +229,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div style={{ background: "var(--pc-bg)", color: "var(--pc-ink)" }}>
+    <div style={{ background: "transparent", color: "var(--pc-ink)" }}>
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-1.5 focus:rounded-md focus:text-[13px]"
@@ -241,7 +241,7 @@ export function CollegeAppShell({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <div className="min-h-dvh flex w-full">
           <AppSidebar />
-          <SidebarInset style={{ background: "var(--pc-bg)" }}>
+          <SidebarInset style={{ background: "transparent" }}>
             <header
               className="sticky top-0 z-30 h-14 flex items-center gap-3 px-4"
               style={{
