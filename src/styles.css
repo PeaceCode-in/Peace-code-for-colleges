@@ -1242,3 +1242,116 @@ html[data-chart-style] svg path.pc-chart-line,
 html[data-chart-style] svg polyline.pc-chart-line {
   stroke-dasharray: var(--pc-chart-dash) !important;
 }
+
+/* ============================================================
+   Glass Tube Sidebar — floating, luminous capsule
+   ============================================================ */
+.pc-glass-tube > div:nth-child(2) {
+  /* the fixed panel wrapper — bump padding for the floating gutter */
+  padding: 14px 6px 14px 14px !important;
+}
+.pc-glass-tube [data-sidebar="sidebar"] {
+  border-radius: 26px !important;
+  border: 1px solid color-mix(in oklab, var(--pc-border) 85%, transparent) !important;
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-surface) 82%, transparent) 0%,
+      color-mix(in oklab, var(--pc-surface) 60%, transparent) 100%) !important;
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, #fff 60%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 10%, transparent),
+    inset 1px 0 0 color-mix(in oklab, #fff 40%, transparent),
+    0 30px 60px -30px color-mix(in oklab, var(--pc-ink) 45%, transparent),
+    0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 30%, transparent) !important;
+  position: relative;
+  overflow: hidden;
+}
+.pc-glass-tube [data-sidebar="sidebar"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 55% at 0% 0%,
+      color-mix(in oklab, var(--pc-primary) 14%, transparent) 0%,
+      transparent 55%),
+    radial-gradient(120% 55% at 100% 100%,
+      color-mix(in oklab, var(--pc-accent) 16%, transparent) 0%,
+      transparent 55%);
+}
+.pc-glass-tube [data-sidebar="sidebar"]::after {
+  /* left inner "tube" highlight strip */
+  content: "";
+  position: absolute;
+  left: 0; top: 12%; bottom: 12%;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg,
+    transparent,
+    color-mix(in oklab, #fff 70%, transparent) 30%,
+    color-mix(in oklab, #fff 70%, transparent) 70%,
+    transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.dark .pc-glass-tube [data-sidebar="sidebar"] {
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-surface) 55%, transparent) 0%,
+      color-mix(in oklab, var(--pc-surface) 32%, transparent) 100%) !important;
+  border-color: color-mix(in oklab, var(--pc-primary) 22%, transparent) !important;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, #fff 10%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, var(--pc-primary) 22%, transparent),
+    0 30px 60px -25px rgba(0,0,0,0.65),
+    0 12px 32px -18px color-mix(in oklab, var(--pc-primary) 40%, transparent) !important;
+}
+
+/* Menu items as glass pills */
+.pc-glass-tube [data-sidebar="menu-button"] {
+  border-radius: 999px !important;
+  transition: background .2s ease, color .2s ease, box-shadow .3s ease, transform .15s ease;
+  position: relative;
+}
+.pc-glass-tube [data-sidebar="menu-button"]:hover {
+  background: color-mix(in oklab, var(--pc-primary) 9%, transparent) !important;
+  transform: translateX(1px);
+}
+.pc-glass-tube [data-sidebar="menu-button"][data-active="true"] {
+  background: linear-gradient(90deg,
+    color-mix(in oklab, var(--pc-primary) 22%, transparent),
+    color-mix(in oklab, var(--pc-primary) 6%, transparent)) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--pc-primary) 40%, transparent),
+    0 6px 18px -8px color-mix(in oklab, var(--pc-primary) 55%, transparent),
+    0 0 22px -6px color-mix(in oklab, var(--pc-primary) 50%, transparent) !important;
+}
+.pc-glass-tube [data-sidebar="menu-button"][data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: 4px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 55%;
+  border-radius: 3px;
+  background: linear-gradient(180deg,
+    var(--pc-primary),
+    color-mix(in oklab, var(--pc-primary) 35%, transparent));
+  box-shadow: 0 0 12px color-mix(in oklab, var(--pc-primary) 70%, transparent);
+}
+.pc-glass-tube [data-sidebar="group-label"] {
+  padding-top: 8px;
+  opacity: 0.85;
+}
+.pc-glass-tube [data-sidebar="footer"] {
+  border-top: 1px solid color-mix(in oklab, var(--pc-border) 70%, transparent) !important;
+  background: transparent !important;
+}
+
+/* Trigger — small glass chip */
+[data-sidebar="trigger"] {
+  border-radius: 999px !important;
+  background: color-mix(in oklab, var(--pc-surface) 65%, transparent) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--pc-border) !important;
+}
