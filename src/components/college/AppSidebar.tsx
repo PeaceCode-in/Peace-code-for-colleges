@@ -135,13 +135,14 @@ export function AppSidebar() {
                         >
                           <Link
                             to={item.url}
-                            className="flex items-center gap-2"
-                            style={{
-                              color: active ? "var(--pc-primary)" : "var(--pc-ink-2)",
-                            }}
+                            className="pc-nav-row group flex items-center gap-2.5"
+                            data-active={active ? "true" : "false"}
                           >
-                            <item.icon className="h-4 w-4" />
-                            {!collapsed && <span className="text-[13px]">{item.title}</span>}
+                            <span className="pc-nav-chip" aria-hidden>
+                              <item.icon className="pc-nav-ico h-[15px] w-[15px]" />
+                              <span className="pc-nav-chip-glow" />
+                            </span>
+                            {!collapsed && <span className="pc-nav-label text-[13px]">{item.title}</span>}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
