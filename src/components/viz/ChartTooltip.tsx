@@ -1,4 +1,96 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { ReactNode, RefObject, useCallback, useEffect, useRef, useState } from "react";
+
+/* -------------------------------------------------------------------------- */
+/*  useTouchAsHover — mirror finger drags onto the same mouse handlers our    */
+/*  charts already declare (onMouseEnter/Leave/Move). We release pointer      */
+/*  capture on touchstart so subsequent pointermove events hit-test to the    */
+/*  element under the finger, then synthesize bubbling mouse events so React  */
+/*  fires onMouseOver / onMouseOut / onMouseMove naturally on those targets.  */
+/*  The wrapper is locked to `touch-action: none` while mounted so a drag on  */
+/*  a data point never accidentally scrolls the page.                          */
+/* -------------------------------------------------------------------------- */
+export function useTouchAsHover(ref: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const prevTouch = el.style.touchAction;
+    const prevSelect = el.style.userSelect;
+    el.style.touchAction = "none";
+    el.style.userSelect = "none";
+
+    let lastTarget: Element | null = null;
+    let active = false;
+
+    const fire = (
+      type: string,
+      target: Element | null,
+      x: number,
+      y: number,
+      related: Element | null = null,
+    ) => {
+      if (!target) return;
+      target.dispatchEvent(
+        new MouseEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          clientX: x,
+          clientY: y,
+          relatedTarget: related as EventTarget | null,
+        }),
+      );
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (!active) return;
+      e.preventDefault();
+      const t = document.elementFromPoint(e.clientX, e.clientY);
+      if (t !== lastTarget) {
+        fire("mouseout", lastTarget, e.clientX, e.clientY, t);
+        fire("mouseover", t, e.clientX, e.clientY, lastTarget);
+        lastTarget = t;
+      }
+      fire("mousemove", t, e.clientX, e.clientY);
+    };
+
+    const onEnd = (e: PointerEvent) => {
+      if (!active) return;
+      fire("mouseout", lastTarget, e.clientX, e.clientY, null);
+      // Fire a wrapper-level mouseleave so per-chart onMouseLeave clears state.
+      el.dispatchEvent(new MouseEvent("mouseleave", { bubbles: false, clientX: e.clientX, clientY: e.clientY }));
+      active = false;
+      lastTarget = null;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("pointercancel", onEnd);
+    };
+
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+      try {
+        (e.target as Element).releasePointerCapture?.(e.pointerId);
+      } catch {
+        /* no-op */
+      }
+      active = true;
+      lastTarget = document.elementFromPoint(e.clientX, e.clientY);
+      fire("mouseover", lastTarget, e.clientX, e.clientY);
+      fire("mousemove", lastTarget, e.clientX, e.clientY);
+      window.addEventListener("pointermove", onMove, { passive: false });
+      window.addEventListener("pointerup", onEnd);
+      window.addEventListener("pointercancel", onEnd);
+    };
+
+    el.addEventListener("pointerdown", onDown);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("pointercancel", onEnd);
+      el.style.touchAction = prevTouch;
+      el.style.userSelect = prevSelect;
+    };
+  }, [ref]);
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Chart tooltip — the single, canonical hover overlay used by every custom  */
@@ -47,6 +139,10 @@ export function useChartTooltip(): ChartTooltipApi {
   }, [positionFrom]);
 
   const hide = useCallback(() => setState(null), []);
+
+  // Touch/pen drags synthesize hover events on the elements under the finger,
+  // so every chart wired through this hook gets the same tooltip on mobile.
+  useTouchAsHover(wrapperRef);
 
   return { wrapperRef, onMove, show, hide, state };
 }

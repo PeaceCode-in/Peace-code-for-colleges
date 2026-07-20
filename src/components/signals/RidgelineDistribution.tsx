@@ -2,7 +2,8 @@
 // One horizontal density curve per ~4-week month with a median tick.
 // Interactive: hover any row to spotlight it and inspect the score bin
 // under the cursor via a floating tooltip.
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useTouchAsHover } from "@/components/viz/ChartTooltip";
 import { getRidgeline, type RangeKey } from "@/lib/signals-selectors";
 import { isSuppressed } from "@/lib/cohort-selectors";
 import { SuppressedTile } from "@/components/primitives/SuppressedTile";
@@ -26,6 +27,8 @@ export function RidgelineDistribution({
 }) {
   const res = useMemo(() => getRidgeline(scale, range), [scale, range]);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  useTouchAsHover(wrapRef);
 
   if (isSuppressed(res)) return <SuppressedTile label="Not enough completed assessments in this window to show a trend. Broaden the range to 26 weeks." />;
   const { rows } = res;
@@ -46,9 +49,11 @@ export function RidgelineDistribution({
 
   return (
     <div
+      ref={wrapRef}
       role="img"
       aria-label={`${scale === "phq9" ? "PHQ-9" : "GAD-7"} score distributions per ${rows.length} months. Higher score = more severe.`}
       className="w-full overflow-x-auto relative"
+      onMouseLeave={() => setHover(null)}
     >
       <svg
         width={chartW}
