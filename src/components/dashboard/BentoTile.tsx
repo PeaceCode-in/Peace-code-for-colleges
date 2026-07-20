@@ -143,9 +143,18 @@ export function BentoTile({
   if (onExpand) {
     const onKey = (e: KeyboardEvent<HTMLElement>) => {
       if (e.key === "Enter" || e.key === " ") {
+        const t = e.target as HTMLElement;
+        if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
         e.preventDefault();
         onExpand();
       }
+    };
+    const onClick = (e: React.MouseEvent) => {
+      const t = e.target as HTMLElement;
+      // Ignore clicks on nested interactive elements so tile-internal
+      // controls (legend chips, link rows, chart hovers) still work.
+      if (t.closest('button, a, input, select, textarea, [role="button"], [data-no-expand]')) return;
+      onExpand();
     };
     return (
       <section
@@ -153,7 +162,7 @@ export function BentoTile({
         tabIndex={0}
         aria-labelledby={hid}
         aria-haspopup="dialog"
-        onClick={onExpand}
+        onClick={onClick}
         onKeyDown={onKey}
         className={`${cls} focus-visible:outline-none focus-visible:ring-2`}
         style={{ ...shell, ["--tw-ring-color" as any]: "var(--pc-accent)" }}
