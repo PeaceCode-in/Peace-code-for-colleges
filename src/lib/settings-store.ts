@@ -355,11 +355,15 @@ export function applyAppearance(s: Settings) {
   root.setAttribute("data-theme", mode);
   try { localStorage.setItem("peacecode.theme.v1", mode); } catch {}
 
-  // Accent
+  // Accent — set with !important so per-bg-theme overrides in styles.css
+  // (e.g. noir/ember hard-coding --pc-primary) don't defeat the user's choice.
   const acc = ACCENTS[a.accent] ?? ACCENTS.moss;
-  root.style.setProperty("--pc-primary", acc.primary);
-  root.style.setProperty("--pc-soft", acc.soft);
-  root.style.setProperty("--pc-aurora-b", acc.soft);
+  root.style.setProperty("--pc-primary",  acc.primary, "important");
+  root.style.setProperty("--pc-accent",   acc.primary, "important");
+  root.style.setProperty("--pc-accent-2", acc.ring,    "important");
+  root.style.setProperty("--pc-ring",     acc.ring,    "important");
+  root.style.setProperty("--pc-soft",     acc.soft,    "important");
+  root.style.setProperty("--pc-aurora-b", acc.soft,    "important");
 
   // Font size (base rem)
   const sizeAdjusted = s.accessibility.largeText ? Math.max(a.fontSize, 18) : a.fontSize;
