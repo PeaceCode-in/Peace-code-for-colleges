@@ -22,16 +22,19 @@ export function Sparkbar({ values, width = 88, height = 18, ariaLabel, color = "
   return (
     <div
       ref={tip.wrapperRef}
-      className="relative inline-block"
+      className="relative block w-full"
+      style={{ maxWidth: width }}
       onMouseMove={tip.onMove}
       onMouseLeave={() => { tip.hide(); setHover(null); }}
     >
       <svg
-        width={width}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+        width="100%"
         height={height}
         role="img"
         aria-label={ariaLabel ?? `Trend of ${values.length} points`}
-        className="overflow-visible"
+        className="block overflow-visible"
       >
         {values.map((v, i) => {
           const h = Math.max(1.5, (v / max) * height);
