@@ -29,11 +29,12 @@ export function ChordMini({ nodes, links, size = 220, ariaLabel, weightLabel = "
   return (
     <div
       ref={tip.wrapperRef}
-      className="relative inline-block"
+      className="relative block w-full mx-auto"
+      style={{ maxWidth: size }}
       onMouseMove={tip.onMove}
       onMouseLeave={() => { tip.hide(); setHoverNode(null); setHoverLink(null); }}
     >
-      <svg width={size} height={size} role="img" aria-label={ariaLabel ?? "Referral flow chord"} className="overflow-visible">
+      <svg viewBox={`0 0 ${size} ${size}`} width="100%" height="auto" role="img" aria-label={ariaLabel ?? "Referral flow chord"} className="block overflow-visible" style={{ aspectRatio: "1 / 1" }}>
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--pc-border)" strokeDasharray="2 4" />
         {links.map((l, i) => {
           const a = map.get(l.from);
