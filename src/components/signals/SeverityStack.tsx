@@ -57,11 +57,15 @@ export function SeverityStack({
           <XAxis dataKey="week" stroke="var(--pc-muted)" fontSize={10} interval={Math.max(0, Math.floor(result.data.length / 8))} />
           <YAxis stroke="var(--pc-muted)" fontSize={10} tickFormatter={(v) => `${Math.round(Number(v) * 100)}%`} />
           <Tooltip
+            cursor={{ stroke: "var(--pc-accent)", strokeWidth: 1, strokeDasharray: "3 3" }}
             contentStyle={{
               background: "var(--pc-surface)", border: "1px solid var(--pc-border)",
               color: "var(--pc-ink)", borderRadius: 8, fontSize: 12,
             }}
-            formatter={(v: number, name: string) => [`${v.toFixed(1)}%`, name]}
+            labelStyle={{ color: "var(--pc-ink)", fontWeight: 600, marginBottom: 2 }}
+            itemStyle={{ padding: "1px 0" }}
+            formatter={(v: number, name: string) => [`${(v * 100).toFixed(1)}%`, name]}
+            labelFormatter={(l) => `Week of ${l}`}
           />
           <Legend
             wrapperStyle={{ fontSize: 11, color: "var(--pc-muted)", cursor: "pointer" }}
@@ -81,6 +85,9 @@ export function SeverityStack({
               fill={b.color}
               fillOpacity={0.85}
               isAnimationActive={false}
+              activeDot={{ r: 4, stroke: "var(--pc-surface)", strokeWidth: 1.5 }}
+              style={{ cursor: "pointer" }}
+              onClick={() => onSelectBand(band === b.key ? "all" : b.key)}
             />
           ))}
         </AreaChart>
