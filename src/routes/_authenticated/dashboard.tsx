@@ -70,6 +70,8 @@ function DashboardPage() {
           eyebrow="Early-warning model"
           tone={snap.crisisSignals.highActive ? "danger" : "default"}
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("crisis")}
+          expandLabel="Open crisis signals detail"
         >
           <KpiNumber
             value={snap.crisisSignals.total.toLocaleString()}
@@ -105,6 +107,8 @@ function DashboardPage() {
           title="Sessions this week"
           eyebrow="Delivered · 7 days"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("sessions")}
+          expandLabel="Open sessions detail"
         >
           <div className="flex items-end justify-between gap-3">
             <div className="min-w-0">
@@ -125,6 +129,8 @@ function DashboardPage() {
           title="Average mood"
           eyebrow="Self-report · 1–10"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("mood")}
+          expandLabel="Open mood detail"
         >
           <div className="flex items-end gap-2">
             <KpiNumber value={snap.avgMood.score.toFixed(1)} suffix="/ 10" size="lg" />
@@ -150,14 +156,24 @@ function DashboardPage() {
         </BentoTile>
 
         {/* Row 2 ─────────────────────────────────────────────── */}
-        <DepartmentBreakdown snap={snap} className="xl:col-span-3 lg:col-span-6" />
-        <WellnessTrendChart snap={snap} className="xl:col-span-9 lg:col-span-6" />
+        <DepartmentBreakdown snap={snap} className="xl:col-span-3 lg:col-span-6" onExpand={open("departments")} />
+        <WellnessTrendChart snap={snap} className="xl:col-span-9 lg:col-span-6" onExpand={open("trend")} />
 
         {/* Row 3 ─────────────────────────────────────────────── */}
-        <RiskFunnel snap={snap} className="xl:col-span-4 lg:col-span-6" />
-        <ConcernTags snap={snap} className="xl:col-span-4 lg:col-span-6" />
-        <EngagementHeatmap snap={snap} className="xl:col-span-4 lg:col-span-6" />
+        <RiskFunnel snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("funnel")} />
+        <ConcernTags snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("concerns")} />
+        <EngagementHeatmap snap={snap} className="xl:col-span-4 lg:col-span-6" onExpand={open("heatmap")} />
       </div>
+
+      <TileDetailSheet
+        open={openKey !== null}
+        onOpenChange={(v) => !v && setOpenKey(null)}
+        title={meta?.title ?? ""}
+        eyebrow={meta?.eyebrow}
+        description={meta?.description}
+      >
+        {openKey && <TileDetailPanel tileKey={openKey} snap={snap} />}
+      </TileDetailSheet>
     </>
   );
 }
