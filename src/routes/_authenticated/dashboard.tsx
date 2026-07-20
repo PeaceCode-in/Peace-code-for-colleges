@@ -37,13 +37,15 @@ function DashboardPage() {
       />
       <div className="grid grid-cols-1 lg:grid-cols-6 xl:grid-cols-12 gap-4">
         {/* Row 1 — hero + 2x2 KPI cluster ────────────────────── */}
-        <WellnessPulse snap={snap} className="xl:col-span-6 xl:row-span-2 lg:col-span-6" />
+        <WellnessPulse snap={snap} className="xl:col-span-6 xl:row-span-2 lg:col-span-6" onExpand={open("pulse")} />
 
         {/* Active students */}
         <BentoTile
           title="Active students"
           eyebrow="Logged in this week"
           className="xl:col-span-3 lg:col-span-3"
+          onExpand={open("active")}
+          expandLabel="Open active students detail"
         >
           <div className="flex items-center gap-4">
             <div className="min-w-0">
