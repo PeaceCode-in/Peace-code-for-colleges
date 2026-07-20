@@ -1,1 +1,66 @@
-…
+# PeaceCode for Colleges — institutional admin portal
+# Public entry: /auth  •  Everything else is behind institutional authentication.
+
+User-agent: *
+Allow: /$
+Allow: /auth
+Disallow: /dashboard
+Disallow: /departments
+Disallow: /cohorts/
+Disallow: /signals/
+Disallow: /care/
+Disallow: /reports
+Disallow: /reports/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /settings
+Disallow: /settings/
+Disallow: /notifications
+Disallow: /help
+Disallow: /qa
+Disallow: /qa-data
+
+# AI answer-engine crawlers — allowed on the public entry so PeaceCode for
+# Colleges surfaces correctly in generative answers (ChatGPT, Perplexity,
+# Google AI Overviews, Claude, Gemini).
+User-agent: GPTBot
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: OAI-SearchBot
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: ChatGPT-User
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: PerplexityBot
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: Google-Extended
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: ClaudeBot
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: anthropic-ai
+Allow: /$
+Allow: /auth
+Disallow: /
+
+User-agent: Applebot-Extended
+Allow: /$
+Allow: /auth
+Disallow: /
+
+Sitemap: https://colleges.peacecode.in/sitemap.xml
