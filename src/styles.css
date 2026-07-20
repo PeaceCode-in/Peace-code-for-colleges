@@ -1754,3 +1754,143 @@ body { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; -webkit
 @media (max-width: 480px) {
   .pc-glass-header { padding-left: 8px; padding-right: 8px; gap: 6px; }
 }
+
+/* ============================================================
+ * Glass-tube sidebar — smooth collapse/expand animation
+ * ========================================================== */
+
+/* Animate every width-bearing element in the shadcn sidebar tree so
+   the floating gutter, the fixed panel, and the spacer glide together. */
+.pc-glass-tube,
+.pc-glass-tube > div,
+.pc-glass-tube [data-sidebar="sidebar"],
+[data-slot="sidebar-container"],
+[data-slot="sidebar-gap"] {
+  transition:
+    width 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    left 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    right 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    padding 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    box-shadow 320ms ease,
+    background 320ms ease;
+  will-change: width;
+}
+
+/* Keep glass, glow and border intact while the width animates. */
+.pc-glass-tube [data-sidebar="sidebar"] {
+  transition:
+    width 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    border-radius 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    background 320ms ease,
+    box-shadow 320ms ease,
+    border-color 320ms ease !important;
+  overflow: hidden;
+}
+
+/* Collapsed panel — trim outer padding so the capsule doesn't feel
+   underweight, and pin the icon column so chips center perfectly. */
+.pc-glass-tube[data-state="collapsed"] > div:nth-child(2) {
+  padding: 14px 8px 14px 8px !important;
+}
+
+/* Menu rows: fixed inner width, chip pinned to the left in expanded,
+   centered when collapsed. Prevents icons from drifting during transition. */
+.pc-glass-tube [data-sidebar="menu-button"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  justify-content: flex-start;
+  padding-left: 10px !important;
+  padding-right: 12px !important;
+  overflow: hidden;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    box-shadow .3s ease,
+    padding 320ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    justify-content 320ms ease !important;
+}
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"] {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* The nav chip (icon capsule) has a fixed footprint so alignment is
+   pixel-stable at every width. */
+.pc-nav-chip {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+}
+
+/* Labels fade + slide out (never a hard cut) as the panel narrows. */
+.pc-nav-label {
+  display: inline-block;
+  white-space: nowrap;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 180ms ease 80ms,
+    transform 220ms cubic-bezier(0.32, 0.72, 0.24, 1) 60ms,
+    max-width 260ms cubic-bezier(0.32, 0.72, 0.24, 1);
+  max-width: 200px;
+  overflow: hidden;
+}
+.pc-glass-tube[data-state="collapsed"] .pc-nav-label,
+.pc-glass-tube[data-collapsible="icon"][data-state="collapsed"] .pc-nav-label {
+  opacity: 0;
+  transform: translateX(-6px);
+  max-width: 0;
+  transition:
+    opacity 120ms ease,
+    transform 200ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    max-width 240ms cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+
+/* Group labels and the brand lockup — fade out during collapse. */
+.pc-glass-tube [data-sidebar="group-label"] {
+  transition: opacity 180ms ease, height 240ms ease, margin 240ms ease, padding 240ms ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="group-label"] {
+  opacity: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+/* The active-state left rail marker snaps to a centered dot when the
+   panel is collapsed so it doesn't clip against the edge. */
+.pc-glass-tube[data-state="collapsed"] [data-sidebar="menu-button"][data-active="true"]::before {
+  left: 50%;
+  top: auto;
+  bottom: 4px;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 3px;
+  border-radius: 3px;
+}
+
+/* Footer avatar / sign-out row: shrink cleanly instead of wrapping. */
+.pc-glass-tube [data-sidebar="footer"] > * {
+  transition: opacity 200ms ease, transform 240ms ease;
+}
+
+/* Respect reduced-motion — skip all animation but keep the layout. */
+@media (prefers-reduced-motion: reduce) {
+  .pc-glass-tube,
+  .pc-glass-tube > div,
+  .pc-glass-tube [data-sidebar="sidebar"],
+  .pc-glass-tube [data-sidebar="menu-button"],
+  .pc-nav-label,
+  [data-slot="sidebar-container"],
+  [data-slot="sidebar-gap"] {
+    transition: none !important;
+  }
+}
