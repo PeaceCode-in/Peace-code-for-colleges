@@ -27,6 +27,8 @@ export function RidgelineDistribution({
 }) {
   const res = useMemo(() => getRidgeline(scale, range), [scale, range]);
   const [hover, setHover] = useState<HoverState | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  useTouchAsHover(wrapRef);
 
   if (isSuppressed(res)) return <SuppressedTile label="Not enough completed assessments in this window to show a trend. Broaden the range to 26 weeks." />;
   const { rows } = res;
