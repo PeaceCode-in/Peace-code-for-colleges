@@ -72,11 +72,12 @@ const GROUPS = SIDEBAR_GROUPS;
 
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, setOpen, isMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const college = useCollegeContext();
   const nav = useNavigate();
+  const hoverTimer = useRef<number | null>(null);
 
   const isActive = (u: string) => pathname === u || pathname.startsWith(u + "/");
 
@@ -85,8 +86,26 @@ export function AppSidebar() {
     nav({ to: "/auth" });
   };
 
+  const handleEnter = () => {
+    if (isMobile) return;
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setOpen(true), 90);
+  };
+  const handleLeave = () => {
+    if (isMobile) return;
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setOpen(false), 220);
+  };
+
   return (
-    <Sidebar collapsible="icon" variant="floating" className="pc-glass-tube" style={{ background: "transparent", borderColor: "transparent" }}>
+    <Sidebar
+      collapsible="icon"
+      variant="floating"
+      className="pc-glass-tube"
+      style={{ background: "transparent", borderColor: "transparent" }}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
       <SidebarHeader style={{ background: "transparent" }}>
         <Link
           to="/dashboard"
