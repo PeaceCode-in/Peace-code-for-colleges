@@ -87,7 +87,14 @@ const ORG_JSONLD = {
       alternateName: "PeaceCode for Colleges",
       url: SITE_URL,
       logo: `${SITE_URL}/favicon.png`,
-      sameAs: ["https://peacecode.in"],
+      sameAs: [
+        "https://peacecode.in",
+        "https://peacecode.in/colleges",
+        "https://peacecode.in/for-colleges",
+        "https://peacecode.in/about",
+        "https://www.linkedin.com/company/peacecode",
+        "https://x.com/PeaceCode",
+      ],
       email: "partnerships@peacecode.in",
       description: SITE_DESC,
       knowsAbout: [
