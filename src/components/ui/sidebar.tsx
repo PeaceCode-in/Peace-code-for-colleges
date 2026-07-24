@@ -106,6 +106,18 @@ const SidebarProvider = React.forwardRef<
       return () => window.removeEventListener("keydown", handleKeyDown);
     }, [toggleSidebar]);
 
+    // Measure frame health during the sidebar width transition (~320ms).
+    // Sample a slightly larger window so we catch any late reflow jank.
+    const prevOpenRef = React.useRef(open);
+    React.useEffect(() => {
+      if (prevOpenRef.current === open) return;
+      prevOpenRef.current = open;
+      if (typeof window === "undefined") return;
+      import("@/lib/perf-frame-monitor").then((m) =>
+        m.measureFrames(`sidebar:${open ? "expand" : "collapse"}`, 420),
+      );
+    }, [open]);
+
     // We add a state so that we can do data-state="expanded" or "collapsed".
     // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? "expanded" : "collapsed";
