@@ -80,7 +80,18 @@ export function AppSidebar() {
   const nav = useNavigate();
   const hoverTimer = useRef<number | null>(null);
 
+  // Dev-only render counter — logs when re-render bursts during sidebar toggle.
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const renders = useRef(0);
+    renders.current += 1;
+    if (typeof window !== "undefined") {
+      (window as unknown as { __pcSidebarRenders?: number }).__pcSidebarRenders = renders.current;
+    }
+  }
+
   const isActive = (u: string) => pathname === u || pathname.startsWith(u + "/");
+
 
   const signOut = () => {
     endSession();
