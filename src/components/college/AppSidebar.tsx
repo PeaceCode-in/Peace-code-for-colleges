@@ -213,7 +213,31 @@ export function AppSidebar() {
   );
 }
 
+
+type NavRowProps = { item: Item; active: boolean };
+const NavRow = memo(function NavRow({ item, active }: NavRowProps) {
+  const Icon = item.icon;
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+        <Link
+          to={item.url}
+          className="pc-nav-row group flex items-center gap-2.5"
+          data-active={active ? "true" : "false"}
+        >
+          <span className="pc-nav-chip" aria-hidden>
+            <Icon className="pc-nav-ico h-[15px] w-[15px]" />
+            <span className="pc-nav-chip-glow" />
+          </span>
+          <span className="pc-nav-label text-[13px]">{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+});
+
 function NavGlider({ children, deps }: { children: React.ReactNode; deps: unknown[] }) {
+
   const ref = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<{ top: number; height: number; visible: boolean }>({
     top: 0,
