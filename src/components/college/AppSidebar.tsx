@@ -132,51 +132,27 @@ export function AppSidebar() {
         <div aria-hidden className="mx-3 my-1 h-px" style={{ background: "var(--pc-border)" }} />
       </SidebarHeader>
       <SidebarContent style={{ background: "transparent" }}>
-        <NavGlider deps={[pathname, collapsed]}>
-        {GROUPS.map((g) => {
-          return (
-            <SidebarGroup key={g.label}>
-              {!collapsed && (
-                <SidebarGroupLabel
-                  className="text-[10px] uppercase"
-                  style={{ letterSpacing: "0.16em", color: "var(--pc-muted)", fontFamily: "var(--font-serif)" }}
-                >
-                  {g.label}
-                </SidebarGroupLabel>
-              )}
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {g.items.map((item) => {
-                    const active = isActive(item.url);
-                    return (
-                      <SidebarMenuItem key={item.url}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={active}
-                          tooltip={item.title}
-                        >
-                          <Link
-                            to={item.url}
-                            className="pc-nav-row group flex items-center gap-2.5"
-                            data-active={active ? "true" : "false"}
-                          >
-                            <span className="pc-nav-chip" aria-hidden>
-                              <item.icon className="pc-nav-ico h-[15px] w-[15px]" />
-                              <span className="pc-nav-chip-glow" />
-                            </span>
-                            {!collapsed && <span className="pc-nav-label text-[13px]">{item.title}</span>}
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          );
-        })}
+        <NavGlider deps={[pathname]}>
+        {GROUPS.map((g) => (
+          <SidebarGroup key={g.label}>
+            <SidebarGroupLabel
+              className="text-[10px] uppercase"
+              style={{ letterSpacing: "0.16em", color: "var(--pc-muted)", fontFamily: "var(--font-serif)" }}
+            >
+              {g.label}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {g.items.map((item) => (
+                  <NavRow key={item.url} item={item} active={isActive(item.url)} />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
         </NavGlider>
       </SidebarContent>
+
 
       <SidebarFooter style={{ background: "transparent" }}>
         {collapsed ? (
