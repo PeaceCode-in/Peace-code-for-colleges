@@ -1,5 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
+
 import {
   Sparkles, Building2, GraduationCap, Users, GitCompareArrows, BookOpen,
   HeartPulse, LineChart, ClipboardList, Waves, CalendarClock, Grid3x3,
@@ -79,7 +80,18 @@ export function AppSidebar() {
   const nav = useNavigate();
   const hoverTimer = useRef<number | null>(null);
 
+  // Dev-only render counter — logs when re-render bursts during sidebar toggle.
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const renders = useRef(0);
+    renders.current += 1;
+    if (typeof window !== "undefined") {
+      (window as unknown as { __pcSidebarRenders?: number }).__pcSidebarRenders = renders.current;
+    }
+  }
+
   const isActive = (u: string) => pathname === u || pathname.startsWith(u + "/");
+
 
   const signOut = () => {
     endSession();
@@ -131,51 +143,27 @@ export function AppSidebar() {
         <div aria-hidden className="mx-3 my-1 h-px" style={{ background: "var(--pc-border)" }} />
       </SidebarHeader>
       <SidebarContent style={{ background: "transparent" }}>
-        <NavGlider deps={[pathname, collapsed]}>
-        {GROUPS.map((g) => {
-          return (
-            <SidebarGroup key={g.label}>
-              {!collapsed && (
-                <SidebarGroupLabel
-                  className="text-[10px] uppercase"
-                  style={{ letterSpacing: "0.16em", color: "var(--pc-muted)", fontFamily: "var(--font-serif)" }}
-                >
-                  {g.label}
-                </SidebarGroupLabel>
-              )}
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {g.items.map((item) => {
-                    const active = isActive(item.url);
-                    return (
-                      <SidebarMenuItem key={item.url}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={active}
-                          tooltip={item.title}
-                        >
-                          <Link
-                            to={item.url}
-                            className="pc-nav-row group flex items-center gap-2.5"
-                            data-active={active ? "true" : "false"}
-                          >
-                            <span className="pc-nav-chip" aria-hidden>
-                              <item.icon className="pc-nav-ico h-[15px] w-[15px]" />
-                              <span className="pc-nav-chip-glow" />
-                            </span>
-                            {!collapsed && <span className="pc-nav-label text-[13px]">{item.title}</span>}
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          );
-        })}
+        <NavGlider deps={[pathname]}>
+        {GROUPS.map((g) => (
+          <SidebarGroup key={g.label}>
+            <SidebarGroupLabel
+              className="text-[10px] uppercase"
+              style={{ letterSpacing: "0.16em", color: "var(--pc-muted)", fontFamily: "var(--font-serif)" }}
+            >
+              {g.label}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {g.items.map((item) => (
+                  <NavRow key={item.url} item={item} active={isActive(item.url)} />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
         </NavGlider>
       </SidebarContent>
+
 
       <SidebarFooter style={{ background: "transparent" }}>
         {collapsed ? (
@@ -236,7 +224,31 @@ export function AppSidebar() {
   );
 }
 
+
+type NavRowProps = { item: Item; active: boolean };
+const NavRow = memo(function NavRow({ item, active }: NavRowProps) {
+  const Icon = item.icon;
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+        <Link
+          to={item.url}
+          className="pc-nav-row group flex items-center gap-2.5"
+          data-active={active ? "true" : "false"}
+        >
+          <span className="pc-nav-chip" aria-hidden>
+            <Icon className="pc-nav-ico h-[15px] w-[15px]" />
+            <span className="pc-nav-chip-glow" />
+          </span>
+          <span className="pc-nav-label text-[13px]">{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+});
+
 function NavGlider({ children, deps }: { children: React.ReactNode; deps: unknown[] }) {
+
   const ref = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<{ top: number; height: number; visible: boolean }>({
     top: 0,
